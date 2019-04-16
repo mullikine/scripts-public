@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+: ${EDITOR:="v"}
+export EDITOR
+
+ff="$(nix mkfifo xc)"
+
+#IFS= read -rd '' output < <(xc - | tm -soak -bout nw -n edit-x-clipboard vipe | cat)
+#printf -- "%s" "$output" | xc
+
+xc - | vipe | soak | xc

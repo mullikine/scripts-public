@@ -1,0 +1,60 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+
+opt="$1"
+shift
+case "$opt" in
+    quicklisp) {
+        script="$HOME/quicklisp/setup.lisp"
+        cmd="sbcl --load \"$script\""
+        completions="$HOME/notes2018/ws/lisp/scripts/quicklisp_completions.log"
+
+        histfile="$HOME/notes2018/ws/lisp/scripts/quicklisp_history.log"
+        touch "$histfile"
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *) {
+        completions="$HOME/notes2018/programs/rlwrap/completions/$opt"
+        touch "$completions"
+
+        histfile="$HOME/notes2018/programs/rlwrap/history/$opt"
+        touch "$histfile"
+
+        cmd="$CMD"
+    }
+    ;;
+esac
+
+
+finalcmd="rlwrap -H \"$histfile\" -f \"$completions\" $cmd" 
+echo "$finalcmd" 1>&2
+eval "$finalcmd"

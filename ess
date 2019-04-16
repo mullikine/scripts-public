@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# es-shell
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+eval "/usr/local/bin/es $CMD"

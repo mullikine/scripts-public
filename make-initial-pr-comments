@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+cat $HOME/notes2018/ws/codelingo/pipeline/dan-message-prs-13.02.19.txt | awk1 | while IFS=$'\n' read -r line; do
+    org_name="$(echo "$line" | path-lasttwo | cut -d / -f 1)"
+    repo_name="$(echo "$line" | path-lasttwo | cut -d / -f 2)"
+
+    ( empcomments generate <(echo "$line) "$(empcomments -org "$org_name" -repo "$repo_name" -imc)" -o >(cat) ) | sed 1d | jq . | v
+done

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+url="$1"
+
+odn ci elinks-dump "$url" | scrape 'forked from [^ ]+' | sed 's/forked from //' | head -n 1

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+exec &>/dev/null
+
+cd "$DUMP/programs/Rambox-0.5.17/"
+
+./rambox & disown

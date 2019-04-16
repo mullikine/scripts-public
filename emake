@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# sp c -e "(find-file \"Makefile\")(call-interactively 'evil-make)"
+#sp c -e "(find-file \"Makefile\")(compile \"make\")"
+# sp c -e "(find-file \"Makefile\")(call-interactively 'evil-make)(switch-to-buffer \"*compilation*\")"
+sp c -e "(find-file \"Makefile\")(compile \"make\")(switch-to-buffer \"*compilation*\")(delete-other-windows)"

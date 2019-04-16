@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+# Pipe into something that can query csv
+read -r -d '' map <<'HEREDOC'
+pos	name
+<$>	eff-map
+<*>	app,apply,spaceship
+>>=	bind
+$
+HEREDOC
+
+for o in "<*>" "<$>" ">>=" "$" "<-" "\\"  "->"; do
+    echo "$o" | udl
+    result="$(hoogle "$o")"
+    typeclass="$(p "$result" | sed -n '/^Prelude /p' | scrape '(Functor|Monad|Applicative)')"
+    echo "type class: $typeclass"
+    echo
+    echo "$result" | indent 1
+    echo
+done

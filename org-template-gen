@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+input_fp="$(cat | tf txt)"
+
+lang="$1"
+
+echo "#+BEGIN_SRC $lang"
+cat "$input_fp" | indent 2 | awk 1
+echo -n "#+END_SRC"

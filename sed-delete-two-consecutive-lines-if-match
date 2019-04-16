@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+patA="$1"
+patB="$2"
+
+sed "/$patA/{N;/$patB/d}"

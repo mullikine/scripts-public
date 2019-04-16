@@ -1,0 +1,63 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# just try to mount something
+
+
+opt="$1"
+case "$opt" in
+    vb) {
+        (
+        fp="$(find "$HOME/VirtualBox VMs" -name '*.vdi' | fzf)"
+        if [ -n "$fp" ]; then
+            mnt "$fp"
+        fi
+        )
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+
+last_arg="${@: -1}"
+fp="$last_arg"
+rp="$(realpath "$fp")"
+dn="$(dirname "$rp")"
+cd "$dn"
+bn="$(basename "$fp")"
+ext="${fp##*.}"
+fn="${fp%.*}"
+
+case "$ext" in
+    vdi) {
+        sudo rmmod nbd
+        sleep 0.3
+        sudo modprobe nbd max_part=16
+        sleep 0.3
+        sudo qemu-nbd -c /dev/nbd0 "$fp"
+        sleep 0.3
+        sudo mkdir -p "/media/${bn}"
+        sudo mount /dev/nbd0p1 "/media/${bn}"
+        echo "exit shell when finished"
+        pushd "/media/${bn}"
+        CWD="/media/${bn}" zsh 
+        popd
+        sudo umount "/media/${bn}"
+        sudo qemu-nbd -d /dev/nbd0
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

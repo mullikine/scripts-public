@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+pager() {
+    if is_tty; then
+        vs $@
+    else
+        cat
+    fi
+}
+
+MAXCOLS=100
+
+if [ "$COLUMNS" -gt "$MAXCOLS" ]; then
+    COLUMNS="$MAXCOLS"
+fi
+
+# if is_tty; then
+#     #cmd="/usr/bin/perldoc $CMD | nv -c 'silent! AnsiEsc' -c 'call GeneralSyntax()' -c 'call NumberSyntax()' -"
+#     # This does not help speed much
+#     # nv -c 'silent! %!strip-ansi' -c 'call GeneralSyntax()' -c 'call NumberSyntax()' -c 'nmap q :q!<CR>' -"
+#     # -c 'set nohls'
+#     #     /usr/bin/perldoc "$@" | strip-ansi | pager
+#     # else
+#     #     /usr/bin/perldoc "$@"
+# fi
+
+/usr/bin/perldoc "$@" | strip-ansi | pager

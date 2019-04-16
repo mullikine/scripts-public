@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# cd $DUMP/programs/sublime_text_3/
+
+$DUMP/programs/sublime_text_3/sublime_text "$@"

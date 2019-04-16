@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd /var/smulliga/dump/apt/build
+
+sudo apt-get build-dep $@
+
+$SHELL

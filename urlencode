@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+if stdin_exists; then
+    awk1 | while IFS=$'\n' read -r line; do
+        /usr/bin/urlencode "$line"
+    done
+else
+    /usr/bin/urlencode "$@"
+fi
+
+# python:
+# import urllib
+# urllib.parse.quote("yo hodsfkl")

@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# # This only happens once, same as on ace. It's something wrong with
+# # python on my new mac. The version of ranger from ace does the same
+# # thing when running on my mac.
+# trap func_trap WINCH
+# func_trap() {
+#     a beep
+#     # eval `resize`
+# }
+
+
+# . ~/.shell_environment
+#PATH="$PATH:$HOME/scripts"
+export PATH="$HOME/scripts:$PATH"
+
+# tm n "$CWD"
+if [ -z "$CWD" ]; then
+    CWD="$(pwd)"
+else
+    CWD="$(p "$CWD" | umn)"
+    ! test -d "$CWD" && CWD="$(pwd)"
+fi
+
+# This allows it to be the correct size after a tmux split
+# I want to get the dimensions of the largest terminal and use those.
+eval `resize`
+# Without the above, below will not display
+# tm nw ranger
+
+# Sometime CWD is wrong. But I should trust it here. I should test it in
+# zsh somewhere.
+cd "$CWD"
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -d|-dump) {
+        export CWD="$(get-dump-name "$CWD")"
+        mkdir -p "$CWD"
+        cd "$CWD"
+        shift
+    }
+    ;;
+
+    -e|-edit) {
+        export CWD="$MYGIT/ranger/ranger/core/"
+        cd "$CWD"
+        v actions.py
+        cd "$CWD"
+        shift
+    }
+    ;;
+
+    -ka|-kill-all) {
+        ps -ef |grep -P 'python.*ranger.py' | grep -v grep | field 2 | xargs kill
+        exit 0
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# not necessary
+#if [ -d "$CMD" ]; then
+#    cd "$CMD"
+#    CWD="$(pwd)"
+#fi
+
+# the larger these are the slower ranger runs. It particular, the
+# keyboard input. Try pasting into command line.
+#LINES=500
+#COLUMNS=1000
+
+# LINES=70
+# COLUMNS=200
+
+# For the smaller font size
+# LINES=64
+# COLUMNS=213
+
+## For the even smaller font size
+#LINES=86
+## COLUMNS=284
+#
+## Annoyingly, this must be significantly larger than the min or I get
+## artifacts
+#COLUMNS=290
+
+export TERM=xterm-256color
+
+# stty cols 70 rows 200
+
+# The script version FIXES:
+# * resizing  (very annoying when not working)
+# * copying paths  (very annoying when not working)
+
+# The python uncompiled version copies things corretly. Why does the
+# compiled version not compile?
+# I need to use "make install", but why does the resulting binary still
+# not copy properly?
+python $MYGIT/ranger/ranger/ranger.py "$@"
+
+# This is much faster but I can't seem to compile a modified version of
+# ranger that has the fixes.
+#cmd="/usr/local/bin/ranger $CMD"

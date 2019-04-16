@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+perl -pe 's|((.)\2*)|$1=~y///c.$2|eg'

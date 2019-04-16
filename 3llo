@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+export TRELLO_USER="$(cat $HOME/.myrc.yaml | yq -r '.trello_user')"
+export TRELLO_KEY="$(cat $HOME/.myrc.yaml | yq -r '.trello_key')"
+export TRELLO_TOKEN="$(cat $HOME/.myrc.yaml | yq -r '.trello_token')"
+
+/usr/local/bin/3llo "$@"

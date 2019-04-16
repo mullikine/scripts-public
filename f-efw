@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+remove-starting-and-trailing-whitespace.sh

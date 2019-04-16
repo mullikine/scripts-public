@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+iconv | pandoc -f html -t org | sed '/#+BEGIN_HTML/,/#+END_HTML/d' | max-one-empty-line.sh

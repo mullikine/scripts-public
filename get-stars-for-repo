@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+author="$1"
+reponame="$2"
+
+ci -t 86400 curl -s "https://api.github.com/repos/$author/$reponame" -H 'Accept: application/vnd.github.preview' | jq '.watchers_count'

@@ -1,0 +1,194 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+
+case "$opt" in
+    addindex) {
+        php /var/www/croogle/update-sphinx-files.php libraries
+        croogle build-freqs-and-suggestions
+        
+        for i in libraries; do
+            sudo indexer ${i}index --buildstops /var/www/croogle/${i}-freqs.txt 100000 --buildfreqs
+        done
+
+        # /var/www/croogle/getsuggestions.sh
+        cd "/var/www/croogle"; ./getsuggestions.sh
+    }
+    ;;
+
+    search) {
+        query="$1"
+
+        printf -- "%s\n" "$query" | /var/www/croogle/cli-multisearch.sh
+    }
+    ;;
+
+    search-stdin) {
+        /var/www/croogle/cli-multisearch.sh
+    }
+    ;;
+
+    setup) {
+        db mysql "ALTER DATABASE fileindexdb CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        php /var/www/croogle/update-sphinx-files.php home
+        sudo indexer --all --rotate
+    }
+    ;;
+
+    test) {
+        cd /var/www/croogle; php /var/www/croogle/search.php
+        # curl "http://croogle/search.php?q=&qpath=shane&page=&pagesize=8&qtype=&index=home"
+        curl "http://croogle/search.php?q=&qpath=shane&page=&pagesize=8&qtype=&index=home"
+        curl "http://croogle/search.php?q=sh&qpath=o&page=&pagesize=8&qtype=change&index=home"
+    }
+    ;;
+    
+    log|error.log) {
+        v /var/log/apache2/error.log
+    }
+    ;;
+
+    c|config) {
+        v $HOME/notes2018/ws/sphinx/morgan.conf
+        sudo cp -a $HOME/notes2018/ws/sphinx/morgan.conf /etc/sphinxsearch/sphinx.conf
+    }
+    ;;
+
+    restart) {
+        sudo /etc/init.d/mysql restart
+        sudo /etc/init.d/apache2 restart
+        sudo /etc/init.d/sphinxsearch restart
+    }
+    ;;
+
+    build-freqs-and-suggestions) {
+        # for i in home system; do
+        for i in libraries; do
+            sudo indexer ${i}index --buildstops /var/www/croogle/${i}-freqs.txt 100000 --buildfreqs
+        done
+        # /var/www/croogle/getsuggestions.sh
+        cd "/var/www/croogle"; ./getsuggestions.sh
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    indexfs) {
+        indexer --config /etc/sphinxsearch/sphinx.conf --all --rotate
+    }
+    ;;
+
+    iname) {
+        input="$(cat)"
+
+        # Sphinx search here. Open tmux.
+    }
+    ;;
+
+    name) {
+        input="$(cat)"
+
+        # Sphinx search here. Open tmux.
+    }
+    ;;
+
+    reindex) {
+        sudo indexer --all --rotate
+
+        indexname="$1"
+
+        if [ -n "$indexname" ]; then
+                php /var/www/croogle/update-sphinx-files.php $indexname
+        else
+            for i in home system; do
+                php /var/www/croogle/update-sphinx-files.php $i
+            done
+        fi
+
+        sudo indexer --all --rotate
+
+        $0 build-freqs-and-suggestions
+    }
+    ;;
+
+    stringify) {
+        dir="$1"
+
+        # Stringify everything in this dir so I can use for
+        # indexing. I could use inception on photos.
+
+        F find-all-no-git -0 | xargs -0 --no-run-if-empty lit
+    }
+    ;;
+
+    listf|list-files) { # list files for given index name
+        opt="$1"
+        shift
+        case "$opt" in
+            home) {
+                # f find-all-no-git $HOME
+                locate -r 'notes2018.*\.org$'
+                locate -r 'notes2018.*\.txt$'
+                locate -r 'notes2018.*\.sh$'
+                locate -r 'notes2018.*\.py$'
+                lit "Finished listing files" 1>&2
+                exit $?
+            }
+            ;;
+
+            libraries) {
+                locate -r '^/usr/local/lib/python3.5/dist-packages/'
+                lit "Finished listing files" 1>&2
+                exit $?
+            }
+            ;;
+
+            sys|system) {
+                locate -r '^/etc'
+                locate -r '^/var'
+                lit "Finished listing files" 1>&2
+                exit $?
+            }
+            ;;
+
+            all-home) {
+                F find-all-no-git $HOME 
+                lit "Finished listing files" 1>&2
+                exit $?
+            }
+            ;;
+
+            all-system|all) {
+                # I should start indexing stringified versions of binary
+                # files somehow.
+
+                F find-all-no-git /
+                exit $?
+            }
+            ;;
+
+            git) {
+                # I should start indexing stringified versions of binary
+                # files somehow.
+
+                F find-all-no-git $MYGIT
+                exit $?
+            }
+            ;;
+
+            *|default) { # Default index, notes
+                # F find-all-no-git $HOME
+                exit $?
+            }
+            ;;
+        esac
+    }
+    ;;
+
+    *)
+esac

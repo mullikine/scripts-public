@@ -1,0 +1,116 @@
+#!/bin/bash
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# This doesn't work directly from googler
+
+# examples:
+# eww "http://news.ycombinator.com"
+
+last_arg="${@: -1}"
+
+if pl "$last_arg" | grep -q -P '^file:///'; then
+    last_arg="$(p "$last_arg" | sed 's=^file://==' | sed 's=#.*==')"
+fi
+# pl "$last_arg"
+# exit 0
+
+if [ -f "$last_arg" ]; then
+    browser_function=eww-open-file
+else
+    browser_function=eww
+    # browser_function=w3m
+fi
+
+MONOCHROME=
+
+cmd=c
+lucky=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -w) {
+        browser_function=w3m
+        shift
+    }
+    ;;
+
+    -e) {
+        browser_function=eww
+        shift
+    }
+    ;;
+
+    -2) {
+        MONOCHROME=y
+        shift
+    }
+    ;;
+
+    -es) {
+        browser_function=eww-and-search
+        shift
+    }
+    ;;
+
+    -s) {
+        elisp+="(occur $(aqf "$2"))"
+        ns "$0: $elisp"
+        shift
+        shift
+    }
+    ;;
+
+    -c) { # run some elisp too
+        elisp+="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -x) {
+        # cmd="c -x"
+        cmd="x"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+export MONOCHROME
+
+url="$last_arg"; : ${url:="google.com"}
+slug="$(printf -- "%s" "$$$url" | short-hash)"
+elisp+="(rename-buffer $(a- qf "*eww-$slug*") t)"
+
+if test "$cmd" = "x"; then
+    # Background and disown it
+    #( unbuffer e -D spacemacs $cmd -e "($browser_function \"$url\")" ) &>/dev/null & disown
+    ( unbuffer og $cmd -e "($browser_function $(aqf "$url"))$elisp" ) &>/dev/null & disown
+else
+    #e -D spacemacs $cmd -e "($browser_function \"$url\")"
+    #og -e "($browser_function \"$url\")"
+
+    # Use magit emacs because it has rainbow identifiers disabled.
+    # I don't want to create a new emacs daemon just for eww
+
+    # echo -n "$browser_function"
+    # echo "$url"
+    # echo "($browser_function $(aqf "$url"))$elisp"
+    # exit 0
+    me -noonly -e "($browser_function $(aqf "$url"))$elisp"
+fi
+
+exit $?
+
+
+    # e -D spacemacs c -e "(progn (dired \".\")(delete-other-windows))"
+    # lit -n "$url" | qne | qne
+
+
+    #e -s eww $cmd -e "($browser_function \"$url\")"
+
+    # e -D spacemacs $cmd -e "($browser_function \"$url\")"
+    #e -s eww c -e "(eww)"
+    #e -s eww x -e "(eww)" --init-debug
+    #e -s eww c -e "(progn (eww) (new-frame))"
+    #e -s eww x -e "(new-frame)" --init-debug

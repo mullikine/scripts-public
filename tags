@@ -1,0 +1,1275 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CLUT	colortrans.py	/^CLUT = [  # color look-up table$/;"	v
+N_MAX_RESULTS_PAGES	gp	/^N_MAX_RESULTS_PAGES = 1$/;"	v
+__author__	colortrans.py	/^__author__    = 'Micah Elliott http:\/\/MicahElliott.com'$/;"	v
+__copyright__	colortrans.py	/^__copyright__ = 'Copyright (C) 2011 Micah Elliott.  All rights reserved.'$/;"	v
+__license__	colortrans.py	/^__license__   = 'WTFPL http:\/\/sam.zoy.org\/wtfpl\/'$/;"	v
+__print_completions	bash-complete	/^__print_completions() {$/;"	f
+__version__	colortrans.py	/^__version__   = '0.1'$/;"	v
+_create_dicts	colortrans.py	/^def _create_dicts():$/;"	f
+_str2hex	colortrans.py	/^def _str2hex(hexstr):$/;"	f
+_strip_hash	colortrans.py	/^def _strip_hash(rgb):$/;"	f
+a	gp	/^        a = google_scrape(url)$/;"	v
+abs	prettyping	/^function abs(x) {$/;"	f
+add_comment	html-declutter.pl	/^sub add_comment {$/;"	s
+add_path	lein	/^function add_path {$/;"	f
+add_upstream	github-add-upstream	/^function add_upstream() {$/;"	f
+all_match_positions	test-match-pos.pl	/^sub all_match_positions {$/;"	s
+amixer	a	/^amixer() {$/;"	f
+amixer	audio	/^amixer() {$/;"	f
+append_to_path	libraries/bash-library.sh	/^append_to_path() {$/;"	f
+arg	colortrans.py	/^    arg = sys.argv[1]$/;"	v
+args	start-app-with-resolution.py	/^args = parser.parse_args()$/;"	v
+argv	diff-so-fancy	/^sub argv {$/;"	s
+awk1if	fel	/^awk1if() {$/;"	f
+bleach_text	diff-so-fancy	/^sub bleach_text {$/;"	s
+blessed	html-declutter.pl	/^sub blessed {$/;"	s
+boolean	diff-so-fancy	/^sub boolean {$/;"	s
+bytes_to_human	math	/^bytes_to_human() {$/;"	f
+calc	math	/^calc() {$/;"	f
+cd_ls	cr	/^cd_ls() {$/;"	f
+cd_ls	riflerun	/^cd_ls() {$/;"	f
+cd_run	cr	/^cd_run() {$/;"	f
+cd_run	riflerun	/^cd_run() {$/;"	f
+ceil	prettyping	/^function ceil(x) {$/;"	f
+char_count	diff-so-fancy	/^sub char_count {$/;"	s
+check_first_run	diff-so-fancy	/^sub check_first_run {$/;"	s
+chr	math	/^chr () {$/;"	f
+chr	xterm-click	/^chr () {$/;"	f
+clean_string	bqme	/^clean_string() {$/;"	f
+clean_string	bqme2	/^clean_string() {$/;"	f
+clean_while_downloading	yt-subs.sh	/^clean_while_downloading() {$/;"	f
+clear	prettyping	/^function clear(d) {$/;"	f
+cmd	start-app-with-resolution.py	/^        cmd = 'xrandr --output ' + mode[0] + ' --mode ' + mode[1]$/;"	v
+cmd	start-app-with-resolution.py	/^    cmd = 'xrandr --output ' + mode[0] + ' --mode ' + mode[1]$/;"	v
+color	diff-so-fancy	/^sub color {$/;"	s
+command_not_found	lein	/^function command_not_found {$/;"	f
+commit_importance_filter	git-touched-files-since-divergence	/^commit_importance_filter() {$/;"	f
+commit_importance_filter	go-to-dir-of-important-change	/^commit_importance_filter() {$/;"	f
+construct_temp_repo	lingo	/^construct_temp_repo() {$/;"	f
+copytoboth	xc	/^copytoboth() {$/;"	f
+current_modes	start-app-with-resolution.py	/^current_modes = []     # remember the user's current settings$/;"	v
+data	getngrams.py	/^data = sys.stdin.read()$/;"	v
+data	tabulate-tsv.py	/^data = sys.stdin.read()$/;"	v
+db	record-balance.py	/^db = ds.connect('sqlite:\/\/\/:memory:')$/;"	v
+debug_mode_enabled	e	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	ec	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	ecn	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	et	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	libraries/bash-library.sh	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	me	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	pc	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	pd	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	sc	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	sp	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	tm	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	vlf	/^debug_mode_enabled() {$/;"	f
+debug_mode_enabled	xr	/^debug_mode_enabled() {$/;"	f
+device_context	start-app-with-resolution.py	/^            device_context = ''$/;"	v
+device_context	start-app-with-resolution.py	/^            device_context = foo[0]$/;"	v
+device_context	start-app-with-resolution.py	/^device_context = ''    # track what device's modes we are looking at$/;"	v
+displayedname	nvt	/^displayedname() {$/;"	f
+displayedname	tm	/^displayedname() {$/;"	f
+displaytime	hrtime	/^displaytime() {$/;"	f
+displaytime	htime	/^function displaytime {$/;"	f
+displaytime	humantime	/^function displaytime {$/;"	f
+displaytime	seconds2human	/^displaytime() {$/;"	f
+do_droid	winetricks	/^do_droid() {$/;"	f
+do_dsf_stuff	diff-so-fancy	/^sub do_dsf_stuff {$/;"	s
+do_query	cheat.sh	/^do_query()$/;"	f
+do_query	cht.sh	/^do_query()$/;"	f
+doc	usespacy.py	/^doc = nlp(u"Peach emoji is where it has always been. Peach is the superior "$/;"	v
+doc	usespacy.py	/^doc = nlp(u'Hello, world. Here are two sentences.')$/;"	v
+download_failed_message	lein	/^function download_failed_message {$/;"	f
+dump	scope.sh	/^dump() { \/usr\/bin\/printf -- "%s\\n" "$output"; }$/;"	f
+e	math	/^e() {$/;"	f
+eclog	e	/^eclog() {$/;"	f
+eclog	ec	/^eclog() {$/;"	f
+eclog	ecn	/^eclog() {$/;"	f
+eclog	et	/^eclog() {$/;"	f
+eclog	me	/^eclog() {$/;"	f
+eclog	pc	/^eclog() {$/;"	f
+eclog	pd	/^eclog() {$/;"	f
+eclog	sc	/^eclog() {$/;"	f
+eclog	sp	/^eclog() {$/;"	f
+eclog	vlf	/^eclog() {$/;"	f
+eclog	xr	/^eclog() {$/;"	f
+editor	note	/^editor() {$/;"	f
+editor	o	/^editor() {$/;"	f
+editor	open	/^editor() {$/;"	f
+editor	tm	/^editor() {$/;"	f
+eval_vim_expr	vime	/^eval_vim_expr() {$/;"	f
+execute_command	winetricks	/^execute_command()$/;"	f
+f_from_sn	list-ips-for-current-network	/^f_from_sn() {$/;"	f
+f_from_sn	nmap-s	/^f_from_sn() {$/;"	f
+ff_pid	kill_firefox	/^ff_pid () {$/;"	f
+ff_running	kill_firefox	/^ff_running () {$/;"	f
+fflush	prettyping	/^	fflush()$/;"	f
+fileAge	age	/^function fileAge$/;"	f
+file_change_string	diff-so-fancy	/^sub file_change_string {$/;"	s
+file_filter	dac	/^file_filter() {$/;"	f
+file_filter	dack	/^file_filter() {$/;"	f
+file_filter	eack	/^file_filter() {$/;"	f
+file_filter	eackd	/^file_filter() {$/;"	f
+file_filter	ead	/^file_filter() {$/;"	f
+file_filter	lack	/^file_filter() {$/;"	f
+file_filter	my-grep	/^file_filter() {$/;"	f
+file_importance_filter	go-to-dir-of-important-change	/^file_importance_filter() {$/;"	f
+file_path_pcre_filter	dac	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	dack	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	eack	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	eackd	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	ead	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	lack	/^file_path_pcre_filter() {$/;"	f
+file_path_pcre_filter	my-grep	/^file_path_pcre_filter() {$/;"	f
+filter	elinks-dump	/^filter() {$/;"	f
+filter	fzgrep	/^filter() {$/;"	f
+filter	nix	/^filter() {$/;"	f
+filter	u	/^filter() {$/;"	f
+filter	unix	/^filter() {$/;"	f
+filter_by_duplicate_repo_names	test-blacklist.sh	/^filter_by_duplicate_repo_names() {$/;"	f
+filter_in	fzf	/^filter_in() {$/;"	f
+filter_out	fzf	/^filter_out() {$/;"	f
+filter_stdin_through_diff_highlight	diff-so-fancy	/^sub filter_stdin_through_diff_highlight {$/;"	s
+filter_through_repo_blacklists	test-blacklist.sh	/^filter_through_repo_blacklists() {$/;"	f
+find_and_grep	dac	/^find_and_grep() {$/;"	f
+find_and_grep	dack	/^find_and_grep() {$/;"	f
+find_and_grep	eack	/^find_and_grep() {$/;"	f
+find_and_grep	eackd	/^find_and_grep() {$/;"	f
+find_and_grep	ead	/^find_and_grep() {$/;"	f
+find_and_grep	lack	/^find_and_grep() {$/;"	f
+foo	start-app-with-resolution.py	/^    foo = line.split()$/;"	v
+format_snippet	gh-query	/^format_snippet() {$/;"	f
+fpage	elinks-dump	/^fpage() {$/;"	f
+fpage	vimlinks	/^fpage() {$/;"	f
+free_cs	libraries/bash-library.sh	/^free_cs() {$/;"	f
+from_s	r	/^from_s() {$/;"	f
+func_trap	fs	/^func_trap() {$/;"	f
+func_trap	lingo	/^func_trap() {$/;"	f
+func_trap	make	/^func_trap() {$/;"	f
+func_trap	ns	/^func_trap() {$/;"	f
+func_trap	pak	/^func_trap() {$/;"	f
+func_trap	test-no-cc	/^func_trap() {$/;"	f
+fzf_cmd	sh-git	/^fzf_cmd() {$/;"	f
+fzf_cmd	sh-git-hydra	/^fzf_cmd() {$/;"	f
+fzf_cmd_last_output	sh-tmux	/^fzf_cmd_last_output() {$/;"	f
+generate_passwd	busyroot.sh	/^generate_passwd() {$/;"	f
+get_default_colors	diff-so-fancy	/^sub get_default_colors {$/;"	s
+get_git_config_hash	diff-so-fancy	/^sub get_git_config_hash {$/;"	s
+get_less_charset	diff-so-fancy	/^sub get_less_charset {$/;"	s
+get_link	gh-query	/^get_link() {$/;"	f
+get_link	org	/^get_link() {$/;"	f
+get_list_of_sections	cheat.sh	/^get_list_of_sections()$/;"	f
+get_list_of_sections	cht.sh	/^get_list_of_sections()$/;"	f
+get_pr_url	gh-pr-status	/^get_pr_url() {$/;"	f
+get_query_options	cheat.sh	/^get_query_options()$/;"	f
+get_query_options	cht.sh	/^get_query_options()$/;"	f
+get_terminal_size	prettyping	/^		get_terminal_size()$/;"	f
+get_terminal_size	prettyping	/^	get_terminal_size()$/;"	f
+get_terminal_size	prettyping	/^function get_terminal_size(SIZE, SIZEA, HAS_DETECTED, CMD) {$/;"	f
+get_the_person_who_closed	gh-merger	/^get_the_person_who_closed() {$/;"	f
+get_the_person_who_closed	ghs	/^get_the_person_who_closed() {$/;"	f
+get_the_person_who_merged	gh-merger	/^get_the_person_who_merged() {$/;"	f
+get_the_person_who_merged	ghs	/^get_the_person_who_merged() {$/;"	f
+getpavol	a	/^getpavol() {$/;"	f
+getpavol	audio	/^getpavol() {$/;"	f
+getpavol	unused/volumedown.sh	/^getpavol()$/;"	f
+getpavol	unused/volumeup.sh	/^getpavol()$/;"	f
+git_abort	sh-git	/^git_abort() {$/;"	f
+git_abort	sh-git-hydra	/^git_abort() {$/;"	f
+git_config	diff-so-fancy	/^sub git_config {$/;"	s
+git_config_boolean	diff-so-fancy	/^sub git_config_boolean {$/;"	s
+git_config_raw	diff-so-fancy	/^	sub git_config_raw {$/;"	s
+google_scrape	gp	/^def google_scrape(url):$/;"	f
+grep	re-grep.go	/^func grep(re, filename string) {$/;"	f
+handle_change	readline.py	/^def handle_change(a_txt, user_data):$/;"	f
+has_stdin	diff-so-fancy	/^sub has_stdin {$/;"	s
+hash_f	ds	/^hash_f() {$/;"	f
+hash_f	ds.new	/^hash_f() {$/;"	f
+hash_f	gs.new	/^hash_f() {$/;"	f
+hash_f	ht	/^hash_f() {$/;"	f
+help	busyroot.sh	/^help() {$/;"	f
+helper_d3dx9_xx	winetricks	/^helper_d3dx9_xx()$/;"	f
+helper_directx_Jun2010	winetricks	/^helper_directx_Jun2010()$/;"	f
+helper_directx_dl	winetricks	/^helper_directx_dl()$/;"	f
+helper_dxvk	winetricks	/^helper_dxvk()$/;"	f
+helper_galliumnine	winetricks	/^helper_galliumnine()$/;"	f
+helper_vb6sp6	winetricks	/^helper_vb6sp6()$/;"	f
+helper_win2ksp4	winetricks	/^helper_win2ksp4()$/;"	f
+helper_win7sp1	winetricks	/^helper_win7sp1()$/;"	f
+helper_win7sp1_x64	winetricks	/^helper_win7sp1_x64()$/;"	f
+helper_winxpsp3	winetricks	/^helper_winxpsp3()$/;"	f
+highlight	scope.sh	/^highlight() {$/;"	f
+hls	lingo	/^hls() {$/;"	f
+horizontal_rule	diff-so-fancy	/^sub horizontal_rule {$/;"	s
+i	gp	/^i = 1$/;"	v
+ids	tm-lsp.sh	/^ids() {$/;"	f
+in_unit_test	diff-so-fancy	/^sub in_unit_test {$/;"	s
+init_lingo_for_dir	lingo	/^init_lingo_for_dir() {$/;"	f
+init_user	busyroot.sh	/^init_user() {$/;"	f
+input_filter	x	/^input_filter() {$/;"	f
+input_filter	x-new	/^input_filter() {$/;"	f
+interpretdate	lucene-date-range	/^interpretdate() {$/;"	f
+irc_broadcast_away	slirc	/^sub irc_broadcast_away {$/;"	s
+irc_broadcast_away	slirc-20180515.pl	/^sub irc_broadcast_away {$/;"	s
+irc_broadcast_join	slirc	/^sub irc_broadcast_join {$/;"	s
+irc_broadcast_join	slirc-20180515.pl	/^sub irc_broadcast_join {$/;"	s
+irc_broadcast_nick	slirc	/^sub irc_broadcast_nick {$/;"	s
+irc_broadcast_nick	slirc-20180515.pl	/^sub irc_broadcast_nick {$/;"	s
+irc_broadcast_notice	slirc	/^sub irc_broadcast_notice {$/;"	s
+irc_broadcast_notice	slirc-20180515.pl	/^sub irc_broadcast_notice {$/;"	s
+irc_broadcast_part	slirc	/^sub irc_broadcast_part {$/;"	s
+irc_broadcast_part	slirc-20180515.pl	/^sub irc_broadcast_part {$/;"	s
+irc_chan_to_id	slirc	/^sub irc_chan_to_id {$/;"	s
+irc_chan_to_id	slirc-20180515.pl	/^sub irc_chan_to_id {$/;"	s
+irc_chanmsg	slirc	/^sub irc_chanmsg {$/;"	s
+irc_chanmsg	slirc-20180515.pl	/^sub irc_chanmsg {$/;"	s
+irc_check_welcome	slirc	/^sub irc_check_welcome {$/;"	s
+irc_check_welcome	slirc-20180515.pl	/^sub irc_check_welcome {$/;"	s
+irc_check_welcome_all	slirc	/^sub irc_check_welcome_all {$/;"	s
+irc_check_welcome_all	slirc-20180515.pl	/^sub irc_check_welcome_all {$/;"	s
+irc_disconnect	slirc	/^sub irc_disconnect {$/;"	s
+irc_disconnect	slirc-20180515.pl	/^sub irc_disconnect {$/;"	s
+irc_disconnect_all	slirc	/^sub irc_disconnect_all {$/;"	s
+irc_disconnect_all	slirc-20180515.pl	/^sub irc_disconnect_all {$/;"	s
+irc_do_message	slirc	/^sub irc_do_message {$/;"	s
+irc_do_message	slirc-20180515.pl	/^sub irc_do_message {$/;"	s
+irc_eq	slirc	/^sub irc_eq {$/;"	s
+irc_eq	slirc-20180515.pl	/^sub irc_eq {$/;"	s
+irc_gateway_notice	slirc	/^sub irc_gateway_notice {$/;"	s
+irc_gateway_notice	slirc-20180515.pl	/^sub irc_gateway_notice {$/;"	s
+irc_id_to_chan	slirc	/^sub irc_id_to_chan {$/;"	s
+irc_id_to_chan	slirc-20180515.pl	/^sub irc_id_to_chan {$/;"	s
+irc_id_to_name	slirc	/^sub irc_id_to_name {$/;"	s
+irc_id_to_name	slirc-20180515.pl	/^sub irc_id_to_name {$/;"	s
+irc_invite_or_kick	slirc	/^sub irc_invite_or_kick {$/;"	s
+irc_invite_or_kick	slirc-20180515.pl	/^sub irc_invite_or_kick {$/;"	s
+irc_lcase	slirc	/^sub irc_lcase {$/;"	s
+irc_lcase	slirc-20180515.pl	/^sub irc_lcase {$/;"	s
+irc_line	slirc	/^sub irc_line {$/;"	s
+irc_line	slirc-20180515.pl	/^sub irc_line {$/;"	s
+irc_listen	slirc	/^sub irc_listen {$/;"	s
+irc_listen	slirc-20180515.pl	/^sub irc_listen {$/;"	s
+irc_name_to_id	slirc	/^sub irc_name_to_id {$/;"	s
+irc_name_to_id	slirc-20180515.pl	/^sub irc_name_to_id {$/;"	s
+irc_notify_away	slirc	/^sub irc_notify_away {$/;"	s
+irc_notify_away	slirc-20180515.pl	/^sub irc_notify_away {$/;"	s
+irc_pick_name	slirc	/^sub irc_pick_name {$/;"	s
+irc_pick_name	slirc-20180515.pl	/^sub irc_pick_name {$/;"	s
+irc_ping	slirc	/^sub irc_ping {$/;"	s
+irc_ping	slirc-20180515.pl	/^sub irc_ping {$/;"	s
+irc_privmsg	slirc	/^sub irc_privmsg {$/;"	s
+irc_privmsg	slirc-20180515.pl	/^sub irc_privmsg {$/;"	s
+irc_send_args	slirc	/^sub irc_send_args {$/;"	s
+irc_send_args	slirc-20180515.pl	/^sub irc_send_args {$/;"	s
+irc_send_from	slirc	/^sub irc_send_from {$/;"	s
+irc_send_from	slirc-20180515.pl	/^sub irc_send_from {$/;"	s
+irc_send_names	slirc	/^sub irc_send_names {$/;"	s
+irc_send_names	slirc-20180515.pl	/^sub irc_send_names {$/;"	s
+irc_send_num	slirc	/^sub irc_send_num {$/;"	s
+irc_send_num	slirc-20180515.pl	/^sub irc_send_num {$/;"	s
+irc_send_who	slirc	/^sub irc_send_who {$/;"	s
+irc_send_who	slirc-20180515.pl	/^sub irc_send_who {$/;"	s
+irc_send_whois	slirc	/^sub irc_send_whois {$/;"	s
+irc_send_whois	slirc-20180515.pl	/^sub irc_send_whois {$/;"	s
+irc_server_notice	slirc	/^sub irc_server_notice {$/;"	s
+irc_server_notice	slirc-20180515.pl	/^sub irc_server_notice {$/;"	s
+irc_topic_change	slirc	/^sub irc_topic_change {$/;"	s
+irc_topic_change	slirc-20180515.pl	/^sub irc_topic_change {$/;"	s
+is_multiline	r	/^is_multiline() {$/;"	f
+is_stdout_pipe	pdf2txt	/^is_stdout_pipe() {$/;"	f
+is_stdout_pipe	xc	/^is_stdout_pipe() {$/;"	f
+is_stdout_tty	F	/^is_stdout_tty() {$/;"	f
+is_stdout_tty	f	/^is_stdout_tty() {$/;"	f
+is_stdout_tty	ffzf	/^is_stdout_tty() {$/;"	f
+is_stdout_tty	filter-find	/^is_stdout_tty() {$/;"	f
+is_stdout_tty	tp	/^is_stdout_tty() {$/;"	f
+is_tty	apt	/^is_tty() {$/;"	f
+is_tty	ca	/^is_tty() {$/;"	f
+is_tty	cabal	/^is_tty() {$/;"	f
+is_tty	cheat	/^is_tty() {$/;"	f
+is_tty	dac	/^is_tty() {$/;"	f
+is_tty	dack	/^is_tty() {$/;"	f
+is_tty	date-hr	/^is_tty() {$/;"	f
+is_tty	dls	/^is_tty() {$/;"	f
+is_tty	ds	/^is_tty() {$/;"	f
+is_tty	ds.new	/^is_tty() {$/;"	f
+is_tty	dump-file	/^is_tty() {$/;"	f
+is_tty	eack	/^is_tty() {$/;"	f
+is_tty	eackd	/^is_tty() {$/;"	f
+is_tty	ead	/^is_tty() {$/;"	f
+is_tty	elinks-dump	/^is_tty() {$/;"	f
+is_tty	find-all-no-git.sh	/^is_tty() {$/;"	f
+is_tty	gc	/^is_tty() {$/;"	f
+is_tty	gdb	/^is_tty() {$/;"	f
+is_tty	gh	/^is_tty() {$/;"	f
+is_tty	git-clone-wiki	/^is_tty() {$/;"	f
+is_tty	git-file-to-url	/^is_tty() {$/;"	f
+is_tty	goo	/^is_tty() {$/;"	f
+is_tty	gr	/^is_tty() {$/;"	f
+is_tty	hoogle	/^is_tty() {$/;"	f
+is_tty	hs	/^is_tty() {$/;"	f
+is_tty	hsq	/^is_tty() {$/;"	f
+is_tty	hsqc	/^is_tty() {$/;"	f
+is_tty	ht	/^is_tty() {$/;"	f
+is_tty	i	/^is_tty() {$/;"	f
+is_tty	i1	/^is_tty() {$/;"	f
+is_tty	istty	/^is_tty() {$/;"	f
+is_tty	lack	/^is_tty() {$/;"	f
+is_tty	libraries/bash-library.sh	/^is_tty() {$/;"	f
+is_tty	lingo	/^is_tty() {$/;"	f
+is_tty	list-mru	/^is_tty() {$/;"	f
+is_tty	list-pythonlibs	/^is_tty() {$/;"	f
+is_tty	lucene-date-range	/^is_tty() {$/;"	f
+is_tty	man	/^is_tty() {$/;"	f
+is_tty	manual	/^is_tty() {$/;"	f
+is_tty	msh	/^is_tty() {$/;"	f
+is_tty	ns	/^is_tty() {$/;"	f
+is_tty	pager	/^is_tty() {$/;"	f
+is_tty	perldoc	/^is_tty() {$/;"	f
+is_tty	pydoc	/^is_tty() {$/;"	f
+is_tty	r	/^is_tty() {$/;"	f
+is_tty	raco	/^is_tty() {$/;"	f
+is_tty	rs	/^is_tty() {$/;"	f
+is_tty	saic	/^is_tty() {$/;"	f
+is_tty	scope.sh	/^is_tty() {$/;"	f
+is_tty	select-dir-from-here	/^is_tty() {$/;"	f
+is_tty	select-git-repo	/^is_tty() {$/;"	f
+is_tty	select-go-package	/^is_tty() {$/;"	f
+is_tty	select-recent-dir	/^is_tty() {$/;"	f
+is_tty	select-tenet-dir	/^is_tty() {$/;"	f
+is_tty	select-ws-dir	/^is_tty() {$/;"	f
+is_tty	show-extensions-below	/^is_tty() {$/;"	f
+is_tty	stack	/^is_tty() {$/;"	f
+is_tty	stashit	/^is_tty() {$/;"	f
+is_tty	strip-ansi-if-cat	/^is_tty() {$/;"	f
+is_tty	tm	/^is_tty() { [ -t 1 ]; }$/;"	f
+is_tty	tm-shortcuts	/^is_tty() {$/;"	f
+is_tty	tsvpager	/^is_tty() {$/;"	f
+is_tty	udl	/^is_tty() {$/;"	f
+is_tty	vc	/^is_tty() {$/;"	f
+is_tty	vimlinks	/^is_tty() {$/;"	f
+is_tty	xc	/^is_tty() {$/;"	f
+is_tty	xct	/^is_tty() {$/;"	f
+is_windows	diff-so-fancy	/^sub is_windows {$/;"	s
+isbehind	libraries/bash-library.sh	/^isbehind()$/;"	f
+john	record-balance.py	/^john = table.find_one(name='John Doe')$/;"	v
+last_arg	tm	/^last_arg() {$/;"	f
+line_deliminate	r	/^line_deliminate() {$/;"	f
+list_all_ssh_ips_for_subnet	list-ips-for-current-network	/^list_all_ssh_ips_for_subnet() {$/;"	f
+list_all_ssh_ips_for_subnet	nmap-s	/^list_all_ssh_ips_for_subnet() {$/;"	f
+list_connected_raspberry_pi_dcbc	list-ips-for-current-network	/^list_connected_raspberry_pi_dcbc() {$/;"	f
+list_connected_raspberry_pi_dcbc	nmap-s	/^list_connected_raspberry_pi_dcbc() {$/;"	f
+list_ip_range_for_subnet	list-ips-for-current-network	/^list_ip_range_for_subnet() {$/;"	f
+list_ip_range_for_subnet	nmap-s	/^list_ip_range_for_subnet() {$/;"	f
+list_ips_for_current_network	list-ips-for-current-network	/^list_ips_for_current_network() {$/;"	f
+list_ips_for_current_network	nmap-s	/^list_ips_for_current_network() {$/;"	f
+lit	gh-query	/^lit () {$/;"	f
+load_3dmark03	winetricks	/^load_3dmark03()$/;"	f
+load_3dmark05	winetricks	/^load_3dmark05()$/;"	f
+load_3dmark06	winetricks	/^load_3dmark06()$/;"	f
+load_3dmark2000	winetricks	/^load_3dmark2000()$/;"	f
+load_3dmark2001	winetricks	/^load_3dmark2001()$/;"	f
+load_3m_library	winetricks	/^load_3m_library()$/;"	f
+load_7zip	winetricks	/^load_7zip()$/;"	f
+load_abiword	winetricks	/^load_abiword()$/;"	f
+load_acreedbro	winetricks	/^load_acreedbro()$/;"	f
+load_adobe_diged	winetricks	/^load_adobe_diged()$/;"	f
+load_adobe_diged4	winetricks	/^load_adobe_diged4()$/;"	f
+load_adobeair	winetricks	/^load_adobeair()$/;"	f
+load_algodoo_demo	winetricks	/^load_algodoo_demo()$/;"	f
+load_alienswarm_steam	winetricks	/^load_alienswarm_steam()$/;"	f
+load_allcodecs	winetricks	/^load_allcodecs()$/;"	f
+load_alldlls	winetricks	/^load_alldlls()$/;"	f
+load_allfonts	winetricks	/^load_allfonts()$/;"	f
+load_amnesia_tdd_demo	winetricks	/^load_amnesia_tdd_demo()$/;"	f
+load_amstream	winetricks	/^load_amstream()$/;"	f
+load_andale	winetricks	/^load_andale()$/;"	f
+load_ao	winetricks	/^load_ao()$/;"	f
+load_aoe3_demo	winetricks	/^load_aoe3_demo()$/;"	f
+load_arial	winetricks	/^load_arial()$/;"	f
+load_art2kmin	winetricks	/^load_art2kmin()$/;"	f
+load_atmlib	winetricks	/^load_atmlib()$/;"	f
+load_atmosphir	winetricks	/^load_atmosphir()$/;"	f
+load_autohotkey	winetricks	/^load_autohotkey()$/;"	f
+load_autostart_winedbg	winetricks	/^load_autostart_winedbg()$/;"	f
+load_avatar_demo	winetricks	/^load_avatar_demo()$/;"	f
+load_avifil32	winetricks	/^load_avifil32()$/;"	f
+load_bad	winetricks	/^load_bad()$/;"	f
+load_baekmuk	winetricks	/^load_baekmuk()$/;"	f
+load_beneath_a_steel_sky_gog	winetricks	/^load_beneath_a_steel_sky_gog()$/;"	f
+load_bfbc2	winetricks	/^load_bfbc2()$/;"	f
+load_binkw32	winetricks	/^load_binkw32()$/;"	f
+load_bioshock2	winetricks	/^load_bioshock2()$/;"	f
+load_bioshock2_steam	winetricks	/^load_bioshock2_steam()$/;"	f
+load_bioshock_demo	winetricks	/^load_bioshock_demo()$/;"	f
+load_blobby_volley	winetricks	/^load_blobby_volley()$/;"	f
+load_borderlands_steam	winetricks	/^load_borderlands_steam()$/;"	f
+load_bttf101	winetricks	/^load_bttf101()$/;"	f
+load_busybox	winetricks	/^load_busybox()$/;"	f
+load_cabinet	winetricks	/^load_cabinet()$/;"	f
+load_calibri	winetricks	/^load_calibri()$/;"	f
+load_cambria	winetricks	/^load_cambria()$/;"	f
+load_candara	winetricks	/^load_candara()$/;"	f
+load_cfc	winetricks	/^load_cfc()$/;"	f
+load_cim_demo	winetricks	/^load_cim_demo()$/;"	f
+load_cinepak	winetricks	/^load_cinepak()$/;"	f
+load_civ4_demo	winetricks	/^load_civ4_demo()$/;"	f
+load_civ5_demo_steam	winetricks	/^load_civ5_demo_steam()$/;"	f
+load_cjkfonts	winetricks	/^load_cjkfonts()$/;"	f
+load_cmake	winetricks	/^load_cmake()$/;"	f
+load_cmd	winetricks	/^load_cmd()$/;"	f
+load_cnc_ddraw	winetricks	/^load_cnc_ddraw()$/;"	f
+load_cnc_redalert3_demo	winetricks	/^load_cnc_redalert3_demo()$/;"	f
+load_cod1	winetricks	/^load_cod1()$/;"	f
+load_cod4mw_demo	winetricks	/^load_cod4mw_demo()$/;"	f
+load_cod5_waw	winetricks	/^load_cod5_waw()$/;"	f
+load_cod_demo	winetricks	/^load_cod_demo()$/;"	f
+load_colorprofile	winetricks	/^load_colorprofile()$/;"	f
+load_comctl32	winetricks	/^load_comctl32()$/;"	f
+load_comctl32ocx	winetricks	/^load_comctl32ocx()$/;"	f
+load_comdlg32ocx	winetricks	/^load_comdlg32ocx()$/;"	f
+load_comicsans	winetricks	/^load_comicsans()$/;"	f
+load_consolas	winetricks	/^load_consolas()$/;"	f
+load_constantia	winetricks	/^load_constantia()$/;"	f
+load_controlpad	winetricks	/^load_controlpad()$/;"	f
+load_controlspy	winetricks	/^load_controlspy()$/;"	f
+load_corbel	winetricks	/^load_corbel()$/;"	f
+load_corefonts	winetricks	/^load_corefonts()$/;"	f
+load_courier	winetricks	/^load_courier()$/;"	f
+load_crayonphysics_demo	winetricks	/^load_crayonphysics_demo()$/;"	f
+load_crypt32	winetricks	/^load_crypt32()$/;"	f
+load_crysis2	winetricks	/^load_crysis2()$/;"	f
+load_csi6_demo	winetricks	/^load_csi6_demo()$/;"	f
+load_csmt	winetricks	/^load_csmt()$/;"	f
+load_d3dcompiler_43	winetricks	/^load_d3dcompiler_43()$/;"	f
+load_d3dcompiler_47	winetricks	/^load_d3dcompiler_47()$/;"	f
+load_d3drm	winetricks	/^load_d3drm()$/;"	f
+load_d3dx10	winetricks	/^load_d3dx10()$/;"	f
+load_d3dx10_43	winetricks	/^load_d3dx10_43()$/;"	f
+load_d3dx11_42	winetricks	/^load_d3dx11_42()$/;"	f
+load_d3dx11_43	winetricks	/^load_d3dx11_43()$/;"	f
+load_d3dx9	winetricks	/^load_d3dx9()$/;"	f
+load_d3dx9_24	winetricks	/^load_d3dx9_24()$/;"	f
+load_d3dx9_25	winetricks	/^load_d3dx9_25()$/;"	f
+load_d3dx9_26	winetricks	/^load_d3dx9_26()$/;"	f
+load_d3dx9_27	winetricks	/^load_d3dx9_27()$/;"	f
+load_d3dx9_28	winetricks	/^load_d3dx9_28()$/;"	f
+load_d3dx9_29	winetricks	/^load_d3dx9_29()$/;"	f
+load_d3dx9_30	winetricks	/^load_d3dx9_30()$/;"	f
+load_d3dx9_31	winetricks	/^load_d3dx9_31()$/;"	f
+load_d3dx9_32	winetricks	/^load_d3dx9_32()$/;"	f
+load_d3dx9_33	winetricks	/^load_d3dx9_33()$/;"	f
+load_d3dx9_34	winetricks	/^load_d3dx9_34()$/;"	f
+load_d3dx9_35	winetricks	/^load_d3dx9_35()$/;"	f
+load_d3dx9_36	winetricks	/^load_d3dx9_36()$/;"	f
+load_d3dx9_37	winetricks	/^load_d3dx9_37()$/;"	f
+load_d3dx9_38	winetricks	/^load_d3dx9_38()$/;"	f
+load_d3dx9_39	winetricks	/^load_d3dx9_39()$/;"	f
+load_d3dx9_40	winetricks	/^load_d3dx9_40()$/;"	f
+load_d3dx9_41	winetricks	/^load_d3dx9_41()$/;"	f
+load_d3dx9_42	winetricks	/^load_d3dx9_42()$/;"	f
+load_d3dx9_43	winetricks	/^load_d3dx9_43()$/;"	f
+load_d3dxof	winetricks	/^load_d3dxof()$/;"	f
+load_darknesswithin2_demo	winetricks	/^load_darknesswithin2_demo()$/;"	f
+load_darkspore	winetricks	/^load_darkspore()$/;"	f
+load_dbghelp	winetricks	/^load_dbghelp()$/;"	f
+load_dcuo	winetricks	/^load_dcuo()$/;"	f
+load_ddr	winetricks	/^load_ddr()$/;"	f
+load_deadspace	winetricks	/^load_deadspace()$/;"	f
+load_deadspace2	winetricks	/^load_deadspace2()$/;"	f
+load_demolition_company_demo	winetricks	/^load_demolition_company_demo()$/;"	f
+load_deusex2_demo	winetricks	/^load_deusex2_demo()$/;"	f
+load_devenum	winetricks	/^load_devenum()$/;"	f
+load_diablo2	winetricks	/^load_diablo2()$/;"	f
+load_digitanks_demo	winetricks	/^load_digitanks_demo()$/;"	f
+load_dinput	winetricks	/^load_dinput()$/;"	f
+load_dinput8	winetricks	/^load_dinput8()$/;"	f
+load_dirac	winetricks	/^load_dirac()$/;"	f
+load_directmusic	winetricks	/^load_directmusic()$/;"	f
+load_directplay	winetricks	/^load_directplay()$/;"	f
+load_directx9	winetricks	/^load_directx9()$/;"	f
+load_dirt2_demo	winetricks	/^load_dirt2_demo()$/;"	f
+load_dmband	winetricks	/^load_dmband()$/;"	f
+load_dmcompos	winetricks	/^load_dmcompos()$/;"	f
+load_dmime	winetricks	/^load_dmime()$/;"	f
+load_dmloader	winetricks	/^load_dmloader()$/;"	f
+load_dmscript	winetricks	/^load_dmscript()$/;"	f
+load_dmstyle	winetricks	/^load_dmstyle()$/;"	f
+load_dmsynth	winetricks	/^load_dmsynth()$/;"	f
+load_dmusic	winetricks	/^load_dmusic()$/;"	f
+load_dmusic32	winetricks	/^load_dmusic32()$/;"	f
+load_dotnet11	winetricks	/^load_dotnet11()$/;"	f
+load_dotnet11sp1	winetricks	/^load_dotnet11sp1()$/;"	f
+load_dotnet20	winetricks	/^load_dotnet20()$/;"	f
+load_dotnet20sdk	winetricks	/^load_dotnet20sdk()$/;"	f
+load_dotnet20sp1	winetricks	/^load_dotnet20sp1()$/;"	f
+load_dotnet20sp2	winetricks	/^load_dotnet20sp2()$/;"	f
+load_dotnet30	winetricks	/^load_dotnet30()$/;"	f
+load_dotnet30sp1	winetricks	/^load_dotnet30sp1()$/;"	f
+load_dotnet35	winetricks	/^load_dotnet35()$/;"	f
+load_dotnet35sp1	winetricks	/^load_dotnet35sp1()$/;"	f
+load_dotnet40	winetricks	/^load_dotnet40()$/;"	f
+load_dotnet45	winetricks	/^load_dotnet45()$/;"	f
+load_dotnet452	winetricks	/^load_dotnet452()$/;"	f
+load_dotnet46	winetricks	/^load_dotnet46()$/;"	f
+load_dotnet461	winetricks	/^load_dotnet461()$/;"	f
+load_dotnet462	winetricks	/^load_dotnet462()$/;"	f
+load_dotnet472	winetricks	/^load_dotnet472()$/;"	f
+load_dotnet_verifier	winetricks	/^load_dotnet_verifier()$/;"	f
+load_dpvoice	winetricks	/^load_dpvoice()$/;"	f
+load_dragonage	winetricks	/^load_dragonage()$/;"	f
+load_dragonage2_demo	winetricks	/^load_dragonage2_demo()$/;"	f
+load_dragonage_ue	winetricks	/^load_dragonage_ue()$/;"	f
+load_droid	winetricks	/^load_droid()$/;"	f
+load_dsdmo	winetricks	/^load_dsdmo()$/;"	f
+load_dsound	winetricks	/^load_dsound()$/;"	f
+load_dswave	winetricks	/^load_dswave()$/;"	f
+load_dx8vb	winetricks	/^load_dx8vb()$/;"	f
+load_dxdiag	winetricks	/^load_dxdiag()$/;"	f
+load_dxdiagn	winetricks	/^load_dxdiagn()$/;"	f
+load_dxdiagn_feb2010	winetricks	/^load_dxdiagn_feb2010()$/;"	f
+load_dxsdk_jun2010	winetricks	/^load_dxsdk_jun2010()$/;"	f
+load_dxsdk_nov2006	winetricks	/^load_dxsdk_nov2006()$/;"	f
+load_dxvk	winetricks	/^load_dxvk()$/;"	f
+load_dxvk100	winetricks	/^load_dxvk100()$/;"	f
+load_dxvk101	winetricks	/^load_dxvk101()$/;"	f
+load_dxvk54	winetricks	/^load_dxvk54()$/;"	f
+load_dxvk60	winetricks	/^load_dxvk60()$/;"	f
+load_dxvk61	winetricks	/^load_dxvk61()$/;"	f
+load_dxvk62	winetricks	/^load_dxvk62()$/;"	f
+load_dxvk63	winetricks	/^load_dxvk63()$/;"	f
+load_dxvk64	winetricks	/^load_dxvk64()$/;"	f
+load_dxvk65	winetricks	/^load_dxvk65()$/;"	f
+load_dxvk70	winetricks	/^load_dxvk70()$/;"	f
+load_dxvk71	winetricks	/^load_dxvk71()$/;"	f
+load_dxvk72	winetricks	/^load_dxvk72()$/;"	f
+load_dxvk80	winetricks	/^load_dxvk80()$/;"	f
+load_dxvk81	winetricks	/^load_dxvk81()$/;"	f
+load_dxvk90	winetricks	/^load_dxvk90()$/;"	f
+load_dxvk91	winetricks	/^load_dxvk91()$/;"	f
+load_dxvk92	winetricks	/^load_dxvk92()$/;"	f
+load_dxvk93	winetricks	/^load_dxvk93()$/;"	f
+load_dxvk94	winetricks	/^load_dxvk94()$/;"	f
+load_dxvk95	winetricks	/^load_dxvk95()$/;"	f
+load_dxvk96	winetricks	/^load_dxvk96()$/;"	f
+load_emu8086	winetricks	/^load_emu8086()$/;"	f
+load_esent	winetricks	/^load_esent()$/;"	f
+load_eufonts	winetricks	/^load_eufonts()$/;"	f
+load_ev3	winetricks	/^load_ev3()$/;"	f
+load_eve	winetricks	/^load_eve()$/;"	f
+load_fable_tlc	winetricks	/^load_fable_tlc()$/;"	f
+load_fakechinese	winetricks	/^load_fakechinese()$/;"	f
+load_fakejapanese	winetricks	/^load_fakejapanese()$/;"	f
+load_fakejapanese_ipamona	winetricks	/^load_fakejapanese_ipamona()$/;"	f
+load_fakejapanese_vlgothic	winetricks	/^load_fakejapanese_vlgothic()$/;"	f
+load_fakekorean	winetricks	/^load_fakekorean()$/;"	f
+load_faudio	winetricks	/^load_faudio()$/;"	f
+load_ffdshow	winetricks	/^load_ffdshow()$/;"	f
+load_fifa11_demo	winetricks	/^load_fifa11_demo()$/;"	f
+load_firefox	winetricks	/^load_firefox()$/;"	f
+load_flash	winetricks	/^load_flash()$/;"	f
+load_fontfix	winetricks	/^load_fontfix()$/;"	f
+load_fontsmooth	winetricks	/^load_fontsmooth()$/;"	f
+load_fontxplorer	winetricks	/^load_fontxplorer()$/;"	f
+load_foobar2000	winetricks	/^load_foobar2000()$/;"	f
+load_forcemono	winetricks	/^load_forcemono()$/;"	f
+load_galliumnine	winetricks	/^load_galliumnine()$/;"	f
+load_galliumnine02	winetricks	/^load_galliumnine02()$/;"	f
+load_galliumnine03	winetricks	/^load_galliumnine03()$/;"	f
+load_gdiplus	winetricks	/^load_gdiplus()$/;"	f
+load_gdiplus_winxp	winetricks	/^load_gdiplus_winxp()$/;"	f
+load_georgia	winetricks	/^load_georgia()$/;"	f
+load_gfw	winetricks	/^load_gfw()$/;"	f
+load_glidewrapper	winetricks	/^load_glidewrapper()$/;"	f
+load_glsl	winetricks	/^load_glsl()$/;"	f
+load_glut	winetricks	/^load_glut()$/;"	f
+load_gmdls	winetricks	/^load_gmdls()$/;"	f
+load_good	winetricks	/^load_good()$/;"	f
+load_grabfullscreen	winetricks	/^load_grabfullscreen()$/;"	f
+load_gsm	winetricks	/^load_gsm()$/;"	f
+load_gta_vc	winetricks	/^load_gta_vc()$/;"	f
+load_heapcheck	winetricks	/^load_heapcheck()$/;"	f
+load_hhw	winetricks	/^load_hhw()$/;"	f
+load_hid	winetricks	/^load_hid()$/;"	f
+load_hidewineexports	winetricks	/^load_hidewineexports()$/;"	f
+load_hon	winetricks	/^load_hon()$/;"	f
+load_hordesoforcs2_demo	winetricks	/^load_hordesoforcs2_demo()$/;"	f
+load_hosts	winetricks	/^load_hosts()$/;"	f
+load_iceweasel	winetricks	/^load_iceweasel()$/;"	f
+load_icodecs	winetricks	/^load_icodecs()$/;"	f
+load_ie6	winetricks	/^load_ie6()$/;"	f
+load_ie7	winetricks	/^load_ie7()$/;"	f
+load_ie8	winetricks	/^load_ie8()$/;"	f
+load_ie8_kb2936068	winetricks	/^load_ie8_kb2936068()$/;"	f
+load_impact	winetricks	/^load_impact()$/;"	f
+load_ipamona	winetricks	/^load_ipamona()$/;"	f
+load_irfanview	winetricks	/^load_irfanview()$/;"	f
+load_isolate_home	winetricks	/^load_isolate_home()$/;"	f
+load_itircl	winetricks	/^load_itircl()$/;"	f
+load_itss	winetricks	/^load_itss()$/;"	f
+load_jet40	winetricks	/^load_jet40()$/;"	f
+load_kde	winetricks	/^load_kde()$/;"	f
+load_kindle	winetricks	/^load_kindle()$/;"	f
+load_kobo	winetricks	/^load_kobo()$/;"	f
+load_kotor1	winetricks	/^load_kotor1()$/;"	f
+load_l3codecx	winetricks	/^load_l3codecx()$/;"	f
+load_lemonysnicket	winetricks	/^load_lemonysnicket()$/;"	f
+load_lhp_demo	winetricks	/^load_lhp_demo()$/;"	f
+load_liberation	winetricks	/^load_liberation()$/;"	f
+load_losthorizon_demo	winetricks	/^load_losthorizon_demo()$/;"	f
+load_lswcs	winetricks	/^load_lswcs()$/;"	f
+load_lucida	winetricks	/^load_lucida()$/;"	f
+load_luxor_ar	winetricks	/^load_luxor_ar()$/;"	f
+load_macdriver	winetricks	/^load_macdriver()$/;"	f
+load_masseffect2	winetricks	/^load_masseffect2()$/;"	f
+load_masseffect2_demo	winetricks	/^load_masseffect2_demo()$/;"	f
+load_maxmagicmarker_demo	winetricks	/^load_maxmagicmarker_demo()$/;"	f
+load_mdac27	winetricks	/^load_mdac27()$/;"	f
+load_mdac28	winetricks	/^load_mdac28()$/;"	f
+load_mdk	winetricks	/^load_mdk()$/;"	f
+load_mdx	winetricks	/^load_mdx()$/;"	f
+load_meiryo	winetricks	/^load_meiryo()$/;"	f
+load_menofwar	winetricks	/^load_menofwar()$/;"	f
+load_mf	winetricks	/^load_mf()$/;"	f
+load_mfc40	winetricks	/^load_mfc40()$/;"	f
+load_mfc42	winetricks	/^load_mfc42()$/;"	f
+load_mfsx_demo	winetricks	/^load_mfsx_demo()$/;"	f
+load_mfsxde	winetricks	/^load_mfsxde()$/;"	f
+load_mimeassoc	winetricks	/^load_mimeassoc()$/;"	f
+load_mingw	winetricks	/^load_mingw()$/;"	f
+load_mise	winetricks	/^load_mise()$/;"	f
+load_mozillabuild	winetricks	/^load_mozillabuild()$/;"	f
+load_mpc	winetricks	/^load_mpc()$/;"	f
+load_msacm32	winetricks	/^load_msacm32()$/;"	f
+load_msasn1	winetricks	/^load_msasn1()$/;"	f
+load_msctf	winetricks	/^load_msctf()$/;"	f
+load_msdxmocx	winetricks	/^load_msdxmocx()$/;"	f
+load_msflxgrd	winetricks	/^load_msflxgrd()$/;"	f
+load_msftedit	winetricks	/^load_msftedit()$/;"	f
+load_mshflxgd	winetricks	/^load_mshflxgd()$/;"	f
+load_msls31	winetricks	/^load_msls31()$/;"	f
+load_msmask	winetricks	/^load_msmask()$/;"	f
+load_mspaint	winetricks	/^load_mspaint()$/;"	f
+load_mspatcha	winetricks	/^load_mspatcha()$/;"	f
+load_msscript	winetricks	/^load_msscript()$/;"	f
+load_msvcirt	winetricks	/^load_msvcirt()$/;"	f
+load_msxml3	winetricks	/^load_msxml3()$/;"	f
+load_msxml4	winetricks	/^load_msxml4()$/;"	f
+load_msxml6	winetricks	/^load_msxml6()$/;"	f
+load_mt4	winetricks	/^load_mt4()$/;"	f
+load_multisampling	winetricks	/^load_multisampling()$/;"	f
+load_mwo	winetricks	/^load_mwo()$/;"	f
+load_myth2_demo	winetricks	/^load_myth2_demo()$/;"	f
+load_native_mdac	winetricks	/^load_native_mdac()$/;"	f
+load_native_oleaut32	winetricks	/^load_native_oleaut32()$/;"	f
+load_nfsshift_demo	winetricks	/^load_nfsshift_demo()$/;"	f
+load_njcwp_trial	winetricks	/^load_njcwp_trial()$/;"	f
+load_njjwp_trial	winetricks	/^load_njjwp_trial()$/;"	f
+load_nocrashdialog	winetricks	/^load_nocrashdialog()$/;"	f
+load_nook	winetricks	/^load_nook()$/;"	f
+load_npm	winetricks	/^load_npm()$/;"	f
+load_npp	winetricks	/^load_npp()$/;"	f
+load_nt40	winetricks	/^load_nt40()$/;"	f
+load_nuget	winetricks	/^load_nuget()$/;"	f
+load_oblivion	winetricks	/^load_oblivion()$/;"	f
+load_office2003pro	winetricks	/^load_office2003pro()$/;"	f
+load_office2007pro	winetricks	/^load_office2007pro()$/;"	f
+load_office2013pro	winetricks	/^load_office2013pro()$/;"	f
+load_ogg	winetricks	/^load_ogg()$/;"	f
+load_ole32	winetricks	/^load_ole32()$/;"	f
+load_ollydbg110	winetricks	/^load_ollydbg110()$/;"	f
+load_ollydbg200	winetricks	/^load_ollydbg200()$/;"	f
+load_ollydbg201	winetricks	/^load_ollydbg201()$/;"	f
+load_opensymbol	winetricks	/^load_opensymbol()$/;"	f
+load_openwatcom	winetricks	/^load_openwatcom()$/;"	f
+load_orm	winetricks	/^load_orm()$/;"	f
+load_pdh	winetricks	/^load_pdh()$/;"	f
+load_penpenxmas	winetricks	/^load_penpenxmas()$/;"	f
+load_physx	winetricks	/^load_physx()$/;"	f
+load_pngfilt	winetricks	/^load_pngfilt()$/;"	f
+load_popfs	winetricks	/^load_popfs()$/;"	f
+load_pptfonts	winetricks	/^load_pptfonts()$/;"	f
+load_protectionid	winetricks	/^load_protectionid()$/;"	f
+load_psdk2003	winetricks	/^load_psdk2003()$/;"	f
+load_psdkwin7	winetricks	/^load_psdkwin7()$/;"	f
+load_psdkwin71	winetricks	/^load_psdkwin71()$/;"	f
+load_psm	winetricks	/^load_psm()$/;"	f
+load_python26	winetricks	/^load_python26()$/;"	f
+load_qasf	winetricks	/^load_qasf()$/;"	f
+load_qdvd	winetricks	/^load_qdvd()$/;"	f
+load_qedit	winetricks	/^load_qedit()$/;"	f
+load_qq	winetricks	/^load_qq()$/;"	f
+load_qqintl	winetricks	/^load_qqintl()$/;"	f
+load_quartz	winetricks	/^load_quartz()$/;"	f
+load_quicktime72	winetricks	/^load_quicktime72()$/;"	f
+load_quicktime76	winetricks	/^load_quicktime76()$/;"	f
+load_rct3deluxe	winetricks	/^load_rct3deluxe()$/;"	f
+load_remove_mono	winetricks	/^load_remove_mono()$/;"	f
+load_riched20	winetricks	/^load_riched20()$/;"	f
+load_riched30	winetricks	/^load_riched30()$/;"	f
+load_richtx32	winetricks	/^load_richtx32()$/;"	f
+load_riseofnations_demo	winetricks	/^load_riseofnations_demo()$/;"	f
+load_rtlm	winetricks	/^load_rtlm()$/;"	f
+load_ruse_demo_steam	winetricks	/^load_ruse_demo_steam()$/;"	f
+load_sacrifice_gog	winetricks	/^load_sacrifice_gog()$/;"	f
+load_safari	winetricks	/^load_safari()$/;"	f
+load_sammax301_demo	winetricks	/^load_sammax301_demo()$/;"	f
+load_sammax304_demo	winetricks	/^load_sammax304_demo()$/;"	f
+load_sandbox	winetricks	/^load_sandbox()$/;"	f
+load_sdl	winetricks	/^load_sdl()$/;"	f
+load_secondlife	winetricks	/^load_secondlife()$/;"	f
+load_secur32	winetricks	/^load_secur32()$/;"	f
+load_setupapi	winetricks	/^load_setupapi()$/;"	f
+load_shockwave	winetricks	/^load_shockwave() {$/;"	f
+load_sims3	winetricks	/^load_sims3()$/;"	f
+load_sims3_gen	winetricks	/^load_sims3_gen()$/;"	f
+load_simsmed	winetricks	/^load_simsmed()$/;"	f
+load_singularity	winetricks	/^load_singularity()$/;"	f
+load_sketchup	winetricks	/^load_sketchup()$/;"	f
+load_sound	winetricks	/^load_sound()$/;"	f
+load_speechsdk	winetricks	/^load_speechsdk()$/;"	f
+load_splitsecond	winetricks	/^load_splitsecond()$/;"	f
+load_spore	winetricks	/^load_spore()$/;"	f
+load_spore_cc_demo	winetricks	/^load_spore_cc_demo()$/;"	f
+load_stalker_pripyat_bench	winetricks	/^load_stalker_pripyat_bench()$/;"	f
+load_starcraft2_demo	winetricks	/^load_starcraft2_demo()$/;"	f
+load_steam	winetricks	/^load_steam()$/;"	f
+load_strictdrawordering	winetricks	/^load_strictdrawordering()$/;"	f
+load_supermeatboy_steam	winetricks	/^load_supermeatboy_steam()$/;"	f
+load_tabctl32	winetricks	/^load_tabctl32()$/;"	f
+load_tahoma	winetricks	/^load_tahoma()$/;"	f
+load_takao	winetricks	/^load_takao()$/;"	f
+load_the_witcher_2_gog	winetricks	/^load_the_witcher_2_gog()$/;"	f
+load_theundergarden_demo	winetricks	/^load_theundergarden_demo()$/;"	f
+load_times	winetricks	/^load_times()$/;"	f
+load_tmnationsforever	winetricks	/^load_tmnationsforever()$/;"	f
+load_torchlight	winetricks	/^load_torchlight()$/;"	f
+load_trainztcc_2004	winetricks	/^load_trainztcc_2004()$/;"	f
+load_trebuchet	winetricks	/^load_trebuchet()$/;"	f
+load_trine_demo_steam	winetricks	/^load_trine_demo_steam()$/;"	f
+load_trine_steam	winetricks	/^load_trine_steam()$/;"	f
+load_tropico3_demo	winetricks	/^load_tropico3_demo()$/;"	f
+load_twfc	winetricks	/^load_twfc()$/;"	f
+load_typingofthedead_demo	winetricks	/^load_typingofthedead_demo()$/;"	f
+load_uff	winetricks	/^load_uff()$/;"	f
+load_unifont	winetricks	/^load_unifont()$/;"	f
+load_unigine_heaven	winetricks	/^load_unigine_heaven()$/;"	f
+load_updspapi	winetricks	/^load_updspapi()$/;"	f
+load_uplay	winetricks	/^load_uplay()$/;"	f
+load_usp10	winetricks	/^load_usp10()$/;"	f
+load_ut3	winetricks	/^load_ut3()$/;"	f
+load_utorrent	winetricks	/^load_utorrent()$/;"	f
+load_utorrent3	winetricks	/^load_utorrent3()$/;"	f
+load_vb2run	winetricks	/^load_vb2run()$/;"	f
+load_vb3run	winetricks	/^load_vb3run()$/;"	f
+load_vb4run	winetricks	/^load_vb4run()$/;"	f
+load_vb5run	winetricks	/^load_vb5run()$/;"	f
+load_vb6run	winetricks	/^load_vb6run()$/;"	f
+load_vc2005express	winetricks	/^load_vc2005express()$/;"	f
+load_vc2005expresssp1	winetricks	/^load_vc2005expresssp1()$/;"	f
+load_vc2005trial	winetricks	/^load_vc2005trial()$/;"	f
+load_vc2008express	winetricks	/^load_vc2008express()$/;"	f
+load_vc2010express	winetricks	/^load_vc2010express()$/;"	f
+load_vcrun2003	winetricks	/^load_vcrun2003()$/;"	f
+load_vcrun2005	winetricks	/^load_vcrun2005()$/;"	f
+load_vcrun2008	winetricks	/^load_vcrun2008()$/;"	f
+load_vcrun2010	winetricks	/^load_vcrun2010()$/;"	f
+load_vcrun2012	winetricks	/^load_vcrun2012()$/;"	f
+load_vcrun2013	winetricks	/^load_vcrun2013()$/;"	f
+load_vcrun2015	winetricks	/^load_vcrun2015()$/;"	f
+load_vcrun2017	winetricks	/^load_vcrun2017()$/;"	f
+load_vcrun6	winetricks	/^load_vcrun6()$/;"	f
+load_vcrun6sp6	winetricks	/^load_vcrun6sp6()$/;"	f
+load_vd	winetricks	/^load_vd()$/;"	f
+load_verdana	winetricks	/^load_verdana()$/;"	f
+load_videomemorysize	winetricks	/^load_videomemorysize()$/;"	f
+load_vista	winetricks	/^load_vista()$/;"	f
+load_vjrun20	winetricks	/^load_vjrun20()$/;"	f
+load_vlc	winetricks	/^load_vlc()$/;"	f
+load_vlgothic	winetricks	/^load_vlgothic()$/;"	f
+load_vsm	winetricks	/^load_vsm()$/;"	f
+load_vulkanrt	winetricks	/^load_vulkanrt()$/;"	f
+load_vulkansdk	winetricks	/^load_vulkansdk()$/;"	f
+load_webdings	winetricks	/^load_webdings()$/;"	f
+load_webio	winetricks	/^load_webio()$/;"	f
+load_wenquanyi	winetricks	/^load_wenquanyi()$/;"	f
+load_wglgears	winetricks	/^load_wglgears()$/;"	f
+load_win10	winetricks	/^load_win10()$/;"	f
+load_win2k	winetricks	/^load_win2k()$/;"	f
+load_win2k3	winetricks	/^load_win2k3()$/;"	f
+load_win2k8	winetricks	/^load_win2k8()$/;"	f
+load_win31	winetricks	/^load_win31()$/;"	f
+load_win7	winetricks	/^load_win7()$/;"	f
+load_win8	winetricks	/^load_win8()$/;"	f
+load_win81	winetricks	/^load_win81()$/;"	f
+load_win95	winetricks	/^load_win95()$/;"	f
+load_win98	winetricks	/^load_win98()$/;"	f
+load_winamp	winetricks	/^load_winamp()$/;"	f
+load_windowmanagerdecorated	winetricks	/^load_windowmanagerdecorated()$/;"	f
+load_windowmanagermanaged	winetricks	/^load_windowmanagermanaged()$/;"	f
+load_windowscodecs	winetricks	/^load_windowscodecs()$/;"	f
+load_winhttp	winetricks	/^load_winhttp()$/;"	f
+load_wininet	winetricks	/^load_wininet()$/;"	f
+load_wininet_win2k	winetricks	/^load_wininet_win2k()$/;"	f
+load_winver	winetricks	/^load_winver()$/;"	f
+load_winxp	winetricks	/^load_winxp()$/;"	f
+load_wm9codecs	winetricks	/^load_wm9codecs()$/;"	f
+load_wme9	winetricks	/^load_wme9()$/;"	f
+load_wmi	winetricks	/^load_wmi()$/;"	f
+load_wmp10	winetricks	/^load_wmp10()$/;"	f
+load_wmp9	winetricks	/^load_wmp9()$/;"	f
+load_wmv9vcm	winetricks	/^load_wmv9vcm()$/;"	f
+load_wog	winetricks	/^load_wog()$/;"	f
+load_wormsreloaded_demo_steam	winetricks	/^load_wormsreloaded_demo_steam()$/;"	f
+load_wsh57	winetricks	/^load_wsh57()$/;"	f
+load_xact	winetricks	/^load_xact()$/;"	f
+load_xact_x64	winetricks	/^load_xact_x64()$/;"	f
+load_xinput	winetricks	/^load_xinput()$/;"	f
+load_xmllite	winetricks	/^load_xmllite()$/;"	f
+load_xna31	winetricks	/^load_xna31()$/;"	f
+load_xna40	winetricks	/^load_xna40()$/;"	f
+load_xvid	winetricks	/^load_xvid()$/;"	f
+longest_common_prefix	u.f.sh	/^longest_common_prefix() {$/;"	f
+lost_a_packet	prettyping	/^			lost_a_packet()$/;"	f
+lost_a_packet	prettyping	/^		lost_a_packet()$/;"	f
+lost_a_packet	prettyping	/^function lost_a_packet() {$/;"	f
+lst	consecutive-combinations.py	/^    lst = line.split()$/;"	v
+main	re-grep.go	/^package main$/;"	p
+main	readline.py	/^def main():$/;"	f
+main	ttyecho.c	/^int main (int argc, char *argv[]) {$/;"	f
+make_native_path	lein	/^function make_native_path {$/;"	f
+mark_empty_line	diff-so-fancy	/^sub mark_empty_line {$/;"	s
+match_all_positions	pcre-match-positions.pl	/^sub match_all_positions {$/;"	s
+match_positions	test-match-pos.pl	/^sub match_positions {$/;"	s
+minimise	eminem	/^minimise() {$/;"	f
+minimise	minimise.sh	/^minimise() {$/;"	f
+minimise	mnm	/^minimise() {$/;"	f
+minimise	umn	/^minimise() {$/;"	f
+minimise	unminimise.sh	/^minimise() {$/;"	f
+modes	start-app-with-resolution.py	/^modes = []             # keep track of all the devices and modes discovered$/;"	v
+myhoogle	hoogle	/^myhoogle() {$/;"	f
+n	getngrams.py	/^            n = int(argument)$/;"	v
+n	getngrams.py	/^n = 1$/;"	v
+names	tm-lsp.sh	/^names() {$/;"	f
+namevalue	formfind.pl	/^sub namevalue {$/;"	s
+ngrams	getngrams.py	/^ngrams = ngrams(token,n)$/;"	v
+nlp	usespacy.py	/^nlp = spacy.load('en_core_web_sm')$/;"	v
+nmap_s	list-ips-for-current-network	/^nmap_s() {$/;"	f
+nmap_s	nmap-s	/^nmap_s() {$/;"	f
+noun_chunks	usespacy.py	/^noun_chunks = list(doc.noun_chunks)$/;"	v
+ord	math	/^ord () {$/;"	f
+org-beamer-export-to-pdf-directory	make-presentations.el	/^(defun org-beamer-export-to-pdf-directory (files)$/;"	f
+other_line_finished_repeating	prettyping	/^			other_line_finished_repeating()$/;"	f
+other_line_finished_repeating	prettyping	/^function other_line_finished_repeating() {$/;"	f
+other_line_is_printed	prettyping	/^		other_line_is_printed()$/;"	f
+other_line_is_printed	prettyping	/^function other_line_is_printed() {$/;"	f
+other_line_is_repeated	prettyping	/^				other_line_is_repeated()$/;"	f
+other_line_is_repeated	prettyping	/^			other_line_is_repeated()$/;"	f
+other_line_is_repeated	prettyping	/^function other_line_is_repeated() {$/;"	f
+output	start-app-with-resolution.py	/^output = xrandrinfo.communicate()[0].decode().split('\\n')$/;"	v
+pager	apt	/^pager() {$/;"	f
+pager	ca	/^pager() {$/;"	f
+pager	cheat	/^pager() {$/;"	f
+pager	dac	/^pager() {$/;"	f
+pager	dack	/^pager() {$/;"	f
+pager	eack	/^pager() {$/;"	f
+pager	eackd	/^pager() {$/;"	f
+pager	ead	/^pager() {$/;"	f
+pager	find-all-no-git.sh	/^pager() {$/;"	f
+pager	hsqc	/^pager() {$/;"	f
+pager	i	/^pager() {$/;"	f
+pager	lack	/^pager() {$/;"	f
+pager	list-mru	/^pager() {$/;"	f
+pager	list-pythonlibs	/^pager() {$/;"	f
+pager	pager	/^pager() {$/;"	f
+pager	perldoc	/^pager() {$/;"	f
+pager	pydoc	/^pager() {$/;"	f
+pager	r	/^pager() {$/;"	f
+pager	raco	/^pager() {$/;"	f
+pager	tm	/^pager() { if is_tty; then v; else cat; fi; }$/;"	f
+parse_arguments	prettyping	/^parse_arguments() {$/;"	f
+parse_hunk_header	diff-so-fancy	/^sub parse_hunk_header {$/;"	s
+parser	start-app-with-resolution.py	/^parser = argparse.ArgumentParser()$/;"	v
+path_info	h	/^path_info() {$/;"	f
+path_info	pathi	/^path_info() {$/;"	f
+path_without_prefix	u.f.sh	/^path_without_prefix() {$/;"	f
+pathmunge	libraries/bash-library.sh	/^pathmunge () {$/;"	f
+pi	math	/^pi() {$/;"	f
+plf	tm	/^plf() {$/;"	f
+poison	html-declutter.pl	/^sub poison {$/;"	s
+prepare_query	cheat.sh	/^prepare_query()$/;"	f
+prepare_query	cht.sh	/^prepare_query()$/;"	f
+prepend_to_path	libraries/bash-library.sh	/^prepend_to_path() {$/;"	f
+print_all	colortrans.py	/^def print_all():$/;"	f
+print_err	e	/^print_err() {$/;"	f
+print_err	ec	/^print_err() {$/;"	f
+print_err	ecn	/^print_err() {$/;"	f
+print_err	et	/^print_err() {$/;"	f
+print_err	me	/^print_err() {$/;"	f
+print_err	pc	/^print_err() {$/;"	f
+print_err	pd	/^print_err() {$/;"	f
+print_err	sc	/^print_err() {$/;"	f
+print_err	sp	/^print_err() {$/;"	f
+print_err	vlf	/^print_err() {$/;"	f
+print_err	xr	/^print_err() {$/;"	f
+print_help	prettyping	/^print_help() {$/;"	f
+print_help	ttyecho.c	/^void print_help(char *prog_name) {$/;"	f
+print_last_n	prettyping	/^		print_last_n()$/;"	f
+print_last_n	prettyping	/^function print_last_n(i, percentage_lost, sum, min, avg, max, diffs) {$/;"	f
+print_missing_response	prettyping	/^	print_missing_response()$/;"	f
+print_missing_response	prettyping	/^function print_missing_response(rtt) {$/;"	f
+print_newlines_if_needed	prettyping	/^			print_newlines_if_needed()$/;"	f
+print_newlines_if_needed	prettyping	/^		print_newlines_if_needed()$/;"	f
+print_newlines_if_needed	prettyping	/^	print_newlines_if_needed()$/;"	f
+print_newlines_if_needed	prettyping	/^function print_newlines_if_needed() {$/;"	f
+print_overall	prettyping	/^		print_overall()$/;"	f
+print_overall	prettyping	/^function print_overall(percentage_lost, avg_rtt) {$/;"	f
+print_received_response	prettyping	/^function print_received_response(rtt, block_index) {$/;"	f
+print_response_legend	prettyping	/^	print_response_legend()$/;"	f
+print_response_legend	prettyping	/^function print_response_legend(i, n, w) {$/;"	f
+print_statistics_bar	prettyping	/^			print_statistics_bar()$/;"	f
+print_statistics_bar	prettyping	/^		print_statistics_bar()$/;"	f
+print_statistics_bar	prettyping	/^function print_statistics_bar() {$/;"	f
+print_statistics_bar_if_terminal	prettyping	/^			print_statistics_bar_if_terminal()$/;"	f
+print_statistics_bar_if_terminal	prettyping	/^		print_statistics_bar_if_terminal()$/;"	f
+print_statistics_bar_if_terminal	prettyping	/^function print_statistics_bar_if_terminal() {$/;"	f
+process_arg	vdiff	/^process_arg() {$/;"	f
+process_rtt	prettyping	/^function process_rtt(rtt) {$/;"	f
+prune	html-declutter.pl	/^sub prune {$/;"	s
+purify	html-declutter.pl	/^sub purify {$/;"	s
+query	gp	/^query = sys.argv[1]$/;"	v
+quo
+quote_it	Q	/^sub quote_it {$/;"	s
+quote_it	qf	/^sub quote_it {$/;"	s
+quote_it	qftln	/^sub quote_it {$/;"	s
+quote_it	qs	/^sub quote_it {$/;"	s
+quote_it	unquote.pl	/^sub quote_it {$/;"	s
+quote_it	uq	/^sub quote_it {$/;"	s
+quote_it	uqne	/^sub quote_it {$/;"	s
+quote_substring	Q	/^sub quote_substring {$/;"	s
+quote_substring	qf	/^sub quote_substring {$/;"	s
+quote_substring	qftln	/^sub quote_substring {$/;"	s
+quote_substring	qs	/^sub quote_substring {$/;"	s
+quote_substring	unquote.pl	/^sub quote_substring {$/;"	s
+quote_substring	uq	/^sub quote_substring {$/;"	s
+quote_substring	uqne	/^sub quote_substring {$/;"	s
+rand	ml	/^rand() {$/;"	f
+regex	my-regex.py	/^regex = re.compile( sys.argv[0])$/;"	v
+regex	myregex.py	/^regex = re.compile( sys.argv[0])$/;"	v
+repository_archived	gh-isarchived	/^repository_archived() {$/;"	f
+repository_neglected	gh-isneglected	/^repository_neglected() {$/;"	f
+rgb	colortrans.py	/^        rgb = short2rgb(arg)$/;"	v
+rgb2short	colortrans.py	/^def rgb2short(rgb):$/;"	f
+rs_gc_to_laptop	unison	/^rs_gc_to_laptop() {$/;"	f
+rs_laptop_to_gc	unison	/^rs_laptop_to_gc() {$/;"	f
+rtm_apicall	slirc	/^sub rtm_apicall {$/;"	s
+rtm_apicall	slirc-20180515.pl	/^sub rtm_apicall {$/;"	s
+rtm_cooldown	slirc	/^sub rtm_cooldown {$/;"	s
+rtm_cooldown	slirc-20180515.pl	/^sub rtm_cooldown {$/;"	s
+rtm_delete_channel	slirc	/^sub rtm_delete_channel {$/;"	s
+rtm_delete_channel	slirc-20180515.pl	/^sub rtm_delete_channel {$/;"	s
+rtm_destroy	slirc	/^sub rtm_destroy {$/;"	s
+rtm_destroy	slirc-20180515.pl	/^sub rtm_destroy {$/;"	s
+rtm_mark_channel	slirc	/^sub rtm_mark_channel {$/;"	s
+rtm_mark_channel	slirc-20180515.pl	/^sub rtm_mark_channel {$/;"	s
+rtm_ping	slirc	/^sub rtm_ping {$/;"	s
+rtm_ping	slirc-20180515.pl	/^sub rtm_ping {$/;"	s
+rtm_record_unknown_uid	slirc	/^sub rtm_record_unknown_uid {$/;"	s
+rtm_record_unknown_uid	slirc-20180515.pl	/^sub rtm_record_unknown_uid {$/;"	s
+rtm_send	slirc	/^sub rtm_send {$/;"	s
+rtm_send	slirc-20180515.pl	/^sub rtm_send {$/;"	s
+rtm_send_to_user	slirc	/^sub rtm_send_to_user {$/;"	s
+rtm_send_to_user	slirc-20180515.pl	/^sub rtm_send_to_user {$/;"	s
+rtm_start	slirc	/^sub rtm_start {$/;"	s
+rtm_start	slirc-20180515.pl	/^sub rtm_start {$/;"	s
+rtm_start_ws	slirc	/^sub rtm_start_ws {$/;"	s
+rtm_start_ws	slirc-20180515.pl	/^sub rtm_start_ws {$/;"	s
+rtm_update_channel	slirc	/^sub rtm_update_channel {$/;"	s
+rtm_update_channel	slirc-20180515.pl	/^sub rtm_update_channel {$/;"	s
+rtm_update_join	slirc	/^sub rtm_update_join {$/;"	s
+rtm_update_join	slirc-20180515.pl	/^sub rtm_update_join {$/;"	s
+rtm_update_part	slirc	/^sub rtm_update_part {$/;"	s
+rtm_update_part	slirc-20180515.pl	/^sub rtm_update_part {$/;"	s
+rtm_update_user	slirc	/^sub rtm_update_user {$/;"	s
+rtm_update_user	slirc-20180515.pl	/^sub rtm_update_user {$/;"	s
+script_append	x	/^script_append() {$/;"	f
+script_append	x-new	/^script_append() {$/;"	f
+second_last_arg	tm	/^second_last_arg() {$/;"	f
+self_install	lein	/^function self_install {$/;"	f
+sentences	usespacy.py	/^sentences = list(doc.sents)$/;"	v
+sesame	html-declutter.pl	/^sub sesame {$/;"	s
+session_list	tm	/^session_list() {$/;"	f
+set_defaults	diff-so-fancy	/^sub set_defaults {$/;"	s
+setup_chroot	busyroot.sh	/^setup_chroot() {$/;"	f
+setvol	a	/^setvol() {$/;"	f
+setvol	audio	/^setvol() {$/;"	f
+shake	html-declutter.pl	/^sub shake {$/;"	s
+short2rgb	colortrans.py	/^def short2rgb(short):$/;"	f
+should_print_unicode	diff-so-fancy	/^sub should_print_unicode {$/;"	s
+should_prune	html-declutter.pl	/^sub should_prune {$/;"	s
+shpv	libraries/tmux-lib.sh	/^shpv() {$/;"	f
+shpvs	libraries/tmux-lib.sh	/^shpvs() {$/;"	f
+solve	math	/^solve() {$/;"	f
+start_line_calc	diff-so-fancy	/^sub start_line_calc {$/;"	s
+start_skype	skype	/^start_skype() {$/;"	f
+stdin_exists	F	/^stdin_exists() {$/;"	f
+stdin_exists	ca	/^stdin_exists() {$/;"	f
+stdin_exists	cchar	/^stdin_exists() {$/;"	f
+stdin_exists	ci	/^stdin_exists() {$/;"	f
+stdin_exists	date-hr	/^stdin_exists() {$/;"	f
+stdin_exists	db	/^stdin_exists() {$/;"	f
+stdin_exists	ds	/^stdin_exists() {$/;"	f
+stdin_exists	ds.new	/^stdin_exists() {$/;"	f
+stdin_exists	e	/^stdin_exists() {$/;"	f
+stdin_exists	ec	/^stdin_exists() {$/;"	f
+stdin_exists	ecn	/^stdin_exists() {$/;"	f
+stdin_exists	et	/^stdin_exists() {$/;"	f
+stdin_exists	f	/^stdin_exists() {$/;"	f
+stdin_exists	ffzf	/^stdin_exists() {$/;"	f
+stdin_exists	field	/^stdin_exists() {$/;"	f
+stdin_exists	filter-find	/^stdin_exists() {$/;"	f
+stdin_exists	fzf	/^stdin_exists() {$/;"	f
+stdin_exists	fzgrep	/^stdin_exists() {$/;"	f
+stdin_exists	gc	/^stdin_exists() {$/;"	f
+stdin_exists	hrtime	/^stdin_exists() {$/;"	f
+stdin_exists	hs	/^stdin_exists() {$/;"	f
+stdin_exists	hsq	/^stdin_exists() {$/;"	f
+stdin_exists	ht	/^stdin_exists() {$/;"	f
+stdin_exists	is-dos	/^stdin_exists() {$/;"	f
+stdin_exists	libraries/bash-library.sh	/^stdin_exists() {$/;"	f
+stdin_exists	locate-stdin	/^stdin_exists() {$/;"	f
+stdin_exists	me	/^stdin_exists() {$/;"	f
+stdin_exists	nf	/^stdin_exists() {$/;"	f
+stdin_exists	nix	/^stdin_exists() {$/;"	f
+stdin_exists	ns	/^stdin_exists() {$/;"	f
+stdin_exists	o	/^stdin_exists() {$/;"	f
+stdin_exists	open	/^stdin_exists() {$/;"	f
+stdin_exists	ord	/^stdin_exists() {$/;"	f
+stdin_exists	pager	/^stdin_exists() {$/;"	f
+stdin_exists	pastebin	/^stdin_exists() {$/;"	f
+stdin_exists	pb	/^stdin_exists() {$/;"	f
+stdin_exists	pc	/^stdin_exists() {$/;"	f
+stdin_exists	pd	/^stdin_exists() {$/;"	f
+stdin_exists	py	/^stdin_exists() {$/;"	f
+stdin_exists	racket-format	/^stdin_exists() {$/;"	f
+stdin_exists	repeat-string	/^stdin_exists() {$/;"	f
+stdin_exists	rtcmd	/^stdin_exists() {$/;"	f
+stdin_exists	rtedit	/^stdin_exists() {$/;"	f
+stdin_exists	s	/^stdin_exists() {$/;"	f
+stdin_exists	sc	/^stdin_exists() {$/;"	f
+stdin_exists	seconds2human	/^stdin_exists() {$/;"	f
+stdin_exists	siq	/^stdin_exists() {$/;"	f
+stdin_exists	sp	/^stdin_exists() {$/;"	f
+stdin_exists	textql	/^stdin_exists() {$/;"	f
+stdin_exists	tf	/^stdin_exists() {$/;"	f
+stdin_exists	tm	/^stdin_exists() { ! [ -t 0 ]; }$/;"	f
+stdin_exists	u	/^stdin_exists() {$/;"	f
+stdin_exists	uniqnosort	/^stdin_exists() {$/;"	f
+stdin_exists	unix	/^stdin_exists() {$/;"	f
+stdin_exists	urldecode	/^stdin_exists() {$/;"	f
+stdin_exists	urlencode	/^stdin_exists() {$/;"	f
+stdin_exists	vime	/^stdin_exists() {$/;"	f
+stdin_exists	vlf	/^stdin_exists() {$/;"	f
+stdin_exists	wf	/^stdin_exists() {$/;"	f
+stdin_exists	wrl	/^stdin_exists() {$/;"	f
+stdin_exists	wrla	/^stdin_exists() {$/;"	f
+stdin_exists	xr	/^stdin_exists() {$/;"	f
+stdinexists	i1	/^stdinexists() {$/;"	f
+stdinexists	msh	/^stdinexists() {$/;"	f
+stdinexists	web	/^stdinexists() {$/;"	f
+stdinexists	xc	/^stdinexists() {$/;"	f
+stdinexists	xc1	/^stdinexists() {$/;"	f
+stdout_capture_exists	libraries/bash-library.sh	/^stdout_capture_exists() {$/;"	f
+stdout_capture_exists	tm	/^stdout_capture_exists() { ! is_tty; }$/;"	f
+store	prettyping	/^function store(d, value) {$/;"	f
+strip_leading_indicators	diff-so-fancy	/^sub strip_leading_indicators {$/;"	s
+sum	math	/^sum() {$/;"	f
+table	record-balance.py	/^table = db['sometable']$/;"	v
+table	tabulate-tsv.py	/^table = list(csv.reader(data, delimiter='\\t'))$/;"	v
+tau	math	/^tau() {$/;"	f
+token	getngrams.py	/^token = nltk.word_tokenize(data)$/;"	v
+tpv	libraries/tmux-lib.sh	/^tpv() {$/;"	f
+tpv	tm	/^tpv() {$/;"	f
+tpwd	libraries/tmux-lib.sh	/^tpwd() {$/;"	f
+transactions	apriori.py	/^transactions = [('eggs', 'bacon', 'soup'),$/;"	v
+trim	diff-so-fancy	/^sub trim {$/;"	s
+trim	scope.sh	/^trim() { head -n "$maxln"; }$/;"	f
+try	scope.sh	/^try() {$/;"	f
+two_dec	balance.sh	/^two_dec() {$/;"	f
+unhandled_input	readline.py	/^def unhandled_input(txt, key):$/;"	f
+unminimise	eminem	/^unminimise() {$/;"	f
+unminimise	minimise.sh	/^unminimise() {$/;"	f
+unminimise	mnm	/^unminimise() {$/;"	f
+unminimise	umn	/^unminimise() {$/;"	f
+unminimise	unminimise.sh	/^unminimise() {$/;"	f
+unmute	a	/^unmute() {$/;"	f
+unmute	audio	/^unmute() {$/;"	f
+usage	diff-so-fancy	/^sub usage {$/;"	s
+verify_dotnet11	winetricks	/^verify_dotnet11()$/;"	f
+verify_dotnet11sp1	winetricks	/^verify_dotnet11sp1()$/;"	f
+verify_dotnet20	winetricks	/^verify_dotnet20()$/;"	f
+verify_dotnet20sp1	winetricks	/^verify_dotnet20sp1()$/;"	f
+verify_dotnet20sp2	winetricks	/^verify_dotnet20sp2()$/;"	f
+verify_dotnet30	winetricks	/^verify_dotnet30()$/;"	f
+verify_dotnet30sp1	winetricks	/^verify_dotnet30sp1()$/;"	f
+verify_dotnet35	winetricks	/^verify_dotnet35()$/;"	f
+verify_dotnet35sp1	winetricks	/^verify_dotnet35sp1()$/;"	f
+verify_dotnet40	winetricks	/^verify_dotnet40()$/;"	f
+verify_dotnet45	winetricks	/^verify_dotnet45()$/;"	f
+verify_dotnet452	winetricks	/^verify_dotnet452()$/;"	f
+verify_dotnet46	winetricks	/^verify_dotnet46()$/;"	f
+verify_dotnet461	winetricks	/^verify_dotnet461()$/;"	f
+verify_dotnet462	winetricks	/^verify_dotnet462()$/;"	f
+verify_dotnet472	winetricks	/^verify_dotnet472()$/;"	f
+version	diff-so-fancy	/^sub version {$/;"	s
+w_ahk_do	winetricks	/^w_ahk_do()$/;"	f
+w_append_path	winetricks	/^w_append_path()$/;"	f
+w_askpermission	winetricks	/^w_askpermission()$/;"	f
+w_backup_reg_file	winetricks	/^w_backup_reg_file()$/;"	f
+w_call	winetricks	/^w_call()$/;"	f
+w_common_override_dll	winetricks	/^w_common_override_dll()$/;"	f
+w_compare_wine_version	winetricks	/^w_compare_wine_version()$/;"	f
+w_conflicts	winetricks	/^w_conflicts()$/;"	f
+w_declare_exe	winetricks	/^w_declare_exe()$/;"	f
+w_die	winetricks	/^w_die()$/;"	f
+w_do_call	winetricks	/^w_do_call()$/;"	f
+w_dotnet_verify	winetricks	/^w_dotnet_verify()$/;"	f
+w_download	winetricks	/^w_download()$/;"	f
+w_download_manual	winetricks	/^w_download_manual()$/;"	f
+w_download_manual_to	winetricks	/^w_download_manual_to()$/;"	f
+w_download_to	winetricks	/^w_download_to()$/;"	f
+w_download_torrent	winetricks	/^w_download_torrent()$/;"	f
+w_expand_env	winetricks	/^w_expand_env()$/;"	f
+w_get_sha1sum	winetricks	/^w_get_sha1sum()$/;"	f
+w_get_sha256sum	winetricks	/^w_get_sha256sum()$/;"	f
+w_get_shatype	winetricks	/^w_get_shatype() {$/;"	f
+w_info	winetricks	/^w_info()$/;"	f
+w_killall	winetricks	/^w_killall()$/;"	f
+w_metadata	winetricks	/^w_metadata()$/;"	f
+w_mount	winetricks	/^w_mount()$/;"	f
+w_open_folder	winetricks	/^w_open_folder()$/;"	f
+w_open_webpage	winetricks	/^w_open_webpage()$/;"	f
+w_override_all_dlls	winetricks	/^w_override_all_dlls()$/;"	f
+w_override_app_dlls	winetricks	/^w_override_app_dlls()$/;"	f
+w_override_dlls	winetricks	/^w_override_dlls()$/;"	f
+w_override_no_dlls	winetricks	/^w_override_no_dlls()$/;"	f
+w_package_broken_win64	winetricks	/^w_package_broken_win64()$/;"	f
+w_package_unsupported_win32	winetricks	/^w_package_unsupported_win32()$/;"	f
+w_package_unsupported_win64	winetricks	/^w_package_unsupported_win64()$/;"	f
+w_package_warn_win64	winetricks	/^w_package_warn_win64()$/;"	f
+w_pathconv	winetricks	/^w_pathconv()$/;"	f
+w_question	winetricks	/^w_question()$/;"	f
+w_read_key	winetricks	/^w_read_key()$/;"	f
+w_register_font	winetricks	/^w_register_font()$/;"	f
+w_register_font_replacement	winetricks	/^w_register_font_replacement()$/;"	f
+w_set_app_winver	winetricks	/^w_set_app_winver()$/;"	f
+w_set_winver	winetricks	/^w_set_winver()$/;"	f
+w_skip_windows	winetricks	/^w_skip_windows()$/;"	f
+w_steam_getid	winetricks	/^w_steam_getid()$/;"	f
+w_steam_install_game	winetricks	/^w_steam_install_game()$/;"	f
+w_steam_safemode	winetricks	/^w_steam_safemode()$/;"	f
+w_try	winetricks	/^w_try()$/;"	f
+w_try_7z	winetricks	/^w_try_7z()$/;"	f
+w_try_ar	winetricks	/^w_try_ar()$/;"	f
+w_try_cabextract	winetricks	/^w_try_cabextract()$/;"	f
+w_try_cd	winetricks	/^w_try_cd()$/;"	f
+w_try_cp_font_files	winetricks	/^w_try_cp_font_files()$/;"	f
+w_try_msiexec64	winetricks	/^w_try_msiexec64()$/;"	f
+w_try_regedit	winetricks	/^w_try_regedit()$/;"	f
+w_try_regedit32	winetricks	/^w_try_regedit32()$/;"	f
+w_try_regedit64	winetricks	/^w_try_regedit64()$/;"	f
+w_try_regsvr	winetricks	/^w_try_regsvr()$/;"	f
+w_try_regsvr64	winetricks	/^w_try_regsvr64()$/;"	f
+w_try_unrar	winetricks	/^w_try_unrar()$/;"	f
+w_try_unzip	winetricks	/^w_try_unzip()$/;"	f
+w_umount	winetricks	/^w_umount()$/;"	f
+w_unset_winver	winetricks	/^w_unset_winver()$/;"	f
+w_verify_cabextract_available	winetricks	/^w_verify_cabextract_available()$/;"	f
+w_verify_sha1sum	winetricks	/^w_verify_sha1sum()$/;"	f
+w_verify_sha256sum	winetricks	/^w_verify_sha256sum()$/;"	f
+w_verify_shasum	winetricks	/^w_verify_shasum()$/;"	f
+w_warn	winetricks	/^w_warn()$/;"	f
+w_warn_cancel	winetricks	/^w_warn_cancel()$/;"	f
+w_wine_version_in	winetricks	/^w_wine_version_in()$/;"	f
+w_wineserver	winetricks	/^w_wineserver()$/;"	f
+w_workaround_wine_bug	winetricks	/^w_workaround_wine_bug()$/;"	f
+winetricks_annihilate_wineprefix	winetricks	/^winetricks_annihilate_wineprefix()$/;"	f
+winetricks_append_to_flags	winetricks	/^winetricks_append_to_flags()$/;"	f
+winetricks_cache_iso	winetricks	/^winetricks_cache_iso()$/;"	f
+winetricks_check_update_availability	winetricks	/^winetricks_check_update_availability()$/;"	f
+winetricks_cleanup	winetricks	/^winetricks_cleanup()$/;"	f
+winetricks_detect_gui	winetricks	/^winetricks_detect_gui()$/;"	f
+winetricks_detect_iso_mount	winetricks	/^winetricks_detect_iso_mount()$/;"	f
+winetricks_detect_optical_drive	winetricks	/^winetricks_detect_optical_drive()$/;"	f
+winetricks_detect_sudo	winetricks	/^winetricks_detect_sudo()$/;"	f
+winetricks_die_if_user_not_dirowner	winetricks	/^winetricks_die_if_user_not_dirowner()$/;"	f
+winetricks_dl_url_to_stdout	winetricks	/^winetricks_dl_url_to_stdout()$/;"	f
+winetricks_dl_warning	winetricks	/^winetricks_dl_warning() {$/;"	f
+winetricks_download_setup	winetricks	/^winetricks_download_setup()$/;"	f
+winetricks_early_wine	winetricks	/^winetricks_early_wine()$/;"	f
+winetricks_get_platform	winetricks	/^winetricks_get_platform()$/;"	f
+winetricks_get_prefix_var	winetricks	/^winetricks_get_prefix_var()$/;"	f
+winetricks_get_sha1sum_prog	winetricks	/^winetricks_get_sha1sum_prog() {$/;"	f
+winetricks_get_sha256sum_prog	winetricks	/^winetricks_get_sha256sum_prog() {$/;"	f
+winetricks_handle_option	winetricks	/^winetricks_handle_option()$/;"	f
+winetricks_init	winetricks	/^winetricks_init()$/;"	f
+winetricks_install_app	winetricks	/^winetricks_install_app()$/;"	f
+winetricks_is_cached	winetricks	/^winetricks_is_cached()$/;"	f
+winetricks_is_installed	winetricks	/^winetricks_is_installed()$/;"	f
+winetricks_is_mounted	winetricks	/^winetricks_is_mounted()$/;"	f
+winetricks_latest_version_check	winetricks	/^winetricks_latest_version_check()$/;"	f
+winetricks_list_all	winetricks	/^winetricks_list_all()$/;"	f
+winetricks_list_cached	winetricks	/^winetricks_list_cached()$/;"	f
+winetricks_list_download	winetricks	/^winetricks_list_download()$/;"	f
+winetricks_list_installed	winetricks	/^winetricks_list_installed()$/;"	f
+winetricks_list_manual_download	winetricks	/^winetricks_list_manual_download()$/;"	f
+winetricks_list_mounts	winetricks	/^winetricks_list_mounts()$/;"	f
+winetricks_load_gog	winetricks	/^winetricks_load_gog()$/;"	f
+winetricks_load_vcdmount	winetricks	/^winetricks_load_vcdmount()$/;"	f
+winetricks_mainmenu	winetricks	/^winetricks_mainmenu()$/;"	f
+winetricks_metadata_basename	winetricks	/^winetricks_metadata_basename()$/;"	f
+winetricks_metadata_exists	winetricks	/^winetricks_metadata_exists()$/;"	f
+winetricks_mkprefixmenu	winetricks	/^winetricks_mkprefixmenu()$/;"	f
+winetricks_mount_cached_iso	winetricks	/^winetricks_mount_cached_iso()$/;"	f
+winetricks_mount_real_volume	winetricks	/^winetricks_mount_real_volume()$/;"	f
+winetricks_os_description	winetricks	/^winetricks_os_description()$/;"	f
+winetricks_parse_wget_progress	winetricks	/^winetricks_parse_wget_progress()$/;"	f
+winetricks_prefixmenu	winetricks	/^winetricks_prefixmenu()$/;"	f
+winetricks_print_version	winetricks	/^winetricks_print_version()$/;"	f
+winetricks_print_wineprefix_info	winetricks	/^winetricks_print_wineprefix_info()$/;"	f
+winetricks_read_bytes	winetricks	/^winetricks_read_bytes()$/;"	f
+winetricks_read_decimal	winetricks	/^winetricks_read_decimal()$/;"	f
+winetricks_read_hex	winetricks	/^winetricks_read_hex()$/;"	f
+winetricks_read_iso9660_volume_name	winetricks	/^winetricks_read_iso9660_volume_name()$/;"	f
+winetricks_read_udf_volume_name	winetricks	/^winetricks_read_udf_volume_name()$/;"	f
+winetricks_read_volume_name	winetricks	/^winetricks_read_volume_name()$/;"	f
+winetricks_selfupdate	winetricks	/^winetricks_selfupdate()$/;"	f
+winetricks_selfupdate_rollback	winetricks	/^winetricks_selfupdate_rollback()$/;"	f
+winetricks_set_unattended	winetricks	/^winetricks_set_unattended()$/;"	f
+winetricks_set_winearch	winetricks	/^winetricks_set_winearch()$/;"	f
+winetricks_set_wined3d_var	winetricks	/^winetricks_set_wined3d_var()$/;"	f
+winetricks_set_wineprefix	winetricks	/^winetricks_set_wineprefix()$/;"	f
+winetricks_settings_menu	winetricks	/^winetricks_settings_menu()$/;"	f
+winetricks_shell	winetricks	/^winetricks_shell()$/;"	f
+winetricks_showmenu	winetricks	/^winetricks_showmenu()$/;"	f
+winetricks_stats_init	winetricks	/^winetricks_stats_init()$/;"	f
+winetricks_stats_log_command	winetricks	/^winetricks_stats_log_command()$/;"	f
+winetricks_stats_report	winetricks	/^winetricks_stats_report()$/;"	f
+winetricks_stats_save	winetricks	/^winetricks_stats_save()$/;"	f
+winetricks_usage	winetricks	/^winetricks_usage()$/;"	f
+winetricks_vcrun6_helper	winetricks	/^winetricks_vcrun6_helper() {$/;"	f
+winetricks_volname	winetricks	/^winetricks_volname()$/;"	f
+winetricks_wget_progress	winetricks	/^winetricks_wget_progress()$/;"	f
+winetricks_wintounix	winetricks	/^winetricks_wintounix()$/;"	f
+with_backoff	eb	/^function with_backoff {$/;"	f
+with_backoff	exponential_backoff	/^function with_backoff {$/;"	f
+word_count	html-declutter.pl	/^sub word_count {$/;"	s
+x	continuous-plot.py	/^    x = range(i)$/;"	v
+xrandrinfo	start-app-with-resolution.py	/^xrandrinfo = subprocess.Popen('xrandr -q', shell=True, stdout=subprocess.PIPE)$/;"	v
+y	continuous-plot.py	/^    y = range(i)$/;"	v

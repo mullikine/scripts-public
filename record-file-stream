@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+# yes | throttle-per-second 3 | ts | tless -fid throttleyes +F -S
+# rfs "$(gs throttleyes)"
+# sfs "$(gs throttleyes)"
+
+last_arg="${@: -1}"
+
+! test -f "$last_arg" && exit 1
+
+fp="$last_arg"
+
+tail -n0 -F "$fp"

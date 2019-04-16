@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# I don't think this command works so well
+
+a="$1"
+b="$2"
+c="$3"
+
+process_arg() {
+    arg="$1"
+    if [ -n "$arg" ]; then
+        realpath "$arg" | s chomp | q | q -ftln
+    fi
+}
+
+a="$(process_arg "$a")"
+b="$(process_arg "$b")"
+c="$(process_arg "$c")"
+
+#a="$(p "$1" | q)"
+#b="$(p "$2" | q)"
+
+#echo "(vdiff-files $a $b)"
+
+if [ -n "$c" ]; then
+    sp -noonly -e "(vdiff-files3 $a $b $c)"
+else
+    sp -noonly -e "(vdiff-files $a $b)"
+fi

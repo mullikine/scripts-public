@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+vol=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -v|-volume) {
+        vol="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if [ -n "$vol" ]; then
+    (
+        sleep 0.5 # wait for vlc to appear in sinks
+        a set-application-volume VLC "$vol"
+    ) &
+fi
+
+/usr/bin/vlc "$@" "vlc://quit"
+
+# echo "$cmd" | udl
+# eval "$cmd" &>/dev/null

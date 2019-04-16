@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+timestamp="$1"
+: ${timestamp:="$(date-ts)"}
+
+date +"%Y-%m-%d %H:%M:%S:%3N" -d "@$timestamp"

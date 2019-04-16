@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+x -sh "gore" -e "gore>" -s ":import fmt" -c m -s "fmt.Pri" -c i -c i -i

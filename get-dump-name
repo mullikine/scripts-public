@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+if [ -n "$1" ]; then
+    CWD="$1"
+fi
+
+: ${CWD:="$(pwd)"}; cd "$CWD"
+
+if lit "$CWD" | grep -q -P "^$DUMP"; then
+    ndir="$(p "$CWD" | sed "s=^$DUMP==")"
+    mkdir -p "$ndir"
+    printf -- "%s\n" "$ndir"
+else
+    ndir="$(p "$CWD" | sed "s=^=$DUMP=")"
+    mkdir -p "$ndir"
+    printf -- "%s\n" "$ndir"
+fi

@@ -1,0 +1,98 @@
+#!/bin/bash
+export TTY
+
+# Think about how I can make rtcmd respond to a changing input.
+# Maybe I actually need to use inotify.
+# That makes sense actually. Then I don't need to relaunch a lot of
+# heavy processes such as the rtcmd script.
+# To chain rtcmd commands, rtcmd needs to take an optional input path.
+# If the input path is supplied it should respond to changes in this
+# path using inotify. It should do this anyway.
+
+# Every time the vim buffer changes it runs the command with the buffer
+# contents as input.
+# I think I can technically use rtcmd to implement rtedit.
+# Maybe with some minor changes?
+# Don't use stdin.
+# I want to run another rtcmd.
+# I want to chain them together.
+# The rtcmd should pipe into another rtcmd.
+
+pl "$(gd mapex)" | rtcmd -E "maptojson : | vi -"
+
+sn="$(basename "$0")"
+
+pattern=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -E) {
+        CMD="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -nv) {
+        NEOVIM=y
+        shift
+    }
+    ;;
+
+    -|-in) {
+        STDIN_EXISTS=y
+        shift
+    }
+    ;;
+
+    ## This does not work
+    ++*) { # pattern
+        pattern="$(printf -- "%s" "$opt" | sed 's/^++//' | s chomp)"
+
+        vimpat+="+/\(\\<$pattern\\>\( -[^ ]\+\)* [^-]\)\@<=."
+        vimopts_end+=" -c startinsert "
+
+        shift
+    }
+    ;;
+
+    +/*) { # pattern
+        pattern="$(printf -- "%s" "$opt" | sed 's=^+/==' | s chomp)"
+
+        vimpat+="+/$pattern"
+
+        vimopts_end+=" -c startinsert "
+
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+stdin_exists && STDIN_EXISTS=y
+
+tf_stdin="$(nix tf stdin txt 0</dev/null || echo /dev/null)"
+
+if test "$STDIN_EXISTS" = "y"; then
+    cat > "$tf_stdin"
+fi
+
+exec 0</dev/null
+
+: ${CMD:="$(cmd "$@")"}
+
+# echo "$CMD" > /tmp/tmpcmd.txt
+
+if test "$STDIN_EXISTS" = "y"; then
+    CMD="cat $(aqf "$tf_stdin") | $CMD"
+fi
+
+cmdparas="$(echo -e -n "$CMD" | qfd)"
+
+CREATED_PANE_ID="$(eval "tm -f -d spv $(test "$NEOVIM" = "y" && p "-nvt") -pakf -safe -d -P $cmdparas" | scrape '%[0-9]+')"
+
+exec </dev/tty `# see etty`
+
+echo -e "$CMD" | v "$vimpat" -ft sh -rt "cat | tm -f -S -tout rs $(test "$NEOVIM" = "y" && p "-nv") -xargs -pakf -safe -t '$CREATED_PANE_ID'" $vimopts_end

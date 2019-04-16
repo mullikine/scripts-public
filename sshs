@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# Just a wrapper around ssh to provide more control over ssh config
+
+# TODO If user is 'pi' then make default password 'raspberry'
+
+CMD="$(cmd "$@")"
+
+if printf -- "%s\n" "$CMD" | grep -q -P ' pi@'; then
+    passw="raspberry"
+fi

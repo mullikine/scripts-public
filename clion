@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+cd $DUMP$HOME/notes2018/ws/programs/clion/clion-2017.3.4/bin
+
+./clion.sh "$@"

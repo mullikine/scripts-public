@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sed "s=https://github\.com/\([^/]\+/[^/]\+/\)blob/=https://raw.githubusercontent.com/\1="

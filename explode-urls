@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+xurls | xargs -l1 ca

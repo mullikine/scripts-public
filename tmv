@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+# -noerror : Make sure the terminal does not wait if I do a C-c
+tm -te -d spv -noerror -args "$@"

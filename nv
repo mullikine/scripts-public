@@ -1,0 +1,55 @@
+#!/bin/bash
+export TTY
+
+# nv -2 -term vim hi
+
+export INSIDE_NEOVIM=y
+
+precmd="TERM=vt100 "
+cmd=
+EVAL=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -2) {
+        #precmd="TERM=xterm-2color "
+        precmd="TERM=vt100 "
+        shift
+    }
+    ;;
+
+    -E) {
+        EVAL=y
+        shift
+    }
+    ;;
+
+    -term) {
+        shift
+
+        CMD="$(cmd "$@")"
+
+        if test "$EVAL" = "y"; then
+            CMD="eval $CMD"
+        fi
+
+        cmd=" -c $(aqf "call TermAndQuit($(aqf "$precmd $CMD"))") -c $(aqf "call GeneralSyntax()") -c $(aqf "call NumberSyntax()") -c $(aqf "normal! i")"
+
+        for i in "$@"; do shift; done
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CMD="$(cmd "$@")"
+
+# maybe I just need to adjust the gamma a bit
+
+# dark blue # good at crown. Good on bright screen during day
+# -c 'hi Normal ctermfg=60'
+# good on bright screen at night
+# -c 'hi Normal ctermfg=235'
+# good on darker screen at night
+# -c 'hi Normal ctermfg=236'
+# good on bright screen during the day. the text is nice and dark
+# -c 'hi Normal ctermfg=237'
+eval "nvim -u $HOME/.nvimrc -c 'set nowrap' -c 'hi Normal ctermfg=237' -c 'set modelines=0 nomodeline' -c 'call GeneralSyntax()' -c 'call NumberSyntax()' $cmd $CMD"

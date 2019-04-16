@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+sed 'x;$!d' # 2nd / second to last line
+
+# @Ruslan - there's not much to explain here, really.
+# - On each line sed exchanges buffers (swaps contents of hold space and pattern space), and
+# - if not on the last line, it deletes the current pattern space (so nothing gets printed).
+# - Only on the last line sed autoprints the pattern space (which contains the previous line, i.e. second to last one) 
+
+# my notes
+# if you do 'x' for every line then you hold a copy of the previous line in the hold space
+# this is what gets printed on the last line, as it is swapped back into the pattern space
+
+# basically, x delays the printing of each line

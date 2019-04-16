@@ -1,0 +1,51 @@
+#!/bin/bash
+export TTY
+
+# oc -g makes a google link
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -nc) {
+        NOCACHE=y
+        shift
+    }
+    ;;
+
+    -b|-bn) {
+        BASENAME=y
+        shift
+    }
+    ;;
+
+    -u) {
+        UPDATE=y
+        shift
+    }
+    ;;
+
+    -l) {
+        NEWLINE=y
+        shift
+    }
+    ;;
+
+    -m) {
+        exec 1> >(orgurl2mdurl)
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+export UPDATE
+export BASENAME
+
+if test "$NEWLINE" = "y"; then
+    exec 1> >(awk 1)
+fi
+
+if test "$NOCACHE" = "y"; then
+    org clink "$@"
+else
+    ci -meta "$BASENAME" org clink "$@"
+fi

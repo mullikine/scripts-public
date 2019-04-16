@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+sed "s=^/home/[^/]\+=$HOME=" | awk1 | while IFS=$'\n' read -r line; do
+    {
+        if test -d "$line"; then
+            (
+                cd "$line"
+                vc url
+            )
+        else
+            echo "$line" | path-lasttwo | sed "s=^=https://github.com/="
+        fi
+    } | awk1
+done

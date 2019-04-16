@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+url="$1"
+url="$(printf -- "%s" "$url" | xurls)"
+
+cd "$DUMP$HOME/notes2018/ws/youtube/subs"
+
+# can't use xa here
+ci -t 3600 yt-subs.sh "$url" | head -n 1 | s chomp | bs ' ' | xargs -l cat | tr -s '\n' ' ' | segment-sentences | pager

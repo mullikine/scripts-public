@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+notify-send "$sn: This doesn't work well, unfortunately." &>/dev/null
+
+tf_path="$(odn nix tf path || echo /dev/null)"
+
+cat > "$tf_path"
+
+pattern="$1"
+
+ruby $MYGIT/adamsanderson/sexp_path/examples/sexp_grep.rb "$pattern" "$tf_path"

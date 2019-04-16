@@ -1,0 +1,34 @@
+#!/bin/bash
+export TTY
+
+# For all things refactoring code
+
+opt="$1"
+shift
+case "$opt" in
+    sh) {
+        opt="$1"
+        shift
+        case "$opt" in
+            expand) {
+                :
+            }
+            ;;
+
+            template) {
+                :
+            }
+            ;;
+
+            *)
+        esac
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

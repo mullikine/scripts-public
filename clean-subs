@@ -1,0 +1,5 @@
+#!/bin/sh
+export TTY
+
+sed -e '0,/^$/d' -e 's/ align:start.*//' -e 's/<[^>]*>//g' -e '/^[0-9]/d' -e '/^\s*$/d' | uniq | \
+tr -s '\n' ' ' | segment-sentences

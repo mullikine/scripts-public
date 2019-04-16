@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+pat="$1"
+RS="$2"
+
+: ${RS:="\n\n"}
+
+awk -v RS="$RS" -v pat="$pat" '$0 ~ pat'

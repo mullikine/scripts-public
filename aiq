@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd -f qfd "$@")"
+: ${CMD:="$(aqf "{ \\\$1=\"\"; print \\\$0 }")"}
+
+cmdname=awk
+s chomp | rtcmd ++$cmdname -E "$cmdname $CMD | vi -"

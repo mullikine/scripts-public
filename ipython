@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# Emacs uses this
+# M-x customize-group python
+
+python3 /usr/local/bin/ipython "$@"

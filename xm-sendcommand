@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+tm -d sph -d -r -n xsession-errors "less +F -S $HOME/.xsession-errors"
+
+$HOME/local/bin/xm-sendcommand "$@"

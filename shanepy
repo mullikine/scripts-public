@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# shanepy -c 'tv("\n".join(ls()[:5]))'
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -u) {
+        update_shanepy=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$update_shanepy" = "y"; then
+    set -xv
+    cd $HOME/notes2018/ws/python/shanepy
+    msudo python2 setup.py build -b /tmp/shanepy install --record /tmp/files.txt
+    msudo python3 setup.py build -b /tmp/shanepy install --record /tmp/files.txt
+    msudo python3.6 setup.py build -b /tmp/shanepy install --record /tmp/files.txt
+    exit 0
+fi
+
+py -rc shane "$@"

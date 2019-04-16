@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# pwd | sed 's=.*/\([^/]\+/[^/]\+\)$=\1=' | slugify
+
+zl wd "$@" | slugify

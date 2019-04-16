@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+# expand url
+# GET https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS
+# analytics on a url
+# curl 'https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&projection=FULL'
+
+
+url="$1"
+
+# echo "{\"longUrl\": $(aqf "$url")}"
+# exit 0
+
+#curl "https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyDvNcvyUA9-2a1-vb3nq0CIo9ZiN1TnR_I" \
+#    -H 'Content-Type: application/json' \
+#    -d "{\"longUrl\": $(aqf "$url")}"
+
+
+# This needs capcha
+#googl () { curl -s -d "url=${1}" http://goo.gl/api/url | sed -n "s/.*:\"\([^\"]*\).*/\1\n/p" ;}
+googl "$url" | xc -i

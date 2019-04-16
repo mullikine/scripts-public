@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+hub pr list -f "%U	%t_END_" | sed 's/_END_/\n/g'

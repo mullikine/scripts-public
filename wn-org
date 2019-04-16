@@ -1,0 +1,6 @@
+#!/bin/bash
+
+word="$1"; : ${word:="default"}
+
+e -o -D spacemacs c -e "(wn-org-search \"$word\")"
+# og -e "(wn-org-search \"$word\")"

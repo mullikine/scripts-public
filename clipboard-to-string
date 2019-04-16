@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+xc | s chomp | q | xc -i

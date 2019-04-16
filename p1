@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+p "$@" | awk1

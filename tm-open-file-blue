@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+bn="$(basename "$fp")"
+
+tm -d -te nw -hlblue -R -nopakf -n "$bn" -c "$CWD" "preview $(aqf "$fp"); python $HOME$MYGIT/ranger/ranger/ranger/ext/rifle.py $(aqf "$fp")"

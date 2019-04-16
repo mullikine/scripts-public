@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+eval "tm -f -S -tout sph -fargs $CMD"

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# TODO: Make this show the results as I select from fzf
+
+tf_jif="$(nix tf jif txt || echo /dev/null)"
+trap "rm \"$tf_jif\" 2>/dev/null" 0
+
+cat > "$tf_jif"
+
+if test -s "$tf_jif"; then
+    jqpath="$(cat "$tf_jif" | yq-showschema | fzf)"
+else
+    echo "No input." 1>&2
+fi
+
+if test -n "$jqpath"; then
+    cat "$tf_jif" | yiq -r "$jqpath"
+else
+    echo "No selection." 1>&2
+fi

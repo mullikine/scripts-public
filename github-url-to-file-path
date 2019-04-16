@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# https://github.com/codelingo/lexicon/blob/master/codelingo/ast/go/server-config.yaml#L8
+
+xurls | sed 's/#.*//' | sed "s=https\?://github.com==" | replace "blob/master/" "" | awk1 | while IFS=$'\n' read -r line; do
+    l "$line" | head -n 1
+done

@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+factor="$1"
+
+fel eval 'echo "$(cat) * '$factor'" | bc'

@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+# This needs a chomp first
+# s chomp | jq -R -s 'split("\n")'
+# removes ALL the blank lines
+# jq -R -s 'split("\n") | map(select(. != ""))
+# removes the last element
+# jq -R -s 'split("\n") | .[0:-1]
+
+jq --raw-input . | jq --slurp .

@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# [ "$1" -lt 256 ] || return 1
+
+# bash/zsh!
+# printf "\\$(printf '%03o' "$1")"
+
+# Slow...
+# racket -e "(display (integer->char $1))" 
+
+# Fast!
+perl -e "print chr($1)"

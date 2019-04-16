@@ -1,0 +1,20 @@
+#!/bin/bash
+
+( hs "$(basename "")" "$@" 0</dev/null ) &>/dev/null
+
+# for i in $HOME/source/git/rosie-pattern-language/rosie/rpl/
+
+/usr/local/bin/rosie -f $HOME/source/git/rosie-pattern-language/rosie/rpl/all.rpl \
+    -f $HOME/source/git/rosie-pattern-language/rosie/rpl/net.rpl \
+    -f $HOME/source/git/rosie-pattern-language/rosie/rpl/csv.rpl \
+    -f $HOME/source/git/rosie-pattern-language/rosie/rpl/json.rpl \
+    "$@"
+
+# /usr/local/bin/rosie --libpath $HOME/var/smulliga/source/git/rosie-pattern-language/rosie/rpl "$@"
+
+# /usr/local/bin/rosie -f $HOME/var/smulliga/source/git/rosie-pattern-language/rosie/rpl/all.rpl "$@"
+
+# /usr/local/bin/rosie "$@"
+
+# /usr/local/bin/rosie -f $HOME/programs/rosie/ipv4.rpl "$@"
+#     -f may be repeated

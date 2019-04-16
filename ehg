@@ -1,0 +1,13 @@
+#!/bin/bash
+
+query="$@"; : ${query:=""}
+
+if [ -n "$query" ]; then
+    # x -sh sh -s "sp -e $(aqf "(call-interactively 'helm-hoogle)(delete-frame)"); clear; exit" -c m -e "Hoogle:" -s "$query" -i
+
+    # x -sh sh -s "sp -eid helm-hoogle; clear; exit" -c m -e "Hoogle:" -s "$query" -i
+    # me -e "(engine/search-hoogle $(aqf "$query"))" && exit
+    hoogle-web "$query"
+else
+    sp -eid helm-hoogle
+fi

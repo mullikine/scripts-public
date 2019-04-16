@@ -1,0 +1,55 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+list_ip_range_for_subnet() {
+    cidr="$1"
+    : ${cidr:="192.168.1.0/24"}
+
+    # $HOME/notes2018/ws/ip-networking/cidr.org
+
+    nmap -sL -n "$cidr" | grep 'Nmap scan report for' | cut -f 5 -d ' '
+    return 0
+}
+
+list_connected_raspberry_pi_dcbc() {
+    nmap-s list_all_ssh_ips_for_subnet 192.168.1.1/24
+}
+
+list_ips_for_current_network() {
+    list_all_ssh_ips_for_subnet "$(i gateway)/24"
+}
+
+list_all_ssh_ips_for_subnet() {
+    while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+        "") { shift; }; ;;
+        -p) {
+            port="$2"
+            shift
+            shift
+        }
+        ;;
+
+        *) break;
+    esac; done
+
+    : ${port:="22"}
+
+    cidr="$1"
+    : ${cidr:="$(i gateway)/24"}
+
+    nmap -p "$port" "$cidr" | aatr "\n\n" "tr '\n' _ | eipct $(aqf "grep -q open") | tr _ '\n'" | rosie-ips
+}
+
+nmap_s() {
+    eval "$@"
+}
+
+f_from_sn() {
+    tr - _
+}
+
+eval "$(printf -- "%s" "$sn" | tr - _)" "$@"

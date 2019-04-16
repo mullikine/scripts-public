@@ -1,0 +1,66 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    oot) {
+        set -- "$@" "Legend of Zelda, The - Ocarina of Time (U) (V1.2) [!].z64"
+    }
+    ;;
+
+    mk64) {
+        set -- "$@" "Mario Kart 64 (E) (V1.1) [!].z64"
+    }
+    ;;
+
+    # None of the below work
+    swracer) {
+        set -- "$@" "Star Wars Episode I - Racer (U) [!].z64"
+    }
+    ;;
+
+    naboo) {
+        set -- "$@" "Star Wars Episode I - Battle for Naboo (U) [!].z64"
+    }
+    ;;
+
+    roguesquadron) {
+        set -- "$@" "Star Wars - Rogue Squadron (E) (V1.1) [!].z64"
+    }
+    ;;
+
+    *)
+esac
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# oot --cheats list
+# oot --cheats 0,1
+
+export LIBGL_DEBUG=verbose
+
+# export LIBGL_ALWAYS_SOFTWARE=1 
+
+cd $DUMP$NOTES/programs/mupen64/
+
+opt="$1"
+case "$opt" in
+    cd) {
+        zcd .
+        exit 0
+    }
+    ;;
+
+    *)
+esac
+
+# mupen64plus "$@" 2>&1
+# It's already set in the config
+# vim +/"VideoPlugin" "$HOME/.config/mupen64plus/mupen64plus.cfg"
+# mupen64plus --gfx mupen64plus-video-GLideN64.so "$@" 2>&1
+
+# CMD="$(cmd "$@")"
+# gdb mupen64plus -ex "r --gfx mupen64plus-video-GLideN64.so $CMD" -ex "bt"
+
+unbuffer mupen64plus "$@" 2>&1 | pager

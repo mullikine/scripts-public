@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+url="$1"
+
+fp="$(curl "$url" 2>/dev/null | html2org | tf org)"
+og "$fp"

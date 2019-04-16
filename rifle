@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+python $HOME$MYGIT/ranger/ranger/ranger/ext/rifle.py "$@"

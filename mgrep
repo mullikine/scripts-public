@@ -1,0 +1,44 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# Multiple grep, all term options are filters
+# echo yo | mgrep -i yo yo y
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+grep_opts=
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -f) {
+        grep_opts="$grep_opts $(printf -- "%s" "$1" | q) $(printf -- "%s" "$2" | q)"
+        shift
+        shift
+    }
+    ;;
+
+    -i) {
+        grep_opts="$grep_opts $(printf -- "%s" "$1" | q)"
+        shift
+    }
+    ;;
+
+    --) {
+        break
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+greps="$(
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- " | grep $grep_opts "
+    printf -- "%s" "$ARG" | q
+done
+)"
+
+# echo "cat$greps"
+cat | eval "cat$greps"

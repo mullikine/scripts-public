@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# first argument may be a filetype
+# echo hi | tm tv json
+
+tm tv "$@"
+
+#input="$(cat)"
+#
+#p "$input" | tm -uin -S -tout -i nw "v" &>/dev/null
+#p "$input"
+## vipe

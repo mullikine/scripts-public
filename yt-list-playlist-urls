@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+pl_url="$1"
+
+ci youtube-dl -j --flat-playlist "$pl_url" | jq -r '.id' | sed 's_^_https://youtu.be/_'

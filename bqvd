@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# Echo the query into this
+#echo "SELECT b.url, b.name, b.forked_from FROM ( SELECT project_id FROM [ghtorrent-bq:ght.project_languages] WHERE language IN ('c', 'c++')) AS a JOIN ( SELECT id, url, name, forked_from, updated_at FROM [ghtorrent-bq:ght.projects]) AS b ON a.project_id = b.id ORDER BY b.updated_at LIMIT 1000" | 
+
+bq --format=csv query 2>/dev/null | tf csv | while read line; do sed -i 1d "$line"; exec </dev/tty; fpvd "$line"; done

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+. $HOME/scripts/libraries/bash-library.sh
+
+if [ -n "$1" ]; then
+    append-to-path "$1"
+fi

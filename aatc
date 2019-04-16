@@ -1,0 +1,46 @@
+#!/bin/bash
+export TTY
+
+# echo "one two\na b" | aatc -f
+
+: ${field:="1"}
+: ${delim:="[\t ]+"}
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -f) {
+        field="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -d) {
+        delim="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# the filter command
+CMD="$(cmd "$@" | sed 's/^"\(.*\)"$/\1/' | qne)"
+: ${CMD:="$(cmd "$@")"}
+
+# echo "$CMD"
+
+read -r -d '' awkscript <<HEREDOC
+BEGIN{OFS="$delim"}
+{
+    printf "%s\n", \$$field |& cmd;
+    cmd |& getline \$$field;
+}
+{
+    print; system("")
+}
+END{close(cmd)}
+HEREDOC
+
+awk -F "$delim" -v cmd="$CMD" "$awkscript"

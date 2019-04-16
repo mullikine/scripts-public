@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd "$@")"
+: ${CMD:="-c \"p(sys.stdin.read())\""}
+
+# s chomp | rtcmd "+/\(\\<sed\\>\( -[^ ]\+\)* [^-]\)\@<=." -E "sed $CMD | vi -"
+
+# s chomp | eval "rtcmd ++sed sed $CMD"
+
+cmdname="shanepy"
+s chomp | rtcmd ++$cmdname -E "$cmdname $CMD | vi -"

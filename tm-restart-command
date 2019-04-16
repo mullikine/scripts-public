@@ -1,0 +1,43 @@
+#!/bin/bash
+export TTY
+
+# continue existing if running?
+continue=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -E) {
+        CMD="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -c) {
+        continue=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+: ${CMD:="$(cmd "$@")"}
+
+name="$(printf -- "%s" "$CMD" | slugify)"
+
+CURRENT_TMUX_SESSION_NAME="$(tmux display-message -p -t $TMUX_PANE '#{session_name}')"
+
+target="$CURRENT_TMUX_SESSION_NAME:$name."
+if test -n "$name" && tmux has-session -t "$target" && test "$continue" = "y"; then
+    exit 0
+fi
+
+{
+if test -n "$name" && tmux has-session -t "$target"; then
+    test "$continue" = "y" && exit 0
+
+    tmux kill-window -t "$target"
+fi
+} &>/dev/null
+
+tm -d nw -n "$name" -d "$CMD"

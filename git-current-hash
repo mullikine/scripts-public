@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+git rev-parse HEAD

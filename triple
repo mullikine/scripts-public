@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+fel eval 'echo "$(cat) * 3" | bc'

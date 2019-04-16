@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+function fileAge
+{
+    local fileMod
+    if fileMod=$(stat -c %Y -- "$1")
+    then
+        echo $(( $(date-ts) - $fileMod ))
+    else
+        return $?
+    fi
+}
+
+fileAge "$@"

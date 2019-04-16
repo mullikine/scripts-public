@@ -1,0 +1,57 @@
+#!/bin/bash
+export TTY
+
+# This gets a global variable
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -q) {
+        QUERY_ONLY=y
+        shift
+    }
+    ;;
+
+    # hash table
+    -ht|-sha) {
+        USE_SHA=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+varname="$1"
+mant="$(p "$varname" | getmant)"
+ext="$(p "$varname" | getext)"
+
+if [ -z "$mant" ]; then
+    exit 0
+fi
+
+hash_f() {
+    if test "$USE_SHA" = "y"; then
+        sha
+    else
+        s join - | slugify
+    fi
+}
+
+vars_dir="$NOTES/vars"
+mkdir -p "$vars_dir"
+
+mant="$(printf -- "%s" "$mant" | hash_f)"
+varname_fp="$NOTES/vars/$mant$ext"
+
+if [ -s "$varname_fp" ]; then
+    if test "$QUERY_ONLY" = "y"; then
+        echo "$varname_fp"
+    else
+        cat "$varname_fp"
+    fi
+else
+    {
+        echo "Not found:" 
+        echo "$varname_fp" 
+    } 1>&2
+fi

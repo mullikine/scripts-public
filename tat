@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# tmux tout
+
+tmux -L touchbar new -s proxy -d "TMUX= tmux attach -t localhost:" \; source ~/.tmux-touchbar.conf \; attach -t proxy:

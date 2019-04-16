@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+c ascify | sed 's/^#/##/' | htmlentities-decode.sh | c ascify

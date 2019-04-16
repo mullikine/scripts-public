@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+: ${len:="50"}
+
+printf -- "%s" "-" | s rs "$len" | awk 1

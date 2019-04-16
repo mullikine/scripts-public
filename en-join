@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# English join
+
+s join ", " | rev | sed 's/ ,/ dna /' | rev

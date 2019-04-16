@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+sed 's/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/\[\2\](\1)/'
+
+# sed 's/\[\[\(.*\)\]\[\(.*\)\]/\[\2\](\1)/'
+
+# [require src lexicon  Issue #255  codelingo/codelingo  GitHub](https://github.com/codelingo/codelingo/issues/255)

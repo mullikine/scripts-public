@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+user="$1"
+shift
+
+pass="$1"
+shift
+
+remote="$1"
+: ${remote:="origin"}
+shift
+
+git config --get "remote.${remote}.url" | sed -e "s=^git@=http://${user}:${pass}@=" -e 's=\.com:=.com/='

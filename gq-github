@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+gq https://api.github.com/graphql -H "Authorization: token $(myrc .github_api_token)" "$@"

@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+## Example
+## -------
+## 726edcf master 20:34 shane/notes2018 δ » new-script-from-args echo hi
+## /tmp/file_new_script_8W7iI5_rand-11510_pid-21032.sh
+## 726edcf master 20:34 shane/notes2018 δ » /tmp/file_new_script_8W7iI5_rand-11510_pid-21032.sh
+## hi
+
+tf_new_script="$(nix tf new_script sh || echo /dev/null)"
+# trap "rm \"$tf_new_script\" 2>/dev/null" 0
+
+echo "#!/bin/bash" > "$tf_new_script"
+cmd "$@" >> "$tf_new_script"
+chmod a+x "$tf_new_script"
+echo "$tf_new_script"

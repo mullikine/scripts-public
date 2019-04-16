@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+export TORSOCKS_CONF_FILE=$HOME/notes2018/ws/proxy/configs/torsocks.conf
+
+# torsocks works better for some things, such as wget
+# works for w3m
+
+# wouldn't this break tty programs?
+# cmd="torsocks $CMD 2> >(ns)"
+
+# $MYGIT/haad/proxychains/proxychains4 -f $HOME/notes2018/im/proxychains-tor.conf "$@"
+torsocks "$@"
+
+if ! test "$?" -eq "0"; then
+    sudo service tor restart
+    sleep 1
+    eval $0 "$@"
+fi

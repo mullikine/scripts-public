@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+tf_script="$(nix tf script wls || echo /dev/null)"
+trap "rm \"$tf_script\" 2>/dev/null" 0
+
+# cat > "$tf_script" <<'HEREDOC'
+# #!/usr/bin/env wolframscript
+# Print[$ScriptCommandLine[[2]]]
+# HEREDOC
+# 
+# chmod a+x "$tf_script"
+# "$tf_script" "$@"
+
+cat > "$tf_script" <<'HEREDOC'
+Print[$ScriptCommandLine[[2]]]
+Print[Import["ExampleData/temperatures.json"]]
+Print[WolframAlpha["size of the moon"]]
+HEREDOC
+
+wolframscript -file "$tf_script" "$@"

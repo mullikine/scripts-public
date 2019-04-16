@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+q="$1"
+qe="$(p "$q" | urlencode)"
+
+{
+    # ci -E "elinks-dump \"https://www.haskell.org/hoogle/?hoogle=$qe\" | edm -m \"V}}}}}dyc<\""
+    hoogle --info "$@"
+    echo -n "-" | rps 20
+    echo
+    hoogle --count=100 "$@"
+} | pager -vs

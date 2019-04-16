@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if  xdotool getactivewindow getwindowname | grep "EDITOR" > /dev/null  ;then
+  # hide firefox in the currently visible window
+  xdotool search --desktop 1 --onlyvisible --name 'firefox' windowminimize
+else
+  # focus emacs
+  wmctrl -a "EDITOR"
+fi

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#e -D spacemacs c -e "(org-brain-visualize \"index\")(delete-other-windows)"
+og -e "(org-brain-visualize \"index\")"

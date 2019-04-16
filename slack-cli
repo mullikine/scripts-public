@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "")" "$@" 0</dev/null ) &>/dev/null
+
+# export SLACK_TOKEN=xoxp-11409744528-11442331975-445295933702-5edccf28394238d92f858964114c58e7
+export SLACK_TOKEN=xoxp-11409744528-11442331975-497918770262-34a70036a070311655ca4d5fb9249880
+
+/usr/local/bin/slack-cli "$@"

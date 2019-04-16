@@ -1,0 +1,29 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    rh) {
+        sn=runhaskell
+    }
+    ;;
+
+    *)
+esac
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    --ghci-options=-ferror-spans) {
+        : # ignoring fixes emacs's run-haskell
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# stack ghc "$@"
+stack exec -- $sn "$@"

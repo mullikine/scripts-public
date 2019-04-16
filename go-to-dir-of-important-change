@@ -1,0 +1,32 @@
+#!/bin/bash
+export TTY
+
+commit_importance_filter() {
+    grep -v -P "Merge (branch|pull)"
+}
+
+file_importance_filter() {
+    grep codelingo.yaml
+}
+
+commit="$(git log --pretty=oneline | commit_importance_filter | head -n 1 | s field 1)"
+
+dp="$(git diff --name-only "$commit" | u dn | u rp | file_importance_filter | head -n 1)"
+
+# This is currently looking only for dirs for which a codelingo.yaml file has been touched
+
+if [ -z "$dp" ]; then
+    # Need to check further back to master
+    dp="$(git-touched-files-since-divergence | file_importance_filter | u dn | u rp | head -n 1)"
+
+    # darn! this includes merge commits.
+fi
+
+if [ -n "$dp" ]; then
+    echo "$dp"
+    cd "$dp"
+    CWD="$dp" zsh
+else
+    echo "No files changed unstaged or HEAD\^!" 1>&2
+    exit 1
+fi

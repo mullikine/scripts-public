@@ -1,0 +1,52 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+d  dir
+s  scripts
+g  tm sel glossary.txt»
+l  tm sel localhost_ws:codelingo
+f  tm sel localhost_im:finch
+i  tm sel localhost_im:irssi
+m  ranger $HOME/notes2018/ws/music
+p  tm sel :perspective.org
+t  tm sel :todo.org
+n  tm sel localhost:notifications.txt».0
+C  tm sel localhost:clipboard.txt
+HEREDOC
+
+# t  tm sel localhost_ws_functional-programming-fp:glossary.txt.0
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    d) cmd="sh-dir" ;;
+    s) cmd="CWD=$HOME/scripts zsh" ;;
+    g) cmd="tm sel glossary.txt»" ;;
+    l) cmd="tm sel localhost_ws:codelingo" ;;
+    f) cmd="tm sel localhost:im:finch" ;;
+    i) cmd="tm sel localhost:im:irssi" ;;
+    m) cmd="ranger $HOME/notes2018/ws/music" ;;
+    p) cmd="tm sel perspective.org" ;;
+    t) cmd="tm sel todo.org" ;;
+    n) cmd="tm sel localhost:notifications.txt».0" ;;
+    C) cmd="tm sel localhost:clipboard.txt" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

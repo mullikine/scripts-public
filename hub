@@ -1,0 +1,119 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -me) {
+        user=me
+        shift
+    }
+    ;;
+
+    -bot) {
+        user=bot
+        shift
+    }
+    ;;
+
+    -team) {
+        user=team
+        shift
+    }
+    ;;
+
+    -user) {
+        user="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+case "$user" in
+    me) {
+        gh_name="$(cat ~/.myrc.yaml | yq -r .github_name)"
+        gh_email="$(cat ~/.myrc.yaml | yq -r .github_email)"
+
+        : ${gh_branch_name:="$(cat ~/.myrc.yaml | yq -r .github_default_branch)"}
+        gh_pass="$(cat ~/.myrc.yaml | yq -r .github_pass)"
+        # gh_token="$(cat ~/.myrc.yaml | yq -r .github_token)"
+        gh_token="$(cat ~/.myrc.yaml | yq -r .github_forking_token)"
+        gh_api_token="$(cat ~/.myrc.yaml | yq -r .github_api_token)"
+        gh_username="$(cat ~/.myrc.yaml | yq -r .github_user)"
+    }
+    ;;
+
+    team) {
+        gh_name="$(clpq clt_name)"
+        gh_email="$(clpq clt_mail)"
+
+        : ${gh_branch_name:="$(clpq clt_branch)"}
+        gh_pass="$(clpq clt_pass)"
+        gh_token="$(clpq clt_token)"
+        gh_api_token="$(clpq clt_token)"
+        gh_username="$(clpq clt_name)"
+    }
+    ;;
+
+    bot) {
+        gh_name="$(clpq clbot_fullname)"
+        gh_email="$(clpq clbot_email)"
+
+        : ${gh_branch_name:="$(clpq clbot_branch_name)"}
+        gh_token="$(clpq clbot_token)"
+        gh_api_token="$(clpq clbot_token)"
+        gh_username="$(clpq clbot_username)"
+    }
+    ;;
+
+    *)
+esac
+
+if test -n "$user"; then
+    read -r -d '' hubconfig <<HEREDOC
+github.com:
+- user: "$gh_username"
+  oauth_token: "$gh_token"
+  protocol: https
+HEREDOC
+
+    hub_config_fp="$(pl "$hubconfig" | tf conf)"
+
+    export HUB_CONFIG="$hub_config_fp"
+
+    # cat "$hub_config_fp" | yiqf
+fi
+
+if test -f "/dev/tty"; then
+    ( hs "$(basename "$0")" "$(ps -o comm= $PPID)" "-->" "$@" </dev/tty ) &>/dev/null
+else
+    ( hs "$(basename "$0")" "$(ps -o comm= $PPID)" "-->" "$@" 0</dev/null ) &>/dev/null
+fi
+
+export BROWSER=eww
+
+category="$1"
+case "$category" in
+    pr) {
+        :
+        com="$1"
+        case "$com" in
+            list) {
+                ci -t 10 $HOME/go/bin/hub "$@"
+                exit $?
+            }
+            ;;
+
+            *)
+        esac
+    }
+    ;;
+
+    *)
+esac
+
+$HOME/go/bin/hub "$@"

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+while IFS=$'\n' read -r line; do
+    args="$(p "$line" | sed -e "s=^http.*\.com/==" -e "s=/pull/= =" -e "s=/= =")"
+    echo -n "$args "
+    my-pr-get-issue-close-time $args
+done

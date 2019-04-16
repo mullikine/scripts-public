@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+python2 `alt -q aws` "$@"

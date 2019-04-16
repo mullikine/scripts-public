@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+cmd="e -D default -s org x $CMD"
+eval "$cmd"

@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+sha="$1"
+
+git cat-file -e $sha^{commit} 2>/dev/null

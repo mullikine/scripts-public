@@ -1,0 +1,37 @@
+#!/bin/bash
+export TTY
+
+# TODO Need this script to
+# - Work over
+
+sn="$(basename "$0")"
+expand=n
+case "$sn" in
+    olx) {
+        expand=y
+    }
+    ;;
+
+    *)
+esac
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -x) {
+        expand=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# I also want all whitespace to be run-length encoded
+
+if test "$expand" = "y"; then
+    sed -e 's=\\n=\n=g' \
+        -e 's=\\t=\t=g'
+else
+    sed -z -e 's=\n=\\n=g' \
+        -e 's=\t=\\t=g'
+fi

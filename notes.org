@@ -1,0 +1,6 @@
+* scripts
+
+| script name | function             |
+|-------------+----------------------|
+| hs          | save a history entry |
+| hsq         | query the history    |

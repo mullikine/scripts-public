@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+cd "$NOTES/ws"
+
+selection="$( find . -maxdepth 3 -mindepth 1 \( -type d -o -type l \) | remove-prefix "./" | fzf )"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if [ -n "$selection" ]; then
+    dir="$(printf -- "%s" "$selection" | u rp)"
+
+    if ! is_tty; then
+        printf -- "%s\n" "$dir"
+    else
+        cd "$dir"
+        clear
+        export CWD="$dir"
+        zsh
+    fi
+fi

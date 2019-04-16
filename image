@@ -1,0 +1,36 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+
+case "$opt" in
+    remove-alpha) {
+        fp="$1"
+
+        fn=$(basename "$fp")
+        dn=$(dirname "$fp")
+        ext="${fn##*.}"
+        mant="${mant%.*}"
+
+        cd "$dn"
+
+        td_converted="$(mktemp -t -d td_convertedXXXXXX || echo /dev/null)"
+        trap "rmdir \"$td_converted\" 2>/dev/null" 0
+
+        convert "$fp" -background white -alpha remove "$td_converted/$fn"
+
+        cd "$td_converted"
+        set -m
+        feh "$fn" & disown
+        CWD="$td_converted" zsh
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

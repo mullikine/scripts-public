@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+pat="$1"
+
+eipct "xa cat | grep -q $(aqf "$pat")"

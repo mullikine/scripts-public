@@ -1,0 +1,74 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+# This command always runs like it had -E
+
+# sshl
+# run ssh with a login shell
+
+: ${UNBUFFER:="n"}
+: ${VERBOSE:="n"}
+: ${FORCE_PIPE:="n"}
+: ${FORCE_TTY:="n"}
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -p) {
+        FORCE_PIPE=y
+        shift
+    }
+    ;;
+
+    -t) {
+        FORCE_TTY=y
+        shift
+    }
+    ;;
+
+    -nu) {
+        UNBUFFER=n
+        shift
+    }
+    ;;
+
+    -u) {
+        UNBUFFER=y
+        shift
+    }
+    ;;
+
+    -v) {
+        VERBOSE=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+ubbit=
+if test "$UNBUFFER" = "y"; then
+    ubbit="unbuffer"
+fi
+
+last_arg="${@: -1}"
+
+if test "$FORCE_PIPE" = "y"; then
+    last_arg="$last_arg | cat"
+fi
+
+set -- "${@:1:$(($#-1))}" # shift last arg
+
+final_cmd="$ubbit bash -l -c $(aqfd "$last_arg")"
+
+if test "$VERBOSE" = "y"; then
+    printf -- "%s\n" "ssh $(cmd "$@") $(aqfd "$final_cmd")" 1>&2
+fi
+
+if test "$FORCE_TTY" = "y"; then
+    set -- -t "$@"
+fi
+
+set -x
+ssh "$@" "$final_cmd"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+while :; do killall epdfinfo; sleep 2; done

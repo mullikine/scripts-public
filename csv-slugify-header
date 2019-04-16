@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+DELIM=,
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -tsv) {
+        DELIM="	"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# slugify first line of input
+read -r header
+
+tf_input_file="$(nix tf input_file || echo /dev/null)"
+trap "rm \"$tf_input_file\" 2>/dev/null" 0
+
+cat > "$tf_input_file"
+
+exec < <(p "$header" | sed -e '1s/.*/\L&/' -e '1s/[^"a-z'$DELIM']\+/_/g' | awk 1; cat "$tf_input_file")
+cat

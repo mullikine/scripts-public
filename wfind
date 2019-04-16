@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# wfind . -type d
+
+# find things at this depth
+# wfind / | u dirsuffix
+
+first_arg="$1"
+first_arg="$(p "$first_arg" | qf)"
+shift
+
+eval "find $first_arg -mindepth 1 -maxdepth 1" "$@"

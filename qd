@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# like qfd but does not surround
+
+bs "\"\\\$"

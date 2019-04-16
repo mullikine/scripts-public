@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+target="$1"
+shift
+
+case "$target" in
+    pshane) {
+        sshp -E p "tmux -L shane new -d -s localhost zsh"
+        sshp -E -t p "tmux -L shane attach -t localhost"
+    }
+    ;;
+
+    *) {
+        sshp -E "$target" "tmux new -d -s localhost zsh"
+        sshp -E -t "$target" "tmux attach -t localhost"
+        # ssh "$target" "bash -l -c \"tmux new -d -c /home/ubuntu -s localhost\""
+        # ssh -t "$target" "bash -l -c \"tmux attach -t localhost\""
+    }
+    ;;
+esac
+
+# Or use sshl
+# sshl
+
+# /usr/local/bin/mosh --ssh="ssh -tt" --server=/usr/local/bin/mosh-server mb -- /Users/shanemulligan/socat-gw.sh

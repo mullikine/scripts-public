@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+clone=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -cl) {
+        clone=y
+        shift
+    }
+    ;;
+
+    -nc|-ncl) {
+        clone=n
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$clone" = "y"; then
+    gc -cl -nn -notty -p 2>/dev/null | cat
+else
+    # gc -nc -nn -notty -p 2>/dev/null | cat
+    gh-path-to-twopath | sed "s=^=$MYGIT/="
+fi
+
+# awk1 | while IFS=$'\n' read -r url; do
+#     export NO_CLONE=y
+#     export NO_NOTIFY=y
+# 
+#     gc -nc -nn -notty "$url" 2>/dev/null 0</dev/null
+# done

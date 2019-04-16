@@ -1,0 +1,37 @@
+#!/bin/bash
+export TTY
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.   EDIT
+0   git add -A .; git reset --hard HEAD
+1   git add -A .; git reset --hard HEAD\^
+2   git add -A .; git reset --hard HEAD\^\^
+)h  git add -A .; git reset --soft HEAD
+!   git add -A .; git reset --soft HEAD\^
+@   git add -A .; git reset --soft HEAD\^\^
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    0) { cmd="git add -A .; git reset --hard HEAD"; }; ;;
+    1) { cmd="git add -A .; git reset --hard HEAD\^"; }; ;;
+    2) { cmd="git add -A .; git reset --hard HEAD\^\^"; }; ;;
+    \)|h) { cmd="git add -A .; git reset --soft HEAD"; }; ;;
+    \!)   { cmd="git add -A .; git reset --soft HEAD\^"; }; ;;
+    \@)   { cmd="git add -A .; git reset --soft HEAD\^\^"; }; ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

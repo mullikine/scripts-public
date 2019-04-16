@@ -1,0 +1,7 @@
+#!/bin/bash
+
+query="$@"; : ${query:=""}
+
+if [ -n "$query" ]; then
+    me -e "(engine/search-hoogle $(aqf "$query"))" && exit
+fi

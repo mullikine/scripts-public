@@ -1,0 +1,45 @@
+#!/bin/bash
+export TTY
+
+chars="$1"
+: ${chars:=" "}
+# chars="$(printf -- "%s" "$chars" | qne)"
+
+# Need 3 slashes on $
+chars="$(printf -- "%s" "$chars" | bs "\\")"
+
+# The issue with this is it escapes all \ as well
+# It should only escape \ which preceed the thing you want to escape
+
+# echo "s_\\([$chars\\]\\)_\\\\\\1_g" 1>&2
+
+# This works perfectly now
+# start bby escaping all escapes that preceed an escaped char
+# pl "s/(\\\)(?=\1*[$chars])/\\\\\$1/g" 1>&2
+# pl "s_\\([$chars]\\)_\\\\\\1_g" 1>&2
+
+# Works perfectly now
+perlchars="$(printf -- "%s" "$chars" | sed 's/\$/\\\\\\\$/')"
+# eg.
+# echo "hi*\$hi" | esc "h" esc "$"
+
+perl -p -e "s/(\\\)(?=\1*[$perlchars])/\\\\\$1/g" |
+sed "s_\\([$chars]\\)_\\\\\\1_g"
+
+
+# This was naive
+# sed "s_\\([$chars\\]\\)_\\\\\\1_g"
+
+# perl -p -e "s/([$chars])/\\\\\$1/g"
+
+
+# sed 's_\([$chars\]\)_\\\1_g'
+
+
+# DO NOT escape a / (forward slash) which is NOT followed by (0 or more / followed by a char to be escaped)
+# ONLY escape a / (forward slash) which is followed by (0 or more / followed by a char to be escaped)
+# perl -p -e 's/../../g'
+# echo "s_([$chars])_\1_g"
+# It takes 5
+# perl -p -e "s/([$chars])/\\\\\$1/g"
+

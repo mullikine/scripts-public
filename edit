@@ -1,0 +1,130 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# This is my wrapper for all editors
+
+# This also needs to be able to take stdin
+
+editor=v
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -e) {
+        # possible values
+        # sp, spv (evil), e, me, v, vim
+
+        editor="$2"
+
+        shift
+        shift
+    }
+    ;;
+
+    +/*) { # pattern
+        pattern="$(p "$opt" | mcut -d+/ -f2)"
+
+        shift
+    }
+    ;;
+
+    +*:*) { # line and column +50:2
+        # Parse this. It would be much better if I had perl here, to
+        # parse the bits. Still, it's a good exercise to try to make the
+        # solution terse
+
+        # make a sed command that extracts bits
+
+        # make a cut command that has a regex delim
+        # awk -F '[_-]' '{print $2"-"$3}'
+        # echo +324:524 | mcut -d "[:+]" -f 2
+        # echo +324:524 | mcut -d "[:+]" -f 3
+
+        line="$(p "$opt" | mcut -d'[+:]' -f2)"
+        col="$(p "$opt" | mcut -d'[+:]' -f3)"
+
+        shift
+    }
+    ;;
+
+    +[0-9]*) {
+        line="$(p "$opt" | mcut -d+ -f2)"
+        shift
+    }
+    ;;
+
+    +*) { # line and column +50:2
+        line="$(p "$opt" | mcut -d+ -f2)"
+        shift
+    }
+    ;;
+
+    -l|-line) {
+        line="$2"
+
+        shift
+        shift
+    }
+    ;;
+
+    -c|-column) { # or should -c be command. or should -e be command? neither. this is an editor agnostic script
+        column="$2"
+
+        shift
+        shift
+    }
+    ;;
+
+    -p|-find-pattern) {
+        # I should be able to use this in combination with -l and -c, to
+        # get more precise.
+
+        line=
+        column=
+        pattern="$2"
+
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+: ${editor:="v"}
+arg_line=
+
+case "$editor" in
+    v|vim) {
+        if [ -n "$line" ] && [ -n "$column" ]; then
+            arg_line+=" -c \"call cursor($line,$column)\" "
+        elif [ -n "$line" ]; then
+            arg_line+=" +$line "
+        fi
+
+        if [ -n "$pattern" ]; then
+            pat="$(p "$pattern" | q)"
+            arg_line+=" +/$pat "
+        fi
+    }
+    ;;
+
+    *) { # assume it's an emacs variant
+        :
+    }
+    ;;
+esac
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+final_cmd="$editor $arg_line $CMD"
+printf -- "%s\n" "$final_cmd"
+
+eval "$final_cmd"

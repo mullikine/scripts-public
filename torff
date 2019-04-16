@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# w3m will only allow mouse for xterm
+export TERM=xterm-256color
+
+# my-torify firefox "$@"
+firefox -P tor "$@"

@@ -1,0 +1,41 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    gh-merger) {
+        command=get_the_person_who_merged
+    }
+    ;;
+
+    gh-closer) {
+        command=get_the_person_who_closed
+    }
+    ;;
+
+    *)
+esac
+
+get_the_person_who_closed() {
+    pr_url="$1"
+    # This doesn't mean it's closed. It could've been reopened
+    odn ci elinks-dump "$pr_url" | scrape '[^ ]+ closed this' | sed 's/ closed this//' | tail -n 1
+}
+
+get_the_person_who_merged() {
+    pr_url="$1"
+    odn ci elinks-dump "$pr_url" | scrape '[^ ]+ merged [0-9]+ commits?' | sed 's/ merged .* commits\?//' | head -n 1
+}
+
+if test -n "$1"; then
+    : ${command:="$1"}
+    shift
+fi
+
+if [ -z "$command" ]; then
+    exit 0
+fi
+
+# Can't use eval here or it will un-group arguments"
+"$command" "$@"

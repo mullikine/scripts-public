@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -E) {
+        cmd_first_arg=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CWD="$(pwd)"
+
+if test "$cmd_first_arg" = "y"; then
+    # Use this for pipes.
+    CWD="$CWD" x -zsh -s "$1" -a
+else
+    CMD="$(cmd "$@")"
+    CWD="$CWD" x -zsh -s "$CMD" -a
+fi

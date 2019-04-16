@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+# Like xargs except all of stdin goes into the first argument
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+input="$(p "$input" | q -ftln)"
+
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+
+# echo "$CMD $input"
+eval "$CMD $input"

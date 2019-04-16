@@ -1,0 +1,3 @@
+#!/bin/bash
+
+tmux -L shane new -s init zsh

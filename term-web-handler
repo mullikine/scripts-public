@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd "$@")"
+
+#BROWSER=w3m
+BROWSER=ff
+
+if lit "$CMD" | grep -q -P 'youtube.com'; then
+    cmd="tm -d -te sph -fa $BROWSER $CMD"
+    eval "$cmd"
+else
+    cmd="tm -d -te sph -fa $BROWSER $CMD"
+    eval "$cmd"
+fi

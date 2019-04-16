@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+if test "$#" -eq "1"; then
+    scrape-words-from-string.pl -r "$1"
+else
+    scrape-words-from-string.pl
+fi

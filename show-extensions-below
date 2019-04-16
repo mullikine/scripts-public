@@ -1,0 +1,29 @@
+#!/bin/bash
+export TTY
+
+{ echo ext; find . -path '*/.git/*' -prune -o -type f -print | sed -n -e 's/.*\///' -e '/\./s/.*\.//p'; } | xsv frequency | sed 1d
+
+# { echo ext; F f | xa ext | grep -v '/'; } | xsv frequency | sed 1d
+# | s join ','
+
+exit 0
+stats="$(F f | xargs -l ext | grep -v '/' | logtop -q | sed 1d | remove-leading-and-trailing-spaces.sh | spaces-to-tabs)"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if is_tty; then
+    {
+        printf -- "%s\n" "$stats" | awk -F '\t' 'BEGIN {OFS="\t"} {$1=""; print $0}' | remove-leading-and-trailing-spaces.sh
+    } | fpvd 
+    # # Frustratingly, logtop sometimes shows a frequency column and
+    # # sometimes does not
+    # {
+    #     printf -- "i\t#\tspeed\text\n"
+    #     printf -- "%s\n" "$stats"
+    # } | awk -F '\t' 'BEGIN {OFS="\t"} {$1=$3=""; print $0}' | fpvd 
+else
+    printf -- "%s\n" "$stats"
+fi

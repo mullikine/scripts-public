@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+# abbrev: tine
+
+# Use this in conjunction with commands such as sed so I can do powerful
+# "grep -v"-like commands
+
+tf_stdin="$(nix tf stdin || echo /dev/null)"
+trap "rm \"$tf_stdin\" 2>/dev/null" 0
+
+cat > "$tf_stdin"
+
+test -s "$tf_stdin"

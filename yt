@@ -1,0 +1,148 @@
+#!/bin/bash
+export TTY
+
+: ${CWD:="$(pwd)"}; cd "$CWD"
+
+# dl_dir="$DUMP/youtube/$CWD"
+
+# mkdir -p "$dl_dir"
+# cd "$dl_dir"
+
+sn="$(basename "$0")"
+
+VIEW=n
+PLAY_IN_BACKGROUND=n
+AUDIO_ONLY=n
+NOCD=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -U|-u|-update) {
+        sudo pip install --upgrade youtube_dl
+        shift
+    }
+    ;;
+
+    -v|-view) {
+        VIEW=y
+        shift
+    }
+    ;;
+
+    -ncd|-nocd) {
+        NOCD=y
+        shift
+    }
+    ;;
+
+    -p|-play) {
+        PLAY_IN_BACKGROUND=y
+        shift
+    }
+    ;;
+
+    -s|-search) {
+        SEARCH=y
+        shift
+    }
+    ;;
+
+    -a|-audio) {
+        AUDIO_ONLY=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$SEARCH" = "y"; then
+    if ! test "$NOCD" = "y"; then
+        dir="$DUMP$HOME/notes2018/ws/youtube"
+        export CWD="$dir"
+        cd "$dir"
+    fi
+
+    tm -d sph -d -c "$dir" ranger
+
+    gr -b yt-spv -n 4 -w "youtube.com" -- "$@"
+elif test "$PLAY_IN_BACKGROUND" = "y" || test "$AUDIO_ONLY" = "y"; then
+    if ! test "$NOCD" = "y"; then
+        dir="$DUMP$HOME/notes2018/ws/youtube"
+        export CWD="$dir"
+        cd "$dir"
+    fi
+
+    lit -s "$@"
+
+    if test "$AUDIO_ONLY" = "y"; then
+        echo audio
+        format_selection="$(ci youtube-dl --ignore-errors -F "$@" | grep "audio only" | tail -n 1 | s field 1)"
+        bn="$(ci youtube-dl "$@" -f "$format_selection" --get-filename 2>/dev/null)"
+
+        if ! [ -f "$bn" ]; then
+            # $DUMP$HOME/notes2018/ws/youtube
+            # echo "$bn"
+            # exit 0
+
+            # echo "$format_selection"
+            # echo "$bn"
+
+            CMD="$(cmd "$@")"
+            eval "youtube-dl --ignore-errors -f $(aqf "$format_selection") $CMD"
+        fi
+    else
+        echo video
+        bn="$(ci youtube-dl --ignore-errors "$@" --get-filename 2>/dev/null)"
+
+        if ! [ -f "$bn" ]; then
+            # tm -d nw -n youtube -t localhost_current -d -c "$dir" ranger
+            # tm select-current
+            youtube-dl --ignore-errors "$@" &>/dev/null
+        fi
+    fi
+
+    cvlc "$bn"
+
+    # eval "mpv --no-video $CMD"
+elif test "$VIEW" = "y"; then
+    if ! test "$NOCD" = "y"; then
+        dir="$DUMP$HOME/notes2018/ws/youtube"
+        export CWD="$dir"
+        cd "$dir"
+    fi
+
+    lit -s "$CMD"
+
+    echo video
+    # Get the last webm
+    # grep -v only # this one filters out all the audio-only or
+    # video-only. the're not that great. but we don't want to download
+    # the highest quality
+    # grep best -- this one gets the best
+    # get the 2nd best audio and video
+    # format_selection="$(eval "youtube-dl --ignore-errors -F $CMD" | grep -v only | tv | tail -n 2 | head -n 1 | s field 1)"
+    # format_selection="$(eval "youtube-dl --ignore-errors -F $CMD" | grep -v only | tail -n 2 | head -n 1 | s field 1)"
+
+    # actually, i do want the best one
+    format_selection="$(ci youtube-dl --ignore-errors -F "$@" | grep best | tail -n 1 | s field 1)"
+    bn="$(ci youtube-dl "$@" -f "$format_selection" --get-filename 2>/dev/null)"
+
+    youtube-dl --ignore-errors -f "$format_selection" "$@"
+
+    vlc "$bn"
+#elif test "$VIEW" = "y"; then
+#    if ! test "$NOCD" = "y"; then
+#        dir="$DUMP$HOME/notes2018/ws/youtube"
+#        export CWD="$dir"
+#        cd "$dir"
+#    fi
+#
+#    # tm -d nw -n youtube -t localhost_current -d -c "$dir" ranger
+#    # tm select-current
+#    # eval "yt $CMD"
+#
+#    # eval "mpv --no-video $CMD"
+#
+#    eval "vlc $CMD"
+else
+    youtube-dl --ignore-errors "$@"
+fi

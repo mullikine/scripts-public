@@ -1,0 +1,27 @@
+#!/bin/bash
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -l|-line) {
+        line="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -c|-col|-column) {
+        column="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CMD=''
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    CMD="$CMD $(printf -- "%s" "$ARG" | q)"
+done
+cmd="/usr/bin/yi --as=vim $CMD"
+eval "$cmd"

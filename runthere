@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+cmd="$1"
+
+bn="$(basename "$cmd")"
+
+dn="$(printf -- "%s" "$cmd" | u dn)"
+set -xv
+cd "$dn"
+./"$bn"

@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+owner="$1"
+: ${owner:="grafana"}
+repo="$2"
+: ${repo:="metrictank"}
+issue="$3"
+: ${issue:="1243"}
+
+# usage: cat $0 | ssh remote "bash -s -- pyargs"
+read -r -d '' pycode <<EOF
+from github import Github
+g = Github("$(cat $HOME/.myrc.yaml | yq -r '.github_api_token')")
+repo = g.get_repo("$owner/$repo")
+issue = repo.get_issue($issue)
+print(issue.closed_at)
+
+from ptpython.repl import embed
+embed(globals(), locals())
+
+# for repo in g.get_user().get_repos():
+#     print(repo.name)
+EOF
+python3 <(echo "$pycode") $@

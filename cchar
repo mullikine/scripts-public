@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+
+stdin_exists() {
+    ! [ -t 0 ] && read -t 0
+}
+
+if stdin_exists; then
+    IFS= read -rd '' input < <(cat /dev/stdin)
+else
+    input="$1"
+fi
+
+num="$(LC_CTYPE=C printf -- '%s' "$input" | ord)"
+
+(( num -= 96 ))
+
+num="$(LC_CTYPE=C printf -- '%s' "$num" | dec2oct)"
+
+printf -- "\\\0%02d" "$num"

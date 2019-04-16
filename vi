@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+vim \
+    -u NONE \
+    -c 'set noswapfile' \
+    -c 'set nowarn' \
+    -c 'set nocompatible' \
+    -c 'set nobackup' \
+    -c 'set backupdir=/dev/shm/var/tmp/shane/vim' \
+    -c 'set directory=/dev/shm/var/tmp/shane/vim' \
+    -c 'set undodir=/dev/shm/var/tmp/shane/vim' \
+    -c 'set mouse=a' \
+    -c 'set nowrap' \
+    "$@"

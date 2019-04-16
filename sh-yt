@@ -1,0 +1,34 @@
+#!/bin/bash
+export TTY
+
+url="$1"
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+d  yt -v $(aqf "$url") # download and watch in vlc
+r  readsubs $(aqf "$url")
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    d) cmd="yt -v $(aqf "$url")" ;;
+    r) cmd="readsubs $(aqf "$url")" ;;
+esac
+echo
+echo "$cmd"
+
+exec </dev/tty
+exec 1> /dev/tty
+eval "$cmd"

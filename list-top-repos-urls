@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+list-top-repos "$@" |
+    jq -r '.[] | "\(.url)"' |
+    sed 's/api.\(github.com\)/\1/' |
+    sed 's~/repos/~/~' |
+    sed '/-$/d'

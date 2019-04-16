@@ -1,0 +1,150 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -e) {
+        elisp="$2" # if using eww browser, run some elisp too
+        shift
+        shift
+    }
+    ;;
+
+    -w) {
+        PREFER_WEB=y
+        shift
+    }
+    ;;
+
+    -l) {
+        PREFER_WEB=n
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+export PREFER_WEB
+
+# headless, terminal firefox
+
+url="$1"
+
+# ns "$url"
+
+# Possible urls. For this reason I can't use _ to substitute in sed
+# file:///usr/local/racket/share/racket/doc/reference/require.html#(form._((lib._racket%2Fprivate%2Fbase..rkt)._provide))
+
+if lit "$url" | grep -q -P 'racket.*\.html#\('; then
+    query="$(lit "$url" | sed 's/.*_\([-[:alnum:]]*\).*/\1/')"
+fi
+
+# 7 is dodgy
+url="$(p "$url" | fix-racket-doc-url)"
+
+if pl "$url" | grep -q '//racket/' && test -z "$PREFER_WEB"; then
+    if yn "racket docs use web[y] or local[n]?"; then
+        url="$(p "$url" | fix-racket-doc-url -w)"
+    else
+        url="$(p "$url" | fix-racket-doc-url -l)"
+    fi
+fi
+
+# ns "$url"
+
+# tm -d sph -fargs elinks-dump "$url"
+
+printf -- "%s" "$url" | xc | ns &>/dev/null # can't background this, annoyingly without strange things happening
+# ff "https://www.youtube.com/watch?v=KHrbDw0267I" # ... when i do this
+
+if lit "$url" | grep -q -P '\.onion/'; then
+    yn "start my-torify w3m?" && my-torify w3m "$url"
+    exit 0
+elif lit "$url" | grep -q -P 'racket.*\?q='; then
+    # needs javascript
+
+    # copy "$url"
+    # ! yn "choose browser?" && exit 0
+    firefox "$url"
+    exit $?
+        
+    # yn "start browsh?" && browsh "$url"
+elif lit "$url" | grep -q -P 'youtube.com/watch' || lit "$url" | grep -q -P 'youtu\.be'; then
+    # yn "start yt?" && yt -v "$url"
+    
+    printf -- "%s\n" "$url"
+    ans="$(qa -. edit \
+              -c copy \
+              -a play-song \
+              -v play-video \
+              -b browsh)"
+
+    case "$ans" in
+        edit) { vs $0; } ;;
+        copy) { copy "$url"; } ;;
+        play-song) { play-song "$url"; } ;;
+        play-video) { play-video "$url"; } ;;
+        browsh) { browsh "$url"; } ;;
+        *) ;;
+    esac
+    exit 0
+fi
+
+# It's too annoying to complete, leave it
+
+# if lit "$url" | grep -q -P 'racket.*\?q='; then
+    # eww -s racket "$url"
+# else
+
+printf -- "%s\n" "$url"
+ans="$(qa -. edit \
+          -ey eww \
+          -f nveww \
+          -n : \
+          -c copy \
+          -f pentadactyl \
+          -p pentadactyl \
+          -r google-chrome \
+          -g google-chrome \
+          -v vim \
+          -b browsh \
+          -w w3m \
+          -o org-browser \
+          -n nvlinks \
+          -l elinks \
+          -x ewx \
+          -s ca-tless \
+          -V vimlinks)"
+
+case "$ans" in
+    eww) {
+        c="eww $( [ -n "$elisp" ] && echo -n "-c $(aqf "$elisp")" ) $( [ -n "$query" ] && echo -n "-s $(aqf "$query")" ) $(aqf "$url")"
+        # yn start eww? && eval "$c"
+        eval "$c"
+    }
+    ;;
+    copy) { xcit -i "$url"; exit 0; } ;;
+    google-chrome) { set -m; google-chrome "$url" & disown; exit 0; } ;;
+    browsh) { browsh -k "$url"; } ;;
+    vim) { printf -- "%s" "$url" | v; } ;;
+    elinks) { elinks "$url"; } ;;
+    nvlinks) { nvlinks "$url"; } ;;
+    pentadactyl) { set +m; trap '' INT HUP; firefox "$url" & disown; } ;;
+    w3m) { w3m "$url"; } ;;
+    org-browser) { org-browser "$url"; } ;;
+    ewx) { ewx "$url"; } ;;
+    ca-tless) { ca "$url" | tless; } ;;
+    vimlinks) { vimlinks "$url"; } ;;
+    edit) { vs $0; } ;;
+    *) {
+        "$ans" "$url"
+    }
+    ;;
+esac
+
+printf -- "%s\n" "$url" | udl
+pak
+
+# browsh -k "$url"

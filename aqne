@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+cmd="apply qne $CMD"
+eval "$cmd"

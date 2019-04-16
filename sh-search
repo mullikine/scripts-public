@@ -1,0 +1,34 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+h  hoogle
+g  gh
+/  google
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    h) cmd="ehg" ;;
+    g) cmd="xs gh" ;;
+    \/) cmd="v $HOME/notes2018/ws/google/searches.org" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

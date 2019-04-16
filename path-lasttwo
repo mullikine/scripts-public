@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+u nodirsuffix | sed 's=.*/\([^/]\+/[^/]\+\)$=\1='

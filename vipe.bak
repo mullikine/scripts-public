@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# This should work like vipe but should be able to take options such as
+# filetype.
+
+# The vipe command was able to choose which editor it used. This should
+# also do the same.
+
+# Therefore, it should be able to use the 'eipe' command for emacs.
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+tf_vipe="$(nix tf vipe || echo /dev/null)"
+trap "rm \"$tf_vipe\" 2>/dev/null" 0
+
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done

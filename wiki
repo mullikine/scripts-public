@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This might actually work if I had the q script. I have to remake it.
+
+query="$@"; : ${query:=""}
+
+if ! pc -e "(dired $(aqf "$query"))"; then
+    me -e "(engine/search-wikipedia $(aqf "$query"))(delete-frame)" && exit
+fi

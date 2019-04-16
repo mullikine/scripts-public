@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# combine
+echo $HOME/notes2018/ws/codelingo/todo.org | cx basename mant
+
+awk1 | while IFS=$'\n' read -r line; do
+    for sn in "$@"
+    do
+        line="$("$sn" "$line")"
+    done
+    printf -- "%s\n" "$line"
+done

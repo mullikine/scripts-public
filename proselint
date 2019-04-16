@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "#" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+echo "proselint is disabled for emacs" 1>&2
+echo "$HOME/scripts/proselint"
+
+exit 0
+
+/usr/local/bin/proselint "$@"

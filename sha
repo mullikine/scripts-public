@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# pipe into this
+
+sha256sum | s field 1

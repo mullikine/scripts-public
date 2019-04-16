@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+row_nums="$1"
+shift
+
+if test -n "$row_nums"; then
+    sed "${row_nums}d"
+else
+    cat
+fi

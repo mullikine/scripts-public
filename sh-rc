@@ -1,0 +1,111 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+Z  zsh
+s  .ssh/config
+\`  .profile
+l  .shellrc
+a  .shell_aliases
+b  bash
+e  emacs
+c  scope.sh
+w  my-spacemacs.el
+n  my-nix.el
+m  .strings.sh
+M  my-music.el
+N  my-engine.el
+i  irssi
+Q  bigqueryrc
+v  vim
+x  xmonad
+h  my-hydra.el
+t  tmux
+r  ranger rc
+R  rifle
+S  syntax.vim
+'  .spacemacs
+C  chinese.vim
+p  python full
+E  .shell_environment
+P  packages.txt
+f  filters.sh
+u  utils.el
+U  utils.2.el
+o  org-config.el
+T  tm
+g  .gitconfig
+G  $HOME/notes2018/ws/google/searches.org
+F  config-files.txt
+H  $HOME/.zsh_history
+k  $HOME/.ghci
+y  $HOME/.pentadactylrc
+Y  $HOME/notes2018/ws/python/shanepy/shanepy.py
+1  $VIMSNIPPETS/codelingo.snippets
+L  $MYGIT/spacemacs/.lsp-session-v1
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    Z) cmd="v $HOME/.zshrc" ;;
+    \`) cmd="v $HOME/.profile" ;;
+    a) cmd="v $HOME/.shell_aliases" ;;
+    b) cmd="v $HOME/.bashrc" ;;
+    F) cmd="v $NOTES/config-files.txt" ;;
+    e) cmd="v $HOME/.emacs" ;;
+    c) cmd="v $HOME/versioned/git/config/ranger/scope.sh" ;;
+    w) cmd="sp $MYGIT/config/emacs/config/my-spacemacs.el" ;;
+    n) cmd="sp $MYGIT/config/emacs/config/my-nix.el" ;;
+    i) cmd="v $HOME/.irssi/config" ;;
+    t) cmd="v $HOME$MYGIT/config/tmux/tmux.conf" ;;
+    S) cmd="v $HOME/notes2018/syntax.vim" ;;
+    \') cmd="v $HOME/.spacemacs" ;;
+    C) cmd="v $HOME/notes2018/chinese.vim" ;;
+    v) cmd="v $HOME$VIMCONFIG/vimrc" ;;
+    s) cmd="v $HOME/.ssh/config" ;;
+    l) cmd="v $HOME/.shellrc" ;;
+    N) cmd="v $HOME/source/git/config/emacs/config/my-engine.el" ;;
+    m) cmd="v $HOME/.strings.sh" ;;
+    M) cmd="sp $EMACSD/config/my-music.el" ;;
+    x) cmd="v $HOME/.xmonad/xmonad.hs" ;;
+    u) cmd="sp $EMACSD/config/my-utils.el" ;;
+    U) cmd="sp $EMACSD/config/my-utils.2.el" ;;
+    r) cmd="v $HOME/.config/ranger/rc.conf" ;;
+    R) cmd="v $HOME/versioned/git/config/ranger/rifle.conf" ;;
+    h) cmd="sp $EMACSD/config/my-hydra.el" ;;
+    p) cmd="v $HOME/notes2018/ws/python/rc/pythonrc.full.py" ;;
+    E) cmd="v $HOME/.shell_environment" ;;
+    P) cmd="v $EMACSD/packages.txt" ;;
+    Q) cmd="v $HOME/.bigqueryrc" ;;
+    o) cmd="sp $EMACSD/config/org-config.el" ;;
+    g) cmd="v $HOME/.gitconfig" ;;
+    G) cmd="v $HOME/notes2018/ws/google/searches.org" ;;
+    T) cmd="v $HOME/scripts/tm" ;;
+    f) cmd="v $HOME/notes2018/ws/filters/filters.sh" ;;
+    H) cmd="v $HOME/.zsh_history" ;;
+    k) cmd="vs $HOME/.ghci" ;;
+    y) cmd="vs $HOME/.pentadactylrc" ;;
+    Y) cmd="vs $HOME/notes2018/ws/python/shanepy/shanepy.py" ;;
+    1) cmd="vs $VIMSNIPPETS/codelingo.snippets" ;;
+    L) cmd="vs $MYGIT/spacemacs/.lsp-session-v1" ;;
+
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

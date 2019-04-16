@@ -1,0 +1,44 @@
+#!/bin/bash
+export TTY
+
+tf_stdin_stdout="$(nix tf stdin txt || echo /dev/null)"
+trap "rm \"$tf_stdin_stdout\" 2>/dev/null" 0
+
+cat > "$tf_stdin_stdout"
+
+pythoncode="$1"
+
+: ${pythoncode:="iat[0,0]"}
+
+read -r -d '' PYCODE <<HEREDOC
+import numpy as np
+import pandas as pd
+pd.set_option('display.max_columns', None)  # or 1000
+pd.set_option('display.max_rows', None)  # or 1000
+pd.set_option('display.max_colwidth', -1)  # or 199
+# , encoding='latin1'
+df = pd.read_csv("$tf_stdin_stdout", dtype=str)
+df.fillna('', inplace=True)
+thing = df.${pythoncode}
+
+try:
+    if isinstance(thing, pd.core.series.Series):
+        print(thing.to_frame().to_string(header=False,index=False))
+    elif isinstance(thing, pd.core.frame.DataFrame):
+        print(thing.to_string(header=False,index=False))
+    else:
+        print(thing)
+except:
+    # Sometimes the cell might not have been added to the table. We want
+    # to fail without an error
+    pass
+
+HEREDOC
+
+# echo "$PYCODE" 1>&2
+
+output="$(python3 -c "$PYCODE" | s efs)"
+
+if test -n "$output"; then
+    printf -- "%s" "$output"
+fi

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+xargs -l glob -b | awk1 | while IFS=$'\n' read -r line; do
+    shortpath="$(p "$line" | sed 's/.*\/\([^/]\+\/[^/]\+\)$/\1/')"
+    printf -- "%s\t" "$shortpath"
+    cat "$line" | wc | erase-starting-whitespace | sed 's/ \+/\t/g'
+done

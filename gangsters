@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+# Use default. Comment this out
+# export WINEPREFIX=$HOME/.local/share/wineprefixes/aohd32
+
+cd "$HOME/.wine/drive_c/Program Files (x86)/Eidos Interactive/Hothouse Creations/Gangsters 2"
+
+# wine explorer /desktop=AOHD,2560x1600 "Gangsters2.exe" $@
+wine explorer /desktop=AOHD,800x600 "Gangsters2.exe" $@

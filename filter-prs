@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+xurls | grep /pull/new/ | sort | uniq

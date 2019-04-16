@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This might actually work if I had the q script. I have to remake it.
+
+uri="$1"; : ${uri:="."}
+
+# e -s dired c
+# e -s dired c -e "(dired \".\")"
+
+# spacemac's dired isn't working
+#e -D spacemacs c -e "(dired \".\")"
+
+#e -D prelude c -e "(dired \".\")"
+
+#e -D spacemacs c -e "(dired \"$uri\")"
+
+if ! pc -e "(dired $(aqf "$uri"))"; then
+    sp -e "(dired $(aqf "$uri"))"
+fi

@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# Creates an html comment around input
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+printf -- "%s" "<!-- $input -->"

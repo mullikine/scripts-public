@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+python3 -m http.server

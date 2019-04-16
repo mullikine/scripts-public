@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+# I'm not sure why but when tor service is running, chrome uses it
+# automatically even without the proxy being set -- very dodgy
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -k) {
+        killall google-chrome chrome
+        exit 0
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+cmd="google-chrome --force-device-scale-factor=2 $CMD"
+# # chrome apperas to be ignoring the dpi, so I still need to scalie
+# # bigger
+# # cmd="google-chrome --force-device-scale-factor=1.0 $CMD"
+eval "$cmd"
+
+# exec "$DUMP/downloads/chrome-linux/chrome" --force-device-scale-factor=1.5 "$@"

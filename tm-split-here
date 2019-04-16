@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+
+wincmd=spv
+SWITCH=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -h) {
+        wincmd="sph"
+        shift
+    }
+    ;;
+
+    -v) {
+        wincmd="spv"
+        shift
+    }
+    ;;
+
+    -sw) {
+        SWITCH=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+tm -d "$wincmd" -d -c "$(pwd)" $(test "$SWITCH" != "y" && printf -- "%s" "-d") "$@"

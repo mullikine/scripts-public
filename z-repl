@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# z-repl "raco pkg install "
+
+# use "x"
+
+cmd="$@"
+
+# zsh
+x -s "$cmd" -i
+
+# x -h -d -tmc zsh -nto -e "" c -s "%matplotlib tk\\n" -scc m -e "In [" -a

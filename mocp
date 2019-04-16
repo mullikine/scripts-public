@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+TERM=screen-2color /usr/bin/mocp "$@"

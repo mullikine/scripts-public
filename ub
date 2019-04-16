@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# TODO: make it execute the arguments while clearing stderr
+# Because by default unbuffer mixes stderr into stdout
+
+/usr/bin/unbuffer bash -c "$@" 2>/dev/null

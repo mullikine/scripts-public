@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -k) {
+        killall slack
+        shift
+
+        exit 0
+    }
+    ;;
+
+    *) break;
+esac; done
+
+/usr/bin/slack "$@"

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+ns "'vol up' this is not used. Use a vol instead"
+
+# This is not used
+
+# This is the correct file
+# $HOME/scripts/a
+
+basedir="/sys/class/backlight/"
+
+# intel_backlight/
+handler=$basedir$(ls $basedir)"/"
+
+old=$(cat "${handler}brightness")
+new="$old"
+
+min=0
+max=$(cat "${handler}max_brightness")
+
+step="$(( max / 10 ))"
+
+# echo "$old $new $step" | tv
+case $1 in
+    up)
+        {
+            new=$(( old + step ))
+        }
+        ;;
+    down)
+        {
+            new=$(( old - step ))
+        }
+        ;;
+    max)
+        {
+            new=$(( max ))
+        }
+        ;;
+    off)
+        {
+            new=$(( 0 ))
+        }
+        ;;
+    min)
+        {
+            # This should first get to min brightness then turn off
+            candidate="$(( min + step ))"
+            if [[ "$old" -gt "$candidate" ]]; then
+                new="$candidate"
+            else
+                new=0
+            fi
+        }
+        ;;
+esac
+
+if [ "$new" -gt "$max" ]; then
+    new="$max"
+fi
+
+if [ "$new" -lt "$min" ]; then
+    new="$min"
+fi
+
+if [ "$new" -ne "$old" ]; then
+    sudo chmod 666 $handler"brightness"
+    echo "$new" > "${handler}brightness"
+fi

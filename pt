@@ -1,0 +1,72 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+if [ "$sn" = "pt3" ] || [ "$sn" = "ptpython3" ]; then
+    PY_VERSION=3
+else
+    PY_VERSION=2
+fi
+
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -rc) {
+        shift
+        opt="$1"
+        shift
+        case "$opt" in
+            full) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.full.py
+            }
+            ;;
+
+            basic) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.basic.py
+            }
+            ;;
+
+            debug) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.debug.py
+            }
+            ;;
+
+            math) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.math.py
+            }
+            ;;
+
+            shane) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.shane.py
+            }
+            ;;
+
+            *) {
+                export PYTHONSTARTUP=$HOME/.pythonrc
+            }
+            ;;
+        esac
+    }
+    ;;
+
+    *) {
+        break
+    }
+    ;;
+esac; done
+
+
+echo "$PYTHONSTARTUP" | mnm 1>&2
+
+case "$PY_VERSION" in
+    2) {
+        ptpython2
+    }
+    ;;
+
+    3) {
+        ptpython3
+    }
+    ;;
+
+    *)
+esac

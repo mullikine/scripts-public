@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+unblock=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -u) {
+        unblock=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+name="$1"
+
+mkdir -p /tmp/poll
+
+touch "/tmp/poll/$name.txt"
+
+
+if test "$unblock" = "y"; then
+    rm "/tmp/poll/$name.txt"
+else
+    inotifywait -e delete_self "/tmp/poll/$name.txt" &>/dev/null
+fi

@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+rp="$(realpath "$fp")"
+if [ -d "$rp" ]; then
+    dn="$rp"
+else
+    dn="$(dirname "$rp")"
+fi
+dnbn="$(basename "$dn")"
+
+cd "$dn"
+
+dates="$(git log --follow --pretty=format:"%ad" --date=short --date=short --name-only -- "$fp" | awk -v RS="\n\n" -vFS="\n" -vOFS=" " '{print $1}')"
+
+end_date="$(pl "$dates" | head -n 1)"
+start_date="$(pl "$dates" | tail -n 1)"
+echo -e "$dnbn\t$start_date\t$end_date"

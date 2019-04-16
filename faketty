@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This is useful when a script does not think it has a tty but actually
+# does. Say, when running as a binding from ranger.
+# vim +55 $HOME/scripts/r
+
+cmd="$1"
+ns "$cmd"
+script --return -c "$cmd" /dev/null"

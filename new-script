@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+# Search the vim ftdetect files for file extensions
+# Pair them up with the ft filename mantissa.
+# Put it into fzf
+# $HOME$VIMCONFIG/vim/ftdetect
+
+# cat $HOME$VIMCONFIG/vim/ftdetect/*.vim | scrape '\*\.[^ 	]+' | v
+
+read -r -d '' maps <<- 'HEREDOC'
+maps="$(p "$maps" | tr -d '\n')"
+
+fn="$SCRIPTS/new-script-${RANDOM}.sh"
+
+touch "$fn"
+chmod a+x "$fn"
+
+printf -- "%s\n" "#!/bin/bash" >> "$fn"
+printf -- "%s\n" "export TTY" >> "$fn"
+printf -- "%s\n" >> "$fn"
+
+/* tm -S -te nw "vim \"$fn\"" */

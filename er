@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+# It's annoying to use emacs' ranger as a substitute for ranger because
+# if you don't quit it, the windows remain open and you have to kill
+# them manually.
+# The don't do this always. It's just easy to get into this state.
+
+# Ranger for emacs is not very well integrated
+# It's quite buggy
+
+dir="$1"; : ${dir:="."}
+rp="$(realpath "$dir")"
+
+e -noonly -D spacemacs c -e "(ranger \"$rp\")"
+
+
+#e -o -D spacemacs c -e "(call-interactively '(ranger \"$rp\"))"
+#e -D spacemacs c -e "(call-interactively (ranger \"$rp\"))"
+#e -D spacemacs c -e "(call-interactively (ranger))"
+#e -D spacemacs c -e "(ranger)"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sed -r 's/-(\w)/\U\1/g'

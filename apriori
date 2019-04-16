@@ -1,0 +1,36 @@
+#!/bin/bash
+export TTY
+
+# vim +/"association rules" "$HOME/notes2018/glossary.txt"
+
+# py i efficient-apriori
+
+: ${min_support:="0.5"}
+: ${min_confidence:="1"}
+
+read -r -d '' PYCODE <<HEREDOC
+import sys
+from efficient_apriori import apriori
+
+try:
+    tuples=[]
+    for line in sys.stdin:
+        tuples.append(tuple(line.rstrip().split(" ")))
+
+    # transactions = [('eggs', 'bacon', 'soup'),
+    #                 ('eggs', 'bacon', 'apple'),
+    #                 ('soup', 'bacon', 'banana')]
+
+    # print(tuples)
+
+    itemsets, rules = apriori(tuples, min_support=$min_support,  min_confidence=$min_confidence)
+
+    # [{eggs} -> {bacon}, {soup} -> {bacon}]
+
+    for rule in rules:
+        print(rule)
+except:
+    pass
+HEREDOC
+
+python3.6 -c "$PYCODE"

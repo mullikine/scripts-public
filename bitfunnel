@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    build) {
+        cd $HOME$MYGIT/BitFunnel/BitFunnel
+
+        ./Configure_Make.sh
+        cd build-make
+        make
+        make test
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

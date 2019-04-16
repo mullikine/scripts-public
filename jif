@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# TODO: Make this show the results as I select from fzf
+
+tf_jif="$(nix tf jif txt || echo /dev/null)"
+trap "rm \"$tf_jif\" 2>/dev/null" 0
+
+cat > "$tf_jif"
+jqpath="$(cat "$tf_jif" | jq-showschema | fzf)"
+cat "$tf_jif" | jq -r "$jqpath"

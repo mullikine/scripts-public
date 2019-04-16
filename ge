@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# pwd | tv
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# -e is sent to open => prefer to edit, m3u file (audio/x-mpegurl) for example
+# ge does this by default
+
+# snippet
+# logme
+
+rp="$(realpath "$0")"
+bn="$(basename "$rp")"
+slogdir="$LOGDIR/$bn"
+mkdir -p  "$slogdir"
+# exec &> >(ts >> "$slogdir/$(date-ts).log");
+
+# printf -- "%s\n" "hi"
+# exit 0
+#exec </dev/tty
+
+OPEN_IN_TMUX=n
+PREFER_EDIT=n
+NW_OPT=nw
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -t) {
+        OPEN_IN_TMUX=y
+        NW_OPT=nw
+        shift
+    }
+    ;;
+
+    -h) {
+        OPEN_IN_TMUX=y
+        NW_OPT=sph
+        shift
+    }
+    ;;
+
+    -e) {
+        PREFER_EDIT=y
+        shift
+    }
+    ;;
+
+    -v) {
+        OPEN_IN_TMUX=y
+        NW_OPT=spv
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$PREFER_EDIT" = "y"; then
+    OPEN_ARGS=" -e "
+fi
+
+CMD="$(cmd "$@")"
+
+# printf -- "%s" "$CMD"
+
+# a beep
+
+
+#exit 0
+# # echo "$CMD"
+# p "$CMD" | umn
+# exit 0
+
+# exit 0
+# eval "open $CMD"
+
+# Open may use the current terminal. Therefore, I can't use unbuffer on
+# this
+#eval "open -e $CMD" & disown
+
+# lit "$CMD" | tm -S -tout sph v
+# exit 1
+
+printf -- "%s\n" "$CMD" > /tmp/fp.txt
+
+export FAST=y
+# ns "$(pwd)"
+
+
+# eval is needed because if I select text included spaces I get quotes.
+# I need to unquote.
+fp="$(eval "p $CMD" | sed 's/^\s\+//' | sed 's/\s\+$//')"
+
+# wd="${fp%/*}"
+# wd="$(p "$CWD" | q | qne)"
+
+# p "$fp" | tv
+# CMD must have its ends quoted because this could be a file path with
+# spaces
+if test "$OPEN_IN_TMUX" = "y"; then
+    p "$fp" | tm open-list-of-files-in-windows
+    #eval "tm -d -te $NW_OPT -c $wd -args open $OPEN_ARGS \"$CMD\""
+    # eval "tm -d -te $NW_OPT -c $wd \"echo $wd | less\""
+else
+    p "$fp" | tm open-list-of-files-in-windows
+    # eval "open $OPEN_ARGS \"$CMD\""
+fi
+
+# open $CMD

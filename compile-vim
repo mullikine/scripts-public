@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# cd $HOME/source/git/vim-ace
+cd $MYGIT/vim
+
+./configure --prefix=$HOME/local --with-features=huge --enable-cscope --enable-multibyte --with-x --enable-rubyinterp=yes --enable-perlinterp=yes --enable-pythoninterp=yes
+
+# I have to choose between
+# --enable-pythoninterp=yes
+# --enable-python3interp=yes
+# I have chosen python2
+
+make -j8
+sudo make install

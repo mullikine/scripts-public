@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+MY_FORK=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -f) {
+        FORCE_ADD=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+rn="$(vc rn | slugify)"
+
+git remote add mullikine "git@github.com:mullikine/$rn.git"

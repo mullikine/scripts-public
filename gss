@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    # Frustratingly
+    # I would need to complete this script to use spreadsheet
+    # capital-letter base26 IDs
+    # $HOME/scripts/base_conversion.inc.phps
+    +*) {
+        cell_id="$(p "$opt" | mcut -d'[+:]' -f2)"
+        spread_col="$(p "$cell_id" | sed 's/^\([A-Z]\+\).*/\1/')"
+        spread_row="$(p "$cell_id" | sed 's/^[^0-9]\+\([0-9]\+\)/\1/')"
+        echo "$spread_col $spread_row"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+google-spreadsheet-cli "$@"

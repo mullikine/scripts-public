@@ -1,0 +1,42 @@
+#!/bin/bash
+export TTY
+
+url_or_id="$1"
+
+# Consider using the API
+# $HOME/scripts/gh-last-merged-pr-days-ago
+
+get_pr_url() {
+    id="$1"
+    printf -- "%s\n" "$(vc url)/pull/$id"
+}
+
+if tt -i "$url_or_id"; then
+    url="$(get_pr_url "$url_or_id")"
+else
+    url="$url_or_id"
+fi
+
+page_contents="$(oci elinks-dump "$url")"
+
+# this accounts for different types of urls
+# elinks-dump "https://github.com/jesseduffield/lazygit/pull/336" | v
+# elinks-dump "https://github.com/jenkins-x/jx/pull/2043/files" | v
+
+if pl "$page_contents" | grep -q -i -P '^\s*merged$'; then
+    echo "merged"
+    exit 0
+fi
+
+last_action="$(pl "$page_contents" | scrape '(closed|reopened) this' | tail -n 1 | sed 's/ this//')"
+if test "$last_action" = "closed"; then
+    echo "closed"
+    exit 0
+fi
+
+if pl "$page_contents" | grep -q -i -P '^\s*open$'; then
+    echo "open"
+    exit 0
+fi
+
+echo "unknown"

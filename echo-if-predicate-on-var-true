@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+as_args=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -x|-l|-a) {
+        as_args=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# predicate -- a command for something to be piped in to
+p="$1" # because it may have pipes
+
+if test "$as_args" = "y"; then
+    p="xargs -l $p"
+fi
+
+awk1 | while IFS=$'\n' read -r var; do
+    if printf -- "%s\n" "$var" | eval "$p"; then
+        printf -- "%s\n" "$var"
+    fi
+done

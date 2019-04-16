@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+read -r -d '' commands <<HEREDOC
+cat /etc/issue
+vc url
+vc get-hash
+vc branch
+go version
+HEREDOC
+
+echo "|command|value|"
+echo "|-"
+printf -- "%s\n" "$commands" | awk1 | while IFS=$'\n' read -r line; do
+    printf -- "%s\n" "$line	$(eval "$line")"
+done | tsv2org-table

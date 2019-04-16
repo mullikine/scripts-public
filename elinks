@@ -1,0 +1,32 @@
+#!/bin/bash
+export TTY
+
+# It's annoying when vim shows elinks errors
+exec 2>/dev/null
+
+precmd=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -2) {
+        precmd="TERM=xterm-2color "
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CMD="$(cmd "$@")"
+
+
+# I want to change the url argument to remove any fragments
+# What is the best way to do this?
+
+
+if ! pl "$CMD" | grep -q -P 'racket-lang'; then
+    CMD="$(p "$CMD" | sed 's/https:/http:/')"
+fi
+ 
+# even with  the eval it's not working.
+cmd="$precmd /usr/bin/elinks -eval 'set connection.ssl.cert_verify = 0' $CMD"
+# lit "$cmd" | tv
+eval "$cmd"

@@ -1,0 +1,7 @@
+#!$HOME/scripts/bsh
+export TTY
+
+exec 1>/dev/null
+
+echo Do something
+echo Do another thing

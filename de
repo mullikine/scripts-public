@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+# Should 'de' be doom emacs?
+
+# This script doubles the number of backslashes and then adds one
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+add-one-slash-to-each-slash-set () {
+    sed -E 's_(\\+)_\\\1_g'
+    return 0
+}
+
+cmd="qne | add-one-slash-to-each-slash-set $CMD"
+eval "$cmd"

@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+repository_archived() {
+    url="$1"
+    shift
+
+    url="$(p "$url" | gh-base-url)"
+
+    test -n "$url" && ci elinks-dump "$url" | grep -q "This repository has been archived";
+
+    return "$?"
+}
+
+repository_archived "$@"

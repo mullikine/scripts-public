@@ -1,0 +1,55 @@
+#!/usr/bin/perl -X
+
+
+# Think uqne funcitions exactly the same as uq
+
+
+# http://search.cpan.org/~evo/String-Escape-2010.002/Escape.pm#INSTALLATION
+
+
+use String::Escape qw( unqqbackslash unquote unbackslash unquotemeta escape printable unprintable unqprintable qprintable );
+
+# sudo cpanm String::Escape
+
+$| = 1; # make the current file handle (stdout) hot. This has the same effect as disabling buffering
+# I CANT use unbuffer
+while(<>) {
+    # print (escape($_, "quote"))
+    
+    # backslash is evil
+    #print unbackslash(unquote($_))
+    # print unqqbackslash($_)
+
+    # This works
+    #print unprintable(unquote($_))
+
+    # But this is even better
+    print unqprintable($_)
+
+    # print ($date, " $_");
+}
+
+# cat
+
+
+# # Need to finish this.
+# 
+# use String::Escape qw( printable unprintable );
+# # Convert control, high-bit chars to \n or \xxx escapes
+# $output = printable($value);
+# # Convert escape sequences back to original chars
+# $value = unprintable($input);
+# 
+# use String::Escape qw( elide );
+# # Shorten strings to fit, if necessary
+# foreach (@_) { print elide( $_, 79 ) . "\n"; }
+# 
+# use String::Escape qw( string2list list2string );
+# # Pack and unpack simple lists by quoting each item
+# $list = list2string( @list );
+# @list = string2list( $list );
+# 
+# use String::Escape qw( escape );
+# # Defer selection of escaping routines until runtime
+# $escape_name = $use_quotes ? 'qprintable' : 'printable';
+# @escaped = escape($escape_name, @values);

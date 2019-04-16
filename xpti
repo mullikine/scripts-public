@@ -1,0 +1,48 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    xpti3|xpitpython3) {
+        PY_VERSION=3
+    }
+    ;;
+
+    xpti36|xpitpython6) {
+        PY_VERSION=36
+    }
+    ;;
+
+    *) {
+        PY_VERSION=2
+    }
+    ;;
+
+esac
+
+# CMD="$(cmd "$@")"
+
+case "$PY_VERSION" in
+    2) {
+        x -h -d -tmc pti2 -nto -e "In [" -scc c -s "%matplotlib tk\n" -scc m -e "In [" -a
+    }
+    ;;
+
+    3) {
+        x -h -d -tmc pti3 -nto -e "In [" -scc c -s "%matplotlib tk\n" -scc m -e "In [" -a
+    }
+    ;;
+
+    36) {
+        x -h -d -tmc pti36 -nto -e "In [" -scc c -s "%matplotlib tk\n" -scc m -e "In [" -a
+    }
+    ;;
+
+    *)
+esac
+
+
+# x -nto -e » -s "exec pti2\n" -e "In" -s "%matplotlib tk\n" -i
+# x -nto -e » -s "exec pti3\n" -e "In" -s "%matplotlib tk\n" -i
+# x -h -d -tmc pti3 -nto -e "In [" -scc c -s "%matplotlib tk\n" -scc m -e "In [" -i

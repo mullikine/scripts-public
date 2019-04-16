@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# I do not want this thing to quit
+
+unbuffer "$@" & disown

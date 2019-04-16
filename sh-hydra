@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+p	localhost_scratch:perspective.org.0
+HEREDOC
+
+echo "sh-tmux-hydra" | udl
+echo "$options"
+
+read -n1 d
+
+# exec </dev/tty
+# exec 1> /dev/tty

@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# w3m will only allow mouse for xterm
+export TERM=xterm-256color
+
+terms="$(urlencode "$@" | sed 's/%20/+/g')"
+
+if [ -n "$terms" ]; then
+    torw3m "http://xmh57jrzrnw6insl.onion/4a1f6b371c/search.cgi?s=DRP&q=$terms&cmd=Search%21"
+else
+    torw3m "http://xmh57jrzrnw6insl.onion/"
+fi

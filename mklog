@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# pipe into this file to create a log
+
+printf -- "%s\n" "Starting log..."
+date
+
+cat | ts
+
+# create the log here
+cd $LOGDIR

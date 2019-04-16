@@ -1,0 +1,14 @@
+#!/bin/bash
+
+mkdir "mp3s"
+for f in *.m4a;
+do
+    bitrate=$(avprobe "${f}" 2> >(grep bitrate) | sed 's/^.*bitrate://g' | sed 's/[^0-9]*//g')
+
+    # For cloud-speech-to-text, capture audio with a sampling rate of 16,000 Hz or higher.
+    # Otago lectures appear to be ~80K.
+    bitrate="${bitrate}K"
+    echo "bitrate: $bitrate" # ugh...
+    new_filename=$(echo "${f}" | sed 's/.m4a$/.mp3/g')
+    ffmpeg -y -i "${f}" -acodec libmp3lame -ab "${bitrate}" "mp3s/${new_filename}"
+done

@@ -1,0 +1,34 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    ir|irresearch) {
+        # sp $HOME/notes2018/uni/cosc/480-project_FY/research/SourceCodeRetrievalAutoBugLocalisation/notes.org
+        # org -e "$HOME/dump$HOME/notes2018/ws/github/mullikine/irresearch/README.org"
+        # org -e "$DUMP$HOME/notes2018/ws/github/mullikine/irresearch/Notes on SCR from LSL for ABL.org"
+        v "$DUMP$HOME/notes2018/ws/github/mullikine/irresearch/Notes on SCR from LSL for ABL.org" \
+            "$HOME/notes/uni/cosc/480-project_FY/research/Repository_Hosting_Services_research.org"
+        
+    }
+    ;;
+
+    nn|nnresearch|nns|neuralnetworks) {
+        # org -e "$HOME/notes2018/uni/cosc/420_Neural Networks_S1/lectures/notes.org"
+        org -e "$DUMP$HOME/notes2018/ws/github/mullikine/nnresearch/notes.org"
+    }
+    ;;
+
+    clojure-testproj) {
+        sp -e "(find-file \"$HOME/notes2018/ws/clojure/projects/tstprjclj/project.clj\")(cider-jack-in)"
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

@@ -1,0 +1,42 @@
+#!/bin/bash
+export TTY
+
+# my shell: it's for things like running remote commands
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -i) {
+        target="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+sn="$(basename "$0")"
+case "$sn" in
+    i1) {
+        target:="shane@instance-1"
+    }
+    ;;
+
+    *)
+esac
+
+: ${target:="shane@instance-1"}
+
+stdinexists() {
+    ! [ -t 0 ]
+}
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if stdinexists || ! is_tty; then
+    ssh -q "$target" source /etc/profile\; source ~/.profile\; "$@"
+else
+    ssh -q -t "$target" source /etc/profile\; source ~/.profile\; "$@"
+fi

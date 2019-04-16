@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+find /usr/share/fish/completions  -maxdepth 1 -mindepth 1 -type f -path '*.fish' | xargs -l basename | sed 's/\..*//' | fzf 

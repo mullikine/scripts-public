@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+query="$1"
+
+# I actually probably only need to search each window, not each pane
+
+tm-lsp.sh | while read line; do
+    pane_id="$(printf -- "%s\n" "$line" | s field 2)"
+    if p "$pane_id" | xargs -l -I{} tm cat {} | grep -q -P "$query"; then
+        # text found in tmux pane
+        echo "$line"
+    fi
+
+    # eipct "xap $(aqf "xargs -l cat | is-dos")"
+done
+
+exit 0

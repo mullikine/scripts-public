@@ -1,0 +1,27 @@
+#!/bin/bash
+export TTY
+
+# rtcmd -E "cat \"$HOME/source/git/mullikine/tenets/tenets/success/360entsecgroup-skylar-goreporter-all-functions.json\" | jq -C -r . | less -rS"
+# rtcmd -E "cat \"$HOME/source/git/mullikine/tenets/tenets/success/360entsecgroup-skylar-goreporter-all-functions.json\" | jq -r \".[].Comment\" | less -rS"
+# rtcmd -E "cat \"$HOME/source/git/mullikine/tenets/tenets/success/360entsecgroup-skylar-goreporter-all-functions.json\" | jq -r \".[].Comment\" | sort | uniq | less -rS"
+
+# Make sure it's chomped. This will save time
+
+CMD="$(cmd "$@")"
+# CMD="$(cmdf "$@")"
+: ${CMD:="-r $(aqf ".")"}
+
+# : ${CMD:="-r $(aqf "\".\"")"}
+
+
+# printf -- "%s\n" "jq $CMD | vi -"
+# exit 0
+
+# s chomp | rtcmd "+/\(\"\.\)\@<=\"" -E "jq $CMD | vi -"
+
+# move to the 2nd char of the first non-option argument to jq
+# s chomp | rtcmd "+/\(\\<jq\\>\( -[^ ]\+\)* [^-]\)\@<=." -E "jq $CMD | vi -"
+
+# s chomp | rtcmd ++jq -E "jq $CMD | vi -"
+
+s chomp | rtcmd ++jq -E "jq $CMD | vs"

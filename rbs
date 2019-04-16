@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+# $MYGIT/thisredone/rb
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+cmd="ruby-script $CMD"
+eval "$cmd"
+
+# netstat | rbs drop 1 | v
+# df -h | rbs 'drop(1).sort_by { |l| l.split[-2].to_f }'

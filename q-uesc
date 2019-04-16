@@ -1,0 +1,15 @@
+#!/usr/bin/perl -X
+
+#http://search.cpan.org/~evo/String-Escape-2010.002/Escape.pm#INSTALLATION
+# echo | esc
+
+# sudo cpanm String::Escape
+
+use String::Escape qw( unbackslash );
+
+$| = 1; # make the current file handle (stdout) hot. This has the same effect as disabling buffering
+# I CANT use unbuffer
+
+while(<>) {
+    print unbackslash($_)
+}

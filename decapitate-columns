@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+n="$1"
+: ${n:="1"}
+
+# : ${delim:="[\t ]+"}
+: ${delim:="	"}
+
+while getopts -- f:d: opt &>/dev/null; do
+case $opt in
+    d)  delim="$OPTARG";;
+esac
+done
+
+
+# awk '{print $NF}'
+cut -d "$delim" "-f${n}-"

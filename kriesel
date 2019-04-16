@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+page="$1"; : ${page:="0"}
+
+opt="$1"
+shift
+case "$opt" in
+    -c) {
+        chapter="$1"
+    }
+    ;;
+
+    -p) {
+        page="$1"
+    }
+    ;;
+
+    template) {
+    }
+    ;;
+    *)
+esac
+
+z -P "$page" "$HOME/notes2018/uni/cosc/420_Neural Networks_S1/resources/neuronalenetze-en-zeta2-1col-dkrieselcom.pdf" & disown

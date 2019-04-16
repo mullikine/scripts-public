@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+
+while getopts -- l:- o &>/dev/null; do
+case $o in
+    l)  location="$OPTARG";;
+    -)  break ;;
+esac
+done
+shift "$((OPTIND-1))"
+
+
+echo "$location"
+
+    # *)  ((OPTIND--)); break ;;
+
+# 
+# OPTIND=1
+
+echo "$OPTIND"
+
+    # *)  eval ARG=${$((OPTIND - 1))}; pl "unknown option: $ARG"; ((OPTIND--)); break;;
+
+    

@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# This method seems to only get the top 30
+
+lang="$1"
+: ${lang:="go"}
+curl -s -G https://api.github.com/search/repositories --data-urlencode "sort=stars" --data-urlencode "order=desc" --data-urlencode "q=language:$lang" --data-urlencode "q=created:>`date -d "-7 day" '+%Y-%m-%d'`" | {
+    jq .items
+    # jq ".items[0,1,2] | {name, description, language, watchers_count, html_url}"
+    
+}

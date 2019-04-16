@@ -1,0 +1,7 @@
+#!/bin/bash
+
+uri="$1"; : ${uri:="."}
+uri="$(p "$uri" | qne)"
+
+e -D spacemacs c -e "(let ((browse-url-browser-function 'eww-browse-url))(pydoc-browse))"
+# e -D spacemacs c -e "(let ((browse-url-browser-function 'w3m-browse-url))(pydoc-browse))"

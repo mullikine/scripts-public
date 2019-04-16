@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# This acts like 0dn
+
+exec 0</dev/null
+
+"$@"

@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+# git cd
+
+# Given a url, cd into the directory
+
+last_arg="${@: -1}"
+last_arg="$(p "$last_arg" | sed "s=^http.\?://github.com=$MYGIT=" | sed "s=/\(blob\|tree\)/[a-z]\+==")"
+last_arg="$(p "$last_arg" | u dn)"
+set -- "${@:1:$(($#-1))}" # shift last arg
+set -- "$last_arg" "$@"
+
+echo "$@" 
+zcd "$@"

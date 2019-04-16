@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+
+# exec 2>/dev/null
+
+# Just don't do this. Assume it's mounted
+# ce mount sea-near
+
+last_arg="${@: -1}"
+
+! [ -f "$last_arg" ] && exit 1
+
+fp="$last_arg"
+rp="$(realpath "$fp")"
+dn="$(dirname "$rp")"
+cd "$dn"
+bn="$(basename "$fp")"
+ext="${bn##*.}"
+fn="${bn%.*}"
+
+np="$(dump-file -d "/media/sea-near/public/dump/" "$rp" | cat)"
+
+dn="$(dirname "$np")"
+bn="$(basename "$np")"
+
+cd "$dn"
+
+ce mkp "$bn" | xc -n -i -

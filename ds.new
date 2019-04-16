@@ -1,0 +1,104 @@
+#!/bin/bash
+export TTY
+
+# This saves a variable globally for use in other scripts
+
+sn="$(basename "$0")"
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+DS_QUIET=
+DS_SILENT=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -info) {
+        show_info=y
+        shift
+    }
+    ;;
+
+    # hash table
+    -ht|-sha) {
+        USE_SHA=y
+        shift
+    }
+    ;;
+
+    # Do not print to stderr
+    -q|-quiet) {
+        DS_QUIET=y
+        shift
+    }
+    ;;
+
+    # Do not print any output ever
+    -s|-silent) {
+        DS_SILENT=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+varname="$1"
+mant="$(p "$varname" | getmant)"
+ext="$(p "$varname" | getext)"
+
+# ds should act like cat if varname not specified. This is so it can be
+# used in scripts
+if [ -z "$mant" ]; then
+    cat
+    exit 0
+fi
+
+case "$sn" in
+    ht) {
+        USE_SHA=y
+    }
+    ;;
+
+    *)
+esac
+
+hash_f() {
+    if test "$USE_SHA" = "y"; then
+        sha
+    else
+        s join - | slugify
+    fi
+}
+
+mant="$(printf -- "%s" "$mant" | hash_f)"
+varname_fp="$NOTES/vars/$mant$ext"
+
+if stdin_exists; then
+    if test "$DS_QUIET" = "y"; then
+        # This will simply store
+        cat > "$varname_fp"
+    else
+        # This means store AND print to stdout
+        cat > "$varname_fp" < <(tee /dev/stderr) 2>&1
+    fi
+else
+    printf -- "%s" "$2" > "$varname_fp"
+fi
+
+# This is needed because platform doesnmay not 
+export NOTES="$HOME/notes"
+vars_dir="$NOTES/vars"
+mkdir -p "$vars_dir"
+
+if test "$show_info" = "y"; then
+    echo "stored ds $mant" 1>&2
+fi
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if ! test "$DS_SILENT" = "y"; then
+    cat "$varname_fp"
+fi

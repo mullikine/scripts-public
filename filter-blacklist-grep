@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+last_arg="${@: -1}"
+set -- "${@:1:$(($#-1))}" # shift last arg
+blacklist_fp="$last_arg"
+
+awk1 | grep -vf "$blacklist_fp" "$@"

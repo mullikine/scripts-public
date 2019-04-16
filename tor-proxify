@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+export TORSOCKS_CONF_FILE=$HOME/notes2018/ws/proxy/configs/torsocks.conf
+
+# torsocks works better for some things, such as wget
+cmd="torsocks $CMD"
+
+# cmd="$MYGIT/haad/proxychains/proxychains4 -f $HOME/notes2018/im/proxychains-tor.conf $CMD"
+eval "$cmd"

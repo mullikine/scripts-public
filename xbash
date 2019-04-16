@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+cmd="$@"
+
+echo "$cmd"
+x -nto -sh bash -e '$' -s "$cmd" -i

@@ -1,0 +1,90 @@
+#!/bin/bash
+export TTY
+
+tf_stdin_stdout="$(nix tf stdin || echo /dev/null)"
+trap "rm \"$tf_stdin_stdout\" 2>/dev/null" 0
+
+cat > "$tf_stdin_stdout"
+
+row="$1"
+col="$2"
+
+: ${row:="1"}
+: ${col:="0"}
+
+# This is needed because pandas removes the header from the equation
+row="$((row - 1))"
+
+# How can I make a script which can reliably query a csv taken from
+# google sheets?
+# When cells can have newlines.
+
+## Tried:
+## ------
+## * Get this to work
+## #+BEGIN_SRC sh
+##   clpq -real= "outreach pipeline" get_pipeline | tr -d '\000' | nf /tmp/query.csv | xargs -l csvsql -e iso-8859-1 --query select * from 'query' LIMIT 1
+## 
+##   clpq -real= "outreach pipeline" get_pipeline | nf /tmp/query.csv | xargs -l csvsql -e iso-8859-1 --query select * from 'query' LIMIT 1
+## #+END_SRC
+## 
+## This has to be made to work to get reliable info.
+## 
+## #+BEGIN_SRC sh
+##   clpq -real= "outreach pipeline" get_pipeline | csv2json | in2csv -f json -v | nf /tmp/query.csv | xargs -l csvsql -e latin-1 --query select * from 'query' LIMIT 1 OFFSET 1
+## #+END_SRC
+## 
+## This didn't work. Maybe I can just use jq to find the info I want.
+## 
+## ** This has its own problems
+## #+BEGIN_SRC sh
+##   clpq -real= "outreach pipeline" get_pipeline | sed 1d | sed "1iproject,non-vendor Go LOC,Has Tenet bundle that the project references,Can run basic tenet,Could run whole bundle across whole repo,Bundle found at least one issue (add link to results),Rewrite fixed at least one issue,Rewrite PR opened (see out reach tab for message),Community Engaged (e.g. heads up on PR on slack - follow template ),Rewrite PR merged,Logo Added to Website,Positive Response from project,CodeLingo setup PR Opened (see out reach tab for message),GH App Install Requested,Message community about PR (see template tab for message),CodeLingo setup PR Merged,Questionnaire Completed,CodeLingo GitHub App Installed,Signed up to Paid Premium,Qualitative Quote from User" | csv2json | jq -r ".[0]"  | vs
+## #+END_SRC
+## 
+## ** Get a specific row
+## #+BEGIN_SRC sh
+##   clpq -real= "outreach pipeline" get_pipeline | nf /tmp/query.csv | xargs -l csvsql --query select * from 'query' LIMIT 1 OFFSET 1
+## 
+##   clpq -real= "outreach pipeline" get_pipeline | perl -np -e 's/\0/\n/g' | nf /tmp/query.csv | xargs -l csvsql --query select * from 'query' LIMIT 1 OFFSET 1
+## #+END_SRC
+
+read -r -d '' PYCODE <<HEREDOC
+import numpy as np
+import pandas as pd
+df = pd.read_csv("$tf_stdin_stdout", dtype={'SysDefaultVal': np.float32}, encoding='latin1')
+df.fillna('', inplace=True)
+try:
+    print(df.iat[$row,$col])
+except:
+    # Sometimes the cell might not have been added to the table. We want
+    # to fail without an error
+    pass
+HEREDOC
+
+# python3 -c "$PYCODE" > "$tf_stdin_stdout"
+# output="$(cat "$tf_stdin_stdout")"
+
+output="$(python3 -c "$PYCODE")"
+
+if test -n "$output"; then
+    printf -- "%s" "$output"
+fi
+
+# {
+#     if test -n "$row"; then
+#         # DISCARD. Must be + 2 because of header. That broke
+#         # indicate-cell
+#         # p "" | SHEET_ID=1pzanlzmXDqmILLqFX0TL78GQMe4N3ilLPU-eabcBqMs SHEET_NAME="outreach pipeline" update-cell-link -0 "some url" "360" 1
+#         # p "" | SHEET_ID=1pzanlzmXDqmILLqFX0TL78GQMe4N3ilLPU-eabcBqMs SHEET_NAME="outreach pipeline" clpq cell -0 "360" 1
+#         # Perhaps the original bug is only happening on rows near 2000. Try this
+#         sed -n "$(( row + 1 ))p"
+#     else
+#         cat
+#     fi
+# } | {
+#     if test -n "$col"; then
+#         rine xsv select "$(( col + 1 ))"
+#     else
+#         cat
+#     fi
+# }

@@ -1,0 +1,263 @@
+#!/bin/bash
+export TTY
+
+# Operations tools
+
+# System administration
+
+# Controlling everything on computer from brightness to the daemons and
+# firewalls
+
+# Related:
+# $HOME/scripts/nix
+# $HOME/scripts/init.sh
+# $HOME/scripts/nix
+# $HOME/scripts/tp
+# $HOME/scripts/nix
+
+sn="$(basename "$0")"
+
+if test "$sn" = "op"; then
+    opt="$1"
+    shift
+else
+    case "$sn" in
+        suspend|suspend.sh) {
+            opt=suspend
+        }
+        ;;
+
+        *)
+            opt="$sn"
+    esac
+fi
+
+case "$opt" in
+    bri|brightness)
+        bri $@
+    ;;
+
+    freespace) {
+        while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+            "") { shift; }; ;;
+            -b) {
+                BYTES=y
+                shift
+            }
+            ;;
+
+            *) break;
+        esac; done
+
+        df / | sed 1d | s field 4 | math-times 1000 | {
+            if test "$BYTES" = "y"; then
+                cat
+            else
+                bytes2human
+            fi
+        } | s ef
+    }
+    ;;
+
+    freemem) {
+        while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+            "") { shift; }; ;;
+            -b) {
+                BYTES=y
+                shift
+            }
+            ;;
+
+            *) break;
+        esac; done
+
+        free -b | grep Mem: | s field 4 | {
+            if test "$BYTES" = "y"; then
+                cat
+            else
+                bytes2human
+            fi
+        } | s ef
+    }
+    ;;
+
+    # Not for playing music but for chaging volume
+    a|audio) {
+        a $@
+    }
+    ;;
+
+    backup-os-to-cloud) {
+        rs --delete -aAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"}  -rs / instance-1:/morgan
+    }
+    ;;
+
+    screenshot) {
+        win screenshot $@
+    }
+    ;;
+
+    cpuspeed|cpu-speed|_cpu_) {
+        sudo cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq
+    }
+    ;;
+
+    battery) {
+        acpi -b
+    }
+    ;;
+
+    status) {
+        # I could put this into a dzen
+
+        cat <<HEREDOC
+Battery: $(op battery-percent)%
+Volume: $(a vol)%
+Brightness: $(bri percent)%
+Disk: $(df -h / | tail -n 1 | s field 4)%
+HEREDOC
+    };;
+
+    battery-percent) {
+        acpi -b | sed -n 's/^.* \([0-9]\+\)%.*$/\1/p'
+    }
+    ;;
+
+    mount) {
+        fp="$1"
+        fn=$(basename "$fp")
+        dn=$(dirname "$fp")
+        ext="${fn##*.}"
+        mant="${fn%.*}"
+
+        #ext_lc="$(p "$ext" | tr '[:upper:]' '[:lower:]')"
+
+        echo "$mant"
+
+        sudo mkdir -p "/media/$mant"
+        sudo umount "/media/$mant"
+        #losetup /dev/loop0 "$fp"
+        #sudo mount /dev/loop0 "/media/$mant"
+
+        cd "$dn"
+        if test "$ext_lc" = "img"; then
+            ccd2iso "$fn" "${mant}.iso"
+        elif test -f "$(eg -i "${mant}.bin")" && tt -fc "${mant}.cue"; then
+            bfp="$(eg -i "${mant}.bin")"
+            cfp="$(eg -i "${mant}.cue")"
+            bchunk "$bfp" "$cfp" "${mant}.track"
+        fi
+        iso="$(eg -i "${mant}.track*.iso" | head -n 1)"
+        sudo mount -o loop "$iso" "/media/$mant"
+        cd "/media/$mant"
+
+        # tm n "$opt :: NOT IMPLEMENTED"
+    }
+    ;;
+
+    stop-lag) {
+        notify-send "$opt :: NOT IMPLEMENTED"
+    }
+    ;;
+
+    performance|stop-lag) {
+        # echo 100 | sudo tee /sys/devices/system/cpu/intel_pstate/max_perf_pct
+        # echo 100 | sudo tee /sys/devices/system/cpu/intel_pstate/min_perf_pct
+        # echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+
+        # sudo cpupower frequency-set -u $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq)
+        # sudo cpupower frequency-set -d $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq)
+
+        # sudo /usr/bin/cpupower -c all frequency-set -g performance
+
+        # cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_req
+        # sudo cpupower frequency-set -d $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq)
+        
+        # sudo cpufreq-selector --cpu=0 --governor=performance
+        # sudo cpufreq-selector --cpu=1 --governor=performance
+
+        # Make cpu go fast again. Does this work? This appears to work.
+        sudo cpupower frequency-set -d 2701000
+        sudo cpupower frequency-set -u 2701000
+        sudo cpupower frequency-set -f 2701000
+
+        # But how to prevent it being cut back when the computer gets
+        # hot. When I run a youtube video.
+    }
+    ;;
+    
+    suspend) {
+        tm n "$opt :: NOT WORKING PROPERLY. DISABLED"
+        # This will only power off after locking screen and logging back
+        # in
+        # systemctl suspend
+        lock.sh
+    }
+    ;;
+
+    ram) {
+        sudo dmidecode --type 17
+    }
+    ;;
+
+    res) {
+        xrandr | grep -w connected |cut -d ' ' -f 4|cut -d + -f 1|tr -d '\n'
+    }
+    ;;
+
+    screenwidth) {
+        xrandr | grep -w connected |cut -d ' ' -f 4|cut -d 'x' -f 1|tr -d '\n'
+    }
+    ;;
+
+    clipboard-restart) {
+        export DISPLAY=:0
+        exec &>/dev/null
+        killall parcellite; parcellite & disown
+    }
+    ;;
+
+    win|windowing) {
+        win $@
+
+        # Examples:
+        # win ffdmenu
+        # win unknown-menu
+        # win xterm-tmux
+        # win vt100-tmux
+        # win xterm-inv
+        # win vt100-inv
+    }
+    ;;
+
+    backl|backlight) {
+        opt="$1"
+        shift
+        case "$opt" in
+            up)
+                kbri up
+            ;;
+
+            down) {
+                kbri down
+            }
+            ;;
+
+            off) {
+                kbri off
+            }
+            ;;
+
+            max) {
+                kbri full
+            }
+            ;;
+
+            *)
+        esac
+        bri $@
+    }
+    ;;
+
+    *)
+esac

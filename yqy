@@ -1,0 +1,39 @@
+#!/bin/bash
+export TTY
+
+noconvert=n
+for var in "$@"
+do
+    case "$var" in
+        -r) {
+            noconvert=y
+        }
+        ;;
+
+        *)
+    esac
+done
+
+#noconvert="$(
+#for var in "$@"
+#do
+#    case "$var" in
+#        -r) {
+#            echo y
+#            exit 0
+#        }
+#        ;;
+#
+#        *)
+#    esac
+#done
+#echo n
+#)"
+
+yq "$@" | {
+    if test "$noconvert" = "y"; then
+        cat
+    else
+        json2yaml
+    fi
+}

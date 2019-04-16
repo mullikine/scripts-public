@@ -1,0 +1,113 @@
+#!/bin/bash
+export TTY
+
+TITLES=y
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -t) {
+        TITLES=y
+        shift
+    }
+    ;;
+
+    -nt) {
+        TITLES=n
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# This converts things into the desired output. It doesn't do a simple
+# cat pipe.
+
+
+#is_youtube_url() {
+#    url="$(sed -n '/http.\?:\/\/\(www\.\)\?youtube.com\/watch/p')"
+#    test -n "$url"
+#}
+
+
+# Put each parameter on a line of the stdin
+while [ $# -gt 0 ]; do
+    opt="$1";
+    shift
+
+    exec < <(printf -- "%s\n" "$opt")
+done
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+pager() {
+    if is_tty; then
+        tless -rS $@
+    else
+        cat
+    fi
+}
+
+
+if stdin_exists; then
+    awk 1 | while IFS=$'\n' read -r target; do
+        if test "$TITLES" = "y"; then
+            printf -- "%s" "$target" | {
+                IFS= read -rd '' input < <(cat /dev/stdin)
+
+                if printf -- "%s\n" "$input" | grep -q -P 'https\?://'; then
+                    printf -- "%s\n" "$input" | oc
+                else
+                    printf -- "%s\n" "$input"
+                fi
+            } | mnm | {
+                # Because this goes through pager() before it reaches
+                # the tty, I need to do this.
+                if is_tty; then
+                    unbuffer udl
+                else
+                    udl
+                fi
+            }
+        fi
+
+        if [ -d "$target" ]; then
+            rp="$(realpath "$target")"
+            pushd / &>/dev/null
+            find "$rp" -mindepth 1 -maxdepth 1
+            popd &>/dev/null
+        elif [ -f "$target" ]; then
+            notify-send "hi"
+            if tt -t "$target"; then
+                cat "$target"
+            else
+                mt "$target"
+            fi
+        elif printf -- "%s\n" "$target" | grep -q -P '^http.?://pasterack'; then
+            # elinks-dump "$target" | sed 's/^.\{5\}//'
+            elinks-dump "$target" | sed 's/^.\{5\}//' | sed -e '0,/_______/d' -e '0,/_______/d'
+            # elinks-dump "$target" | sed 's/^.\{5\}//' | sed -n '/^#lang/,$p'
+        elif printf -- "%s\n" "$target" | grep -q -P 'http.?://github.*/blob/'; then
+            target="$(printf -- "%s" "$target" | sed -e 's/github.com/raw.githubusercontent.com/' -e 's_/blob__')"
+            curl "$target" 2>/dev/null
+        elif printf -- "%s\n" "$target" | grep -q -P '^http.?://'; then
+            # ns "$target"
+            elinks-dump "$target"
+        fi | awk 1
+        echo
+    done
+# else
+#     notify-send "hi"
+#     for thing in "$@"
+#     do
+#         if [ -f "$thing" ]; then
+#             cat "$thing"
+#         fi
+#     done
+fi | pager

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+updatedb -v -l 0 -o $HOME/dump/programs/updatedb/home -U /media/ssh-home

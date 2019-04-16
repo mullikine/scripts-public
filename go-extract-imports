@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+{
+    printf -- "%s" "$input" | sed -n '/^import (/,/^)/p' | sed -n '/^\s\+"/p'
+    printf -- "%s" "$input" | sed -n '/^import "/s/^import \("[^"]\+"\)/\1/p'
+} | sed 's/^\s*"\([^"]\+\)"/\1/' | sort | uniq

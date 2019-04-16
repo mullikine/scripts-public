@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+pl_url="$1"
+
+# It could be an org mode link, so use xurls
+pl_url="$(printf -- "%s" "$pl_url" | xurls | head -n 1)"
+
+yt-list-playlist-urls "$pl_url" | awk1 | while IFS=$'\n' read -r url; do
+    play-song "$url"
+done

@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+timestamp="$1"
+
+if test -n "$timestamp"; then
+    date +"%Y-%m-%d %H:%M:%S:%3N" -d "@$timestamp"
+else
+    date +"%Y-%m-%d %H:%M:%S:%3N"
+fi

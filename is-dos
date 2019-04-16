@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+if stdin_exists; then
+    tf="$(tf txt)"
+else
+    fp="$1"
+    tf="$(cat "$fp" | tf txt)"
+fi
+
+# cmp="$(dos2unix < "$tf" | cmp -s - "$tf")"
+cmp="$(dos2unix < "$tf" | diff - "$tf")"
+
+# echo "$cmp" 1>&2
+# cat "$tf"
+test -n "$cmp"

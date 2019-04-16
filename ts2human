@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+awk1 | while IFS=$'\n' read -r line; do
+    date -d "@$line" +"%a %b %e %_I:%M %p %Y"
+done

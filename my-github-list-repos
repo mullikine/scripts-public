@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# usage: cat $0 | ssh remote "bash -s -- pyargs"
+read -r -d '' pycode <<EOF
+from github import Github
+g = Github("$(cat $HOME/.myrc.yaml | yq -r '.github_api_token')")
+for repo in g.get_user().get_repos():
+    print(repo.name)
+
+EOF
+python3 <(echo "$pycode") $@

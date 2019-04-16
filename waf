@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+# flatten out the query
+query="$@"
+
+# ci mma "WolframAlpha[$(aqf "$query")]"
+
+ci mma "WolframAlpha[$(aqf "$query"), $(aqf "PodPlaintext")]"

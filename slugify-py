@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# echo "$PYTHONPATH"
+# export PYTHONPATH=
+
+python3 -c "import sys; import slugify; print(slugify.slugify(sys.stdin.read()))" | s chomp

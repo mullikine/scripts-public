@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# ns +"volume: $VOL" "vlc may be different"
+
+# alternatives
+# dunst
+
+trap func_trap HUP
+func_trap() {
+    :
+}
+
+# It might be using stdin
+#if [ $# -eq 0 ] ; then
+#    $0 -h
+#    exit 0
+#fi
+
+# the general category is default
+category=_
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    +*) {
+        category="$(p "$opt" | mcut -d+ -f2 | s chomp)"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+exec 3>&1
+# exec 1>/dev/null 2>/dev/null
+
+# This demands a -q for no stdout
+# Also, I want options to:
+#   Disable notify-send
+
+# while getopts -- vh name &>/dev/null; do
+# case $name in
+#     v)  VISIBLE=yo;;
+#     h)  {
+#     	printf -- "%s\n" "-v to force visibility"
+#     	exit 0
+#     }
+#     	;;
+#     *)  ((OPTIND--)); break ;;
+# esac
+# done
+# shift "$((OPTIND-1))"
+# OPTIND=1
+# 
+# printf -- "%s\n" "$VISIBLE"
+
+
+stdin_exists() {
+    # This is faulty
+    # IFS= read -t0.1 -rd '' input < <(cat /dev/stdin)
+    # exec < <(printf -- "%s" "$input")
+    # [ -n "$input" ]
+
+    ! [ -t 0 ]
+    # ! [ -t 0 ] && read -t 0
+}
+
+had_stdin=n
+
+if stdin_exists; then
+    had_stdin=y
+    message="$(cat)"
+fi
+
+CMD="$(cmd "$@")"
+
+: ${message:="$CMD"}
+
+ns_dir="$HOME/notes/programs/ns/"
+mkdir -p "$ns_dir"
+
+printf -- "%s\n" ": $message" | ts >> "$ns_dir/$category.txt"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if ! is_tty; then
+    printf -- "%s\n" "$message"
+fi
+
+if [ -n ${VISIBLE+x} ]; then
+    # Using CMD here would add arguments to the notification
+    if test "$category" = "_"; then
+        which notify-send &>/dev/null && notify-send "$message"
+    else
+        which notify-send &>/dev/null && notify-send "$category" "$message" 
+    fi
+fi
+
+if test "$had_stdin" = "y"; then
+    exec 1>&3
+    # p "$message"
+fi

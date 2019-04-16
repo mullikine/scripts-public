@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+td_wd="$(mktemp -t -d td_wdXXXXXX || echo /dev/null)"
+
+export CWD="$td_wd"
+cd "$CWD"
+zsh

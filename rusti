@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+cmd="rustup run nightly-2016-08-01 $HOME/.cargo/bin/rusti $CMD"
+eval "$cmd"

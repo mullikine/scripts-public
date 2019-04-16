@@ -1,0 +1,81 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# ed -- improved. uses real vim
+
+tf_temp="$(nix tf temp || echo /dev/null)"
+trap "rm \"$tf_temp\" 2>/dev/null" 0
+
+cat > "$tf_temp"
+
+# macro="$1"
+# unbuffer vim -c "e! $tf_temp" -c "$macro" -c w -c "sleep 100m" -c q &>/dev/null
+
+read -r -d '' shell_cmd <<HEREDOC
+unbuffer vim -c 'set noswapfile' \\
+    -c "e! $tf_temp" \\
+$(
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        printf -- "%s\n" "    -c $(aqfd ":norm! $2") \\"
+        shift
+        shift
+    }
+    ;;
+
+    -m) {
+        macro="$2"
+        # macro="$(echo -e "$macro")"
+        # I don't know if this is correct
+        printf -- "%s\n" "    -c $(aqfd "exe expand($(aqfd ":norm $macro"))") \\"
+        shift
+        shift
+    }
+    ;;
+
+    -m!) {
+        macro="$2"
+        # macro="$(echo -e "$macro")"
+        # I don't know if this is correct
+        printf -- "%s\n" "    -c $(aqfd "exe expand($(aqfd ":norm! $macro"))") \\"
+        shift
+        shift
+    }
+    ;;
+
+    -x) {
+        printf -- "%s\n" "    -c $(aqfd ":$2") \\"
+        shift
+        shift
+    }
+    ;;
+
+    -e) {
+        printf -- "%s\n" "    -c $(aqfd "exe expand($(aqfd ":$2"))") \\"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+for var in "$@"
+do
+    printf -- "%s\n" "    -c $(aqfd "$var") \\"
+done
+)
+    -c wq &>/dev/null
+HEREDOC
+
+printf -- "%s\n" "$shell_cmd" | ds last-edm &>/dev/null
+
+eval "$shell_cmd"
+
+# exec </dev/tty `# see etty`
+# vim -c "e! $tf_temp" -c "$macro" -c w
+
+# vim -c "e! $tf_temp" -c "$macro" -c w -c q
+cat "$tf_temp"

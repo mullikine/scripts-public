@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    giq-gh) {
+        curlopts+="-H \"Authorization: bearer myGithubAccessToken\""
+    }
+    ;;
+
+    *)
+esac
+
+curl -i -H 'Content-Type: application/json' \
+      $curlopts \
+      -X POST \
+      -d '{"query": "query {repository(owner: \"wso2\", name: \"product-is\") {description}}"}' https://api.github.com/graphql

@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+wordnut "$@"
+
+# /usr/bin/sdcv

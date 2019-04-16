@@ -1,0 +1,7 @@
+if test -f "$line"; then
+    line="$(printf -- "%s" "$line" | qne)"
+    tm -d -te nw -hlgreen -R -nopakf -n "$line" -c "$CWD" "preview $(aqf "$line"); python $HOME$MYGIT/ranger/ranger/ranger/ext/rifle.py \"$line\""
+elif test -d "$line"; then
+    line="$(printf -- "%s" "$line" | qne)"
+    REPEAT_COMMAND=y tm ns -hlred -r -l -s -c "$line"
+fi

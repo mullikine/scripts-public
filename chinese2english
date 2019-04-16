@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+sentence="$@"
+slug="$(p "$sentence" | slugify)-$sn"
+
+# shx sp -e "(google-translate-translate $(aqf "zh-CN") $(aqf "en") $(aqf "$sentence"))(switch-to-buffer $(aqf "*Google Translate*"))"
+# shx e c -e '(google-translate-translate "zh-CN"  "en"  "'$sentence'" )(switch-to-buffer "*Google Translate*" )(delete-other-windows)'
+TERM=screen-256color $HOME/local/emacs26/bin/emacsclient -a '' -t -s $HOME/.emacs.d/server/DEFAULT -e '(progn (google-translate-translate "zh-CN"  "en"  "'$sentence'" )(switch-to-buffer "*Google Translate*" )(rename-buffer "'*translate-$slug*'") t)(delete-other-windows)(delete-other-windows))'

@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+disable-dual-screens
+xrandr --output eDP-1 --primary --left-of HDMI-2 --output HDMI-2 --scale 2x2 --auto

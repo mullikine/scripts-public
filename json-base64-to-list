@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+base64 --decode | jq -r '.'

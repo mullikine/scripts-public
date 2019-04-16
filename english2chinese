@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+sentence="$@"
+slug="$(p "$sentence" | slugify)-$sn"
+
+sp -e "(google-translate-translate $(aqf "en") $(aqf "zh-CN") $(aqf "$sentence"))(switch-to-buffer $(aqf "*Google Translate*"))(rename-buffer $(a- qf "*translate-$slug*") t)"

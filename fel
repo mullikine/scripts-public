@@ -1,0 +1,38 @@
+#!/bin/bash
+export TTY
+
+# This is a wrl script
+# While read line, execute pipine the line into the command
+# specified as arguments
+
+OUTPUT_LINES=y
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -E) {
+        DO_EXEC=y
+        shift
+    }
+    ;;
+
+    -n) { OUTPUT_LINES=n; shift; }; ;;
+    -l) { OUTPUT_LINES=y; shift; }; ;;
+
+    *) break;
+esac; done
+
+awk1if() {
+    if test "$OUTPUT_LINES" = "y"; then
+        awk 1
+    else
+        cat
+    fi
+}
+
+if test "$DO_EXEC" = "y"; then
+    CMD="$1"
+else
+    CMD="$(cmd "$@")"
+fi
+
+awk1 | while IFS=$'\n' read -r line; do
+    p "$line" | eval "$CMD" | awk1if
+done

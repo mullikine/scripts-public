@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+# rtcmd "+/\(\"\.\)\@<=\"" -E "yq -r \".\" | json2yaml | vi -"
+
+CMD="$(cmd "$@")"
+: ${CMD:="-r $(aqf ".")"}
+
+# * Annoyingly this seems to not deal well with free values
+# json2yaml
+# Converting 'mullikine' to yaml would result in 'mullikine', I think.
+
+# s chomp | rtcmd ++yq -E "yq $CMD | json2yaml | vs"
+s chomp | rtcmd ++yqy -E "yqy $CMD | vs"

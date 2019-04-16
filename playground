@@ -1,0 +1,45 @@
+#!/bin/bash
+export TTY
+
+lang="$1"
+shift
+
+case "$lang" in
+    go|golang) {
+        sp -ci go-playground
+    }
+    ;;
+
+    py|python) {
+        # tm sel localhost:xpti3.0
+        v $HOME/notes2018/ws/playgrounds/python/notes.org
+    }
+    ;;
+
+    c) {
+        sp -ci cc-playground
+    }
+    ;;
+
+    js|javascript) {
+        v "$HOME/notes2018/ws/node/playground/basic-test.js"
+    }
+    ;;
+
+    gh|github) {
+        $HOME/notes2018/current/playgrounds/my-github.py "$@"
+    }
+    ;;
+
+    ts|typescript) {
+        :
+    }
+    ;;
+
+    clql) {
+        :
+    }
+    ;;
+
+    *)
+esac

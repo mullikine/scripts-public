@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+
+
+# stdin goes into this
+sponge -a "$fp"
+cat "$fp" | uniqnosort | sponge "$fp"
+
+
+# IFS= read -rd '' input < <(cat /dev/stdin)
+# {
+# cat "$fp"
+# printf -- "%s" "$cat" | awk 1
+# } | uniqnosort | sponge "$fp"

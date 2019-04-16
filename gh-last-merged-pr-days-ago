@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+
+repo_lasttwo="$1"
+shift
+
+exec 2>/dev/null
+
+last_active="$(
+gh-curl -npages 1 -all -s "https://api.github.com/repos/${repo_lasttwo}/pulls?state=all" |
+jq -r "select(.merged_at != null).merged_at" | head -n 1 | xargs -l date +%s -d
+)"
+
+if test -z "$last_active"; then
+    echo 9999 # A long time ago
+    exit 1
+fi
+
+# This many days ago
+echo "$(( ($(date-ts) - last_active) / 60 / 60 / 24 ))"

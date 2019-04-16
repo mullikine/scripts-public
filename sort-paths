@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+perl -n -e '$x = $_; $x =~ tr%/%%cd; print length($x), " $_";' |
+sort -k 1n -k 2 |
+sed 's/^[0-9][0-9]* //'

@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+repository_neglected() {
+    url="$1"
+    shift
+
+    url="$(p "$url" | gh-base-url)"
+
+    test -n "$url" && {
+
+        lasttwo="$(printf -- "%s" "$url" | path-lasttwo)"
+
+        days="$(ci gh-last-merged-pr-days-ago "$lasttwo")"
+
+        # If the last merged was over 6 months ago, it's neglected
+        test $(( 6 * 30 )) -lt "$days"
+    }
+
+    return "$?"
+}
+
+repository_neglected "$@"

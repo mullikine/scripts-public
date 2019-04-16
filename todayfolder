@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+d="`date +%d.%m.%y`"
+mkdir -p "$d"
+cd "$d"
+CWD="$d" zsh

@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+commit_importance_filter() {
+    grep -v -P "Merge (branch|pull)"
+}
+
+divergence_commit="$(vc base)"
+if [ -n "$divergence_commit" ]; then
+    git rev-list "$(vc base)..HEAD" | xargs -l git --no-pager log -n1 --pretty=oneline | commit_importance_filter | s field 1 |
+        while read hash; do
+            git --no-pager diff --name-only "$hash^!"
+        done
+
+    # git diff --name-only HEAD.."$divergence_commit" | add-prefix "$(vc root)/"
+fi

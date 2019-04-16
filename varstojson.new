@@ -1,0 +1,51 @@
+#!/bin/bash
+export TTY
+
+# These parameters MUST come first. Both of them.
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -n) {
+        ds_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -q) {
+        exec &>/dev/null
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+{
+    while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+        -[a-z]*) {
+            e="$(printf -- "%s" "$opt" | sed 's/^-//')"
+            val="$2"
+
+            if test -n "$val"; then
+                printf -- "%s\n" "$e:$val" 
+            fi
+
+            shift
+            shift
+        }
+        ;;
+
+        *) break;
+    esac; done
+
+    for e in $@; do
+        eval val=\${$e}
+        printf -- "%s\n" "$e:$val"
+    done
+} | maptojson : | {
+    if test -n "$ds_name"; then
+        ds -info "${ds_name}.json"
+    else
+        cat
+    fi
+}

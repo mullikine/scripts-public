@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# would be better to have functions that operate on strings, not files
+
+c=`tail -c 1 $1`
+if [ "$c" != "" ]; then echo "no newline"; fi

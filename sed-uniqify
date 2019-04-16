@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+ununique_text="$1"
+
+# sed-uniqify "@rewrite.name"
+
+sed ':a; /'$ununique_text'/{x;s/$/X/;x;G;s/'$ununique_text'\(.*\)\n\(.*\)/<\2>\1/;ba;};' | sed 's/<\(X\+\)>/'$ununique_text'\1/g'

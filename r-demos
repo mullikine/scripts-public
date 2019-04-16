@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+"(ess-display-demos)(delete-other-windows)"
+x -h -d -tmc pti3 -nto -e "In [" -scc c -s "%matplotlib tk\n" -scc m -e "In [" -a

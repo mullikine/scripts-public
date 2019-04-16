@@ -1,0 +1,53 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "#" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+# Make this command use curl and the API instead of going through the python libary
+# Then use the same credentials as everything else
+# `GET /legacy/issues/search/:owner/:repository/:state/:keyword <http://developer.github.com/v3/search/legacy>`_
+
+owner="$1"
+repo="$2"
+issue_string="$3"
+
+if test -z "$owner" || test -z "$repo" || test -z "$issue_string"; then
+    exit 1
+fi
+
+test -n "$(gh-curl -all -s "https://api.github.com/search/issues?q=$(aqf "$issue_string" | sed "s/\s\+$//" | urlencode)%20in:title+repo:$owner/$repo")"
+
+exit $? # Don't use python
+
+read -r -d '' pycode <<EOF
+import shanepy
+from shanepy import *
+from github import Github
+g = Github("$(cat $HOME/.myrc.yaml | yq -r '.github_api_token')")
+repo = g.get_repo("$owner/$repo")
+issues = repo.legacy_search_issues("open", $(aqf "$(aqf "$issue_string")"))
+try:
+    print(issues[0].title)
+except:
+    pass
+EOF
+result="$(python3 <(echo "$pycode"))"
+
+# try closed too
+if test -z "$result"; then
+read -r -d '' pycode <<EOF
+import shanepy
+from shanepy import *
+from github import Github
+g = Github("$(cat $HOME/.myrc.yaml | yq -r '.github_api_token')")
+repo = g.get_repo("$owner/$repo")
+issues = repo.legacy_search_issues("closed", $(aqf "$(aqf "$issue_string")"))
+try:
+    print(issues[0].title)
+except:
+    pass
+EOF
+result="$(python3 <(echo "$pycode"))"
+fi
+
+test -n "$result"

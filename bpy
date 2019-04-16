@@ -1,0 +1,77 @@
+#!/bin/bash
+export TTY
+
+export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.full.py
+
+sn="$(basename "$0")"
+if [ "$sn" = "bpy3" ] || [ "$sn" = "bpython3" ]; then
+    PY_VERSION=3
+else
+    PY_VERSION=2
+fi
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -rc) {
+        shift
+        opt="$1"
+        shift
+        case "$opt" in
+            full) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.full.py
+            }
+            ;;
+
+            basic) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.basic.py
+            }
+            ;;
+
+            debug) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.debug.py
+            }
+            ;;
+
+            math) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.math.py
+            }
+            ;;
+
+            shane) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.shane.py
+            }
+            ;;
+
+            *) {
+                export PYTHONSTARTUP=$HOME/.pythonrc
+            }
+            ;;
+        esac
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+CMD="$(cmd "$@")"
+
+case "$PY_VERSION" in
+    2) {
+        python2 -m bpython
+    }
+    ;;
+
+    3) {
+        python3 -m bpython
+    }
+    ;;
+
+    *) break;
+esac

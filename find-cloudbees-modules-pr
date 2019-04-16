@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+cd $HOME/source/git/cloudbees/
+
+for i in *; do
+    (
+        cd "$i"
+        pwd
+        ci hub pr list | grep -i -P '(module|deps|depend)';
+    )
+done

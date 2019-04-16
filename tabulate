@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+
+# http://search.cpan.org/~arif/Text-Tabulate-1.1.1/lib/Text/Tabulate.pm
+
+use Text::Tabulate;
+
+# $tab = new Text::Tabulate (<options>);
+# my $tab = new Text::Tabulate( -tab => 'tab', ...);
+my $tab = new Text::Tabulate( -tab => 'tab');
+
+# $tab->configure(<options>);
+# $tab->configure(-tab => 'tab', gutter => '|', ...);
+$tab->configure(-tab => 'tab', gutter => '|');
+
+@out = $tab->format(@lines);
+@out = $tab->common(@lines);
+
+
+@out = tabulate ( { tab => '???', ...}, @lines);
+@out = tabulate ( $tab, $pad, $gutter, $adjust, @lines);

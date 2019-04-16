@@ -1,0 +1,31 @@
+#!/bin/bash
+export TTY
+
+# Takes stdin as contents and para 1 as extension and echo the resulting
+# filename. Good for fpvd
+
+sn="$(basename "$0")"
+
+fp="$1"
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+if stdin_exists; then
+    cat > "$fp"
+fi
+
+case "$sn" in
+    wf) {
+        cat "$fp"
+    }
+    ;;
+
+    nf) {
+        echo "$fp"
+    }
+    ;;
+
+    *)
+esac

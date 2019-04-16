@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+{ echo ext; F f | xargs -l ext | grep -v '/'; } | xsv search -s ext '^(go|php|py)$' |  xsv frequency | xsv select value,count | sed 1d

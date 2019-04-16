@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+pager() {
+    if is_tty; then
+        v $@
+    else
+        cat
+    fi
+}
+
+(
+    cat "$HOME/notes/vim_mru_files.txt"
+    cat "$HOME$MYGIT/spacemacs/.cache/recentf"
+    cat "$HOME$MYGIT/purcell/emacs.d/recentf"
+    cat "$HOME$MYGIT/jkitchin/scimax/user/recentf"
+    cat "$HOME$MYGIT/philippe-grenet/exordium/recentf"
+) 2>/dev/null | pager

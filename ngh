@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+$HOME/scripts/node /usr/local/bin/gh "$@"

@@ -1,0 +1,41 @@
+#!/bin/bash
+export TTY
+
+# need an sql testing environment
+# lots of testing environments
+
+# NEED:
+# sed
+# jq
+# https://github.com/rcoh/angle-grinder
+# pcre
+# python regex
+# javascript regex
+# jsonnet (https://github.com/mgyucht/jsonnet-mode, https://jsonnet.org/)
+
+clear
+# exec 1> >(mnm)
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+z  fzf utils/fuzzy.txt
+s  fzf services/fuzzy.txt
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    z) cmd="fzf $HOME/notes2018/ws/utils/fuzzy.txt | xc -i" ;;
+    s) cmd="fzf $HOME/notes2018/ws/services/fuzzy.txt | xc -i" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

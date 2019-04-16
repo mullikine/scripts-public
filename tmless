@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+export EDITOR=v
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+# pipe into this command
+
+eval "tm -tout spv -fa tless $CMD"

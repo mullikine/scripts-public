@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+target="$1"
+target="$(printf -- "%s" "$target" | path-lasttwo)"
+
+td_non_repo_dir="$(mktemp -t -d td_non_repo_dirXXXXXX || echo /dev/null)"
+trap "rmdir \"$td_non_repo_dir\" 2>/dev/null" 0
+
+cd "$td_non_repo_dir"
+
+# This should give an error code
+git ls-remote "https://github.com/$target" &>/dev/null

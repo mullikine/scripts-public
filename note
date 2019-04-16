@@ -1,0 +1,80 @@
+#!/bin/bash
+export TTY
+
+export FSNOTES="$HOME/notes2018/programs/note/archive"
+
+# tmux-fs-notes.sh
+# get-fs-notes.sh
+
+editor() {
+    if e running; then
+        e c "$1"
+    else
+        v "$1"
+    fi
+}
+
+opt="$1"
+shift
+case "$opt" in
+    getlinks) { # find all the links in the files in my notes folder
+        exec 2>/dev/null
+        tm n "$opt :: NOT IMPLEMENTED"
+        echo "$opt :: NOT IMPLEMENTED"
+    }
+    ;;
+
+    fs) {
+        cmd="$1"
+        shift
+        case "$cmd" in
+            edit) { # Edit the notes for a directory or path
+                path="$1"
+                rp="$(realpath "$path")"
+
+                # dn="$(p "$rp" | u dn)"
+
+                notes_dir_path="$FSNOTES$rp"
+                mkdir -p "$notes_dir_path"
+                notes_path="$notes_dir_path/$(date +%d.%m.%y).txt"
+                touch "$notes_path"
+
+                # editor "$notes_path"
+                v "$notes_path"
+                break
+            }
+            ;;
+
+            view) { # Show notes below a directiory
+                path="$1"
+                rp="$(realpath "$path")"
+
+                # dn="$(p "$rp" | u dn)"
+
+                notes_dir_path="$FSNOTES$rp"
+
+                find "$notes_dir_path" -type f | awk 1 | while IFS=$'\n' read -r line; do
+                    lit "$line" | mnm
+                    echo
+                    cat "$line"
+                    echo
+                    echo
+                done | v
+                break
+            }
+            ;;
+
+            *)
+        esac
+
+        break
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

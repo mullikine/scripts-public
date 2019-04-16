@@ -1,0 +1,66 @@
+#!/bin/bash
+export TTY
+
+# trap func_trap INT
+# func_trap() {
+#     notify-send "yo"
+#     exit 0
+# }
+
+# This breaks it
+# exec 2> >(general-term-pipe-highlighting)
+
+# This should be much like a switch
+
+declare -A MYMAP
+
+# Find control char
+# echo -n  | od -c
+# echo -n  | od -c
+# printf '%b' '\004' | od -c
+
+# default bindings.
+# MYMAP["$(printf -- '\003')"]="" # C-c # Doesn't work
+MYMAP["$(printf -- '\004')"]="" # C-d
+MYMAP["$(printf -- '\033')"]="" # ESC
+MYMAP["q"]=""                   # q
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -*) {
+        key="$(p "$opt" | mcut -d- -f2)"
+        # echo "$key"
+
+        # for each char in string
+        while read -n1 c; do
+            MYMAP[$c]="$2"
+        done < <(printf -- "%s" "$key")
+
+        # This works
+        printf -- "%s\n" "[$key] $2" | general-term-pipe-highlighting 1>&2
+
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+#settings=$(stty -g)
+#stty stop undef
+#stty raw
+while :; do
+    # tput civis
+    printf -- "%s" ": " 1>&2
+    read -n1 c
+    echo 1>&2
+    # tput cnorm
+
+    test "${MYMAP[$c]+abc}" && break # if is set then break
+done
+# stty "$settings"
+
+printf -- "%s" "${MYMAP[$c]}"
+
+# All it should do is return the value of the option
+# qa -y eww -n : -c "xc-it -i"

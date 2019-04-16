@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+Z    $HOME/.zsh_history
+B    $HOME/.bash_history
+G    hsq gh
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    Z) cmd="v ~/.zsh_history" ;;
+    B) cmd="v ~/.bash_history" ;;
+    G) cmd="hsq gh" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

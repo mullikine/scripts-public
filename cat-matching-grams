@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+pattern="$1"
+
+sed "s/[^$pattern]\+/ /g"

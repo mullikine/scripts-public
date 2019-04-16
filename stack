@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+last_arg="${@: -1}"
+
+# printf -- "%s" "$last_arg" > /tmp/last.txt
+
+# ns -- "$last_arg"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if ! test "$last_arg" = "--help" && \
+    ! test "$3" = "ghci" && \
+    ! test "$3" = "runhaskell" \
+    ; then
+
+    if is_tty; then
+        exec 1> >(colorise-build-stdout.sh)
+        exec 2> >(colorise-build.sh)
+    fi
+fi
+
+/usr/local/bin/stack "$@"

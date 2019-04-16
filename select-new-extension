@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+exec 2>/dev/null
+
+for fp in $HOME$VIMCONFIG/vim/ftdetect/*.vim; do
+    rp="$(realpath "$fp")"
+    dn="$(dirname "$rp")"
+    cd "$dn"
+    bn="$(basename "$fp")"
+    ext="${bn##*.}"
+    fn="${bn%.*}"
+    exts="$(cat "$fp" | scrape '\*\.[^. \t]+' | scrape '[a-zA-Z]+' | sort | uniq)"
+    if [ -n "$exts" ]; then
+        # echo "$fn" | udl
+        printf -- "%s\n" "$exts" | prp "$fn: "
+    fi
+done

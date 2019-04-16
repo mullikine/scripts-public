@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+exec 1>&2
+
+if tmux info &> /dev/null; then 
+  echo running
+  exit 0
+else
+  echo not running 
+  exit 1
+fi

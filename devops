@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+
+case "$opt" in
+    get-environment-dirs-exports) {
+        cat $HOME/notes/ws/development-environment/environment-directories.txt | awk 1 | while read line; do
+            vn="$(lit "$line" | s field 1)"
+            dn="$(lit "$line" | s field 2)"
+            lit "export $vn=\"$dn\""
+        done
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+    *)
+esac

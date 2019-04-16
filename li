@@ -1,0 +1,91 @@
+#!/bin/bash
+export TTY
+
+# log it?
+
+# put elasticsearch stuff in here
+# Ultimately, I should be querying elasticsearch for queries to use in elasticsearch
+
+read -r -d '' q_get_file <<HEREDOC
+# and get it ...
+GET index/type/1
+HEREDOC
+
+read -r -d '' q_index_file <<HEREDOC
+# index a doc
+PUT index/type/1
+{
+  "body": "here"
+}
+HEREDOC
+
+read -r -d '' q_everything <<HEREDOC
+# Get everything
+GET _search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+HEREDOC
+
+# Not sure if this is how
+# curl 'https://kibana.codelingo.io/elasticsearch/_msearch' -H 'Pragma: no-cache' -H 'Origin: https://kibana.codelingo.io' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.9' -H 'kbn-version: 5.6.4' -H 'Authorization: Basic Y2xhZG1pbjo2MDBmN2MxYzJlZGExNzI1NDg5YTQ2ZTdjMWE0YTE5OGJiNWRhMGM0MTBmNWU3NDFmZg==' -H 'content-type: application/x-ndjson' -H 'Accept: application/json, text/plain, */*' -H 'Cache-Control: no-cache' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36' -H 'Cookie: _ga=GA1.2.260442267.1536010232' -H 'Connection: keep-alive' -H 'Referer: https://kibana.codelingo.io/app/kibana' --data-binary $'{"index":["logstash-*"],"ignore_unavailable":true,"preference":1537764028437}\n{"query":{"bool":{"must":[{"query_string":{"query":"kubernetes.pod_name:\\"platform\\" AND msg:\\"New review request\\"","analyze_wildcard":true}},{"match_all":{}},{"range":{"@timestamp":{"gte":1537763158292,"lte":1537764058292,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"_source":{"excludes":[]},"aggs":{"2":{"date_histogram":{"field":"@timestamp","interval":"1d","time_zone":"Pacific/Auckland","min_doc_count":1}}},"version":true,"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{"highlight_query":{"bool":{"must":[{"query_string":{"query":"kubernetes.pod_name:\\"platform\\" AND msg:\\"New review request\\"","analyze_wildcard":true,"all_fields":true}},{"match_all":{}},{"range":{"@timestamp":{"gte":1537763158292,"lte":1537764058292,"format":"epoch_millis"}}}],"must_not":[]}}}},"fragment_size":2147483647}}\n{"index":["logstash-*"],"ignore_unavailable":true,"preference":1537764028437}\n{"query":{"bool":{"must":[{"query_string":{"query":"kubernetes.pod_name:\\"platform\\" AND msg:\\"New review request\\"","analyze_wildcard":true}},{"match_all":{}},{"range":{"@timestamp":{"gte":1537763158292,"lte":1537764058292,"format":"epoch_millis"}}}],"must_not":[]}},"size":0,"_source":{"excludes":[]},"aggs":{"2":{"significant_terms":{"field":"username.keyword","size":50}}},"version":true,"highlight":{"pre_tags":["@kibana-highlighted-field@"],"post_tags":["@/kibana-highlighted-field@"],"fields":{"*":{"highlight_query":{"bool":{"must":[{"query_string":{"query":"kubernetes.pod_name:\\"platform\\" AND msg:\\"New review request\\"","analyze_wildcard":true,"all_fields":true}},{"match_all":{}},{"range":{"@timestamp":{"gte":1537763158292,"lte":1537764058292,"format":"epoch_millis"}}}],"must_not":[]}}}},"fragment_size":2147483647}}\n' --compressed
+
+opt="$1"
+shift
+case "$opt" in
+    es) { # es_everything
+        :
+    }
+    ;;
+
+    list-release-tarballs) { 
+        curl https://github.com/codelingo/lingo/releases 2>/dev/null | scrape '/.*linux.*64.tar.gz' | add-prefix "https://github.com"
+    }
+    ;;
+
+    install-latest-lingo-binary) {
+        set -x
+        tb="$(li list-release-tarballs | head -n 1)"
+
+        if ! [ -n "$tb" ]; then
+            ns "could not scrape tarball. try again"
+            exit 1
+        fi
+
+        td_thing="$(mktemp -t -d td_thingXXXXXX || echo /dev/null)"
+        trap "rmdir \"$td_thing\" 2>/dev/null" 0
+
+        cd "$td_thing"
+        wget "$tb"
+        version="$(glob "lingo-*" | scrape 'v[0-9.]+')"
+
+        # export CWD="$(pwd)"
+        # zsh
+        # exit 0
+
+        gobin="$HOME/go/bin"
+
+        newbinfn="lingo-$version"
+
+        tar xf *
+        cp -a lingo "${gobin}/${newbinfn}"
+        cd "$gobin"
+        ln -sf "${newbinfn}" lingo
+
+        ns "installed: ${newbinfn}"
+        exit $?
+    }
+    ;;
+
+    ki) { # kibana_everything
+        read -r -d '' qdsl <<HEREDOC
+HEREDOC
+
+        curl -XPOST kibana.codelingo.io:9200/your_index/your_type/_search -d "$qdsl"
+    }
+    ;;
+
+    *)
+esac

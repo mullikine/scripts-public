@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sed -n '/^\(-[^-]\|+[^+]\)/p' | sed '/^[+-]Subproject/d' | wc -l | ( echo "$(( $(cat) / 2 ))" ) | bc

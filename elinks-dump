@@ -1,0 +1,51 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+exec 3>&2
+exec 2>/dev/null
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+fpage() {
+    if is_tty; then
+        v
+    else
+        cat
+    fi
+}
+
+filter() {
+    # sed '/StackOverflow/ 1,/* StackOverflow/d' |
+    sed '/^References/,$d' | \
+    c ascify
+}
+
+out="$(ci elinks --no-numbering --dump "$@" | filter)" 
+
+# elinks output hates vim for some reason. Ahhh. It's because stderr was
+# redirected to dev null
+#printf -- "%s" "$out"
+
+## If not a tty but TTY is exported from outside, attach the tty
+#if test "$mytty" = "not a tty" && ! [ -z ${TTY+x} ]; then
+#    lit "Attaching tty"
+#    exec 0<"$TTY"
+#    exec 1>"$TTY"
+#else
+#    # Otherwise, this probably has its own tty and only needs normal
+#    # reattachment (maybe stdin was temporarily redirected)
+#    exec </dev/tty
+#fi
+
+exec 2>&3
+printf -- "%s" "$out" | fpage
+
+exit 0
+# printf -- "%s" "$out" | awk 1 | vim -
+# lit "$out" | vim -
+# lit "$out" | fpage

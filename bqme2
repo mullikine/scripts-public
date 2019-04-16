@@ -1,0 +1,207 @@
+#!/bin/bash
+
+# Annoyingly, this might just be a sample.
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        limit="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -ft) {
+        ft="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+read ft
+read limit
+
+
+query="$(cat)"
+
+echo "$query" >> ~/bqme-history.log
+echo "path: $ft"
+echo "limit: $limit results"
+
+date
+echo "Query: '$query'"
+echo "Query: '$query'" | sed 's/./-/g'
+echo
+
+clean_string() {
+    sed '/^\s\+$/d' |
+    sed 's/^\s\+//' |
+    sed 's/\s\+$//'
+}
+
+echo "<div style=\"float: right; width: 30%; background: #ccc; padding: 1em;\">"
+echo "<h3>Links</h3>"
+echo "<a href=\"https://www.kaggle.com/poonaml/analyzing-3-million-github-repos-using-bigquery\">analyzing-3-million-github-repos-using-bigquery</a>"
+
+echo "<h3>Top cpp repositories</h3>"
+(
+    echo "disabled temporarily"
+    exit 0
+    # Need this variable scope to not interfere
+
+    prequeries=(
+        "SELECT COUNT(*) FROM [bigquery-public-data:github_repos.sample_contents] WHERE regexp_match(content, r'$query')"
+
+    "#standardSQL
+WITH cpp_repos AS
+  ( SELECT DISTINCT repo_name -- Notice DISTINCT
+   FROM \`bigquery-public-data.github_repos.sample_files\`
+   WHERE path LIKE '%.cpp')
+SELECT commits.repo_name,
+       count
+  (COMMIT) AS num_commits
+FROM \`bigquery-public-data.github_repos.sample_commits\` AS commits
+JOIN cpp_repos ON cpp_repos.repo_name = commits.repo_name
+GROUP BY commits.repo_name
+ORDER BY num_commits DESC
+"
+
+)
+        
+    
+    
+    count=0
+    while [ "x${prequeries[count]}" != "x" ]; do
+        query="${prequeries[count]}"
+        # echo -e "$query"
+        
+        echo "<div style=\"background: #f7cccc; border: #f99;overflow-y:hidden;overflow-x: scroll;\">"
+        echo "$query" | sed '/^\s\+$/d' | recode ascii..html | sed '/^\s\+$/d'
+        echo "</div>"
+
+        echo "<div style=\"background: #f7f7f7; border: #999;overflow-y:hidden;overflow-x: scroll;\">"
+        echo -e "$query" | sed '/^\s\+$/d' | bq --format=csv query | sed '/^\s\+$/d'
+        #| {
+        #    # read header
+        #    # echo "<em>$header</em>"
+        #    cat
+        #}
+        # | feedgnuplot --lines --points --legend 0 "data 0" --title "Test plot" --y2 1 --terminal 'dumb 80,40' --exit
+        echo "</div>"
+        echo
+        count=$(( $count + 1 ))
+    done
+)
+echo "</div>"
+
+
+# echo "ft: $ft"
+# ft="$(print -- "%s" "$ft" | $HOME/scripts/qne -ftln)"
+# echo "ft: $ft"
+
+
+    # "SELECT COUNT(*) FROM [bigquery-public-data:github_repos.sample_contents] WHERE regexp_match(content, r'$query')"
+    # "SELECT sample_repo_name, sample_path FROM [bigquery-public-data:github_repos.sample_contents] WHERE regexp_match(content, r'$query') LIMIT 5"
+queries=(
+
+    "#standardSQL
+    SELECT 
+      sample_repo_name,
+      sample_path,
+      (SELECT STRING_AGG(snip) FROM snippets.snip) AS snippets
+    FROM (
+      SELECT 
+        sample_repo_name, sample_path, REGEXP_EXTRACT_ALL(content, r'.*$query.*') AS snip
+      FROM (
+        SELECT sample_repo_name, content, sample_path FROM \`bigquery-public-data.github_repos.sample_contents\` WHERE REGEXP_CONTAINS(content, r'$query') AND REGEXP_CONTAINS(sample_path, r'$ft')
+      )
+    ) snippets LIMIT $limit"
+
+    )
+
+    # LIKE is not faster
+    # SELECT sample_repo_name, content, sample_path FROM \`bigquery-public-data.github_repos.sample_contents\` WHERE REGEXP_CONTAINS(content, r'$query') AND sample_path LIKE '$ft'
+# SELECT sample_repo_name, content, sample_path FROM \`bigquery-public-data.github_repos.sample_contents\` WHERE REGEXP_CONTAINS(content, r'$query') AND REGEXP_CONTAINS(sample_path, r'$ft')
+
+
+#cleanstring() {
+#}
+
+# Need to get the branch
+count=0
+while [ "x${queries[count]}" != "x" ]; do
+    query="${queries[count]}"
+    echo "<div style=\"background: #ccccf7; border: #f99; width: 65%;overflow-y:hidden;overflow-x: scroll;\">"
+    echo -e "$query"
+    echo "</div>"
+    echo -e "$query" | bq --format=csv query | {
+        count2=0
+        awk 1 | sed 1,2d | while IFS=$'\n' read -r line; do
+            echo "<div style=\"background: #f7f7f7; border-left: 1em solid #9f9; padding-left: 1em; \">"
+        # if [ -n "$line" ]; then
+            repo="$(printf -- "%s\n" "$line" | awk -F, '{print $1}')"
+            path="$(printf -- "%s\n" "$line" | awk -F, '{print $2}')"
+            snips="$(printf -- "%s\n" "$line" | sed 's/^[^,]\+,[^,]\+,//' | recode ascii..html | clean_string)"
+            
+            # echo "repo: $repo"
+            # echo "path: $path"
+            # echo "line: $line" | recode ascii..html
+            link="https://github.com/$repo/blob/master/$path"
+            bn="$(basename "$path")"
+            echo "$count2. <a href=\"$link\"><em>$repo:</em> $bn</a>"
+            # echo "<em>Matches</em>"
+            echo "<div style=\"background: #ffc; display: inline-block;\">$snips</div>"
+            echo
+
+        # fi
+            echo "</div>"
+            count2=$(( $count2 + 1 ))
+        done
+    }
+    echo
+    count=$(( $count + 1 ))
+done
+
+
+
+exit 0
+
+cmd="
+SELECT sample_repo_name, sample_path FROM [bigquery-public-data:github_repos.sample_contents] WHERE regexp_match(content, r'$query') LIMIT 5
+"
+
+cmd2="
+SELECT x.id, x.content, y.url, y.name, y.forked_from FROM
+(
+SELECT id, content FROM [bigquery-public-data:github_repos.sample_contents] WHERE REGEXP_MATCH(content, r'$query')
+) AS x
+JOIN
+(
+    SELECT b.id, b.url, b.name, b.forked_from FROM
+        ( SELECT project_id FROM [ghtorrent-bq:ght.project_languages] WHERE language IN ('c', 'c++')) AS a
+    JOIN
+        ( SELECT id, url, name, forked_from, updated_at FROM [ghtorrent-bq:ght.projects]) AS b
+    ON a.project_id = b.id
+) AS y
+ON x.id = b.id
+LIMIT 5
+"
+
+
+echo "project names and forks"
+echo "$cmd"
+echo "$cmd" | bq --format=csv query
+
+#echo "list of samples"
+#cmd="SELECT id FROM [bigquery-public-data:github_repos.sample_contents] LIMIT 10"
+#echo "$cmd"
+#echo "$cmd" | bq --format=csv query
+#echo
+#
+#echo "first sample"
+#cmd="SELECT id, content FROM [bigquery-public-data:github_repos.sample_contents] WHERE REGEXP_MATCH(content, r'$query') LIMIT 1"
+#echo "$cmd"
+#echo "$cmd" | bq --format=csv query

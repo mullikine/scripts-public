@@ -1,0 +1,55 @@
+#!/bin/bash
+export TTY
+
+: ${AS_USER:="bot"}
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -team) {
+        AS_USER=team
+        shift
+    }
+    ;;
+
+    -bot) {
+        AS_USER=bot
+        shift
+    }
+    ;;
+
+    -me) {
+        AS_USER=me
+        shift
+    }
+    ;;
+
+    *) break;
+esac
+done
+
+case "$AS_USER" in
+    me) {
+        gh_username="$(cat ~/.myrc.yaml | yq -r .github_user)"
+    }
+    ;;
+
+    team) {
+        gh_username="$(clpq clt_name)"
+    }
+    ;;
+
+    bot) {
+        gh_username="$(clpq clbot_username)"
+    }
+    ;;
+
+    *)
+esac
+
+old_name="$1"
+new_name="$2"
+
+{ test -z "$1" || test -z "$2"; } && exit 1
+
+set -xv
+export AS_USER
+gh-curl -X PATCH --data "{ \"name\": \"${new_name}\" }" "https://api.github.com/repos/${gh_username}/${old_name}" &>/dev/null

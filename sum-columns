@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+cols="$(printf -- "%s" "$input" | awk '{print NF; exit}')"
+# echo "datamash sum 1-$cols"
+# printf -- "%s" "$input" | datamash sum 1-"$cols"
+
+printf -- "%s" "$input" | spaces-to-tabs | datamash sum 1 sum 2 sum 3 | spaces-to-tabs

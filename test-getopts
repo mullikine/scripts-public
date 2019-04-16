@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+while getopts -- l:- o &>/dev/null; do
+case $o in
+    l)  location="$OPTARG";;
+    -)  break ;;
+esac
+done
+shift "$((OPTIND-1))"

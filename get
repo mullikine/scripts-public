@@ -1,0 +1,40 @@
+#!/bin/bash
+export TTY
+
+# Script for obtaining things
+
+opt="$1"
+shift
+
+case "$opt" in
+    home|ace) {
+        script_name="$1"
+        shift
+
+        host="$opt"
+
+        remote_path="$(ssh $host "source ~/.profile; which \"$script_name\"")"
+
+        if [ -n "$remote_path" ]; then
+            scp $host:"$remote_path" $SCRIPTS
+            cd "$SCRIPTS"; export CWD="$SCRIPTS"
+            echo
+
+            cmd="ls -ld \"$script_name\""
+            printf -- "%s\n" "$cmd"
+            eval "$cmd"
+
+            CWD="$CWD" zsh
+        fi
+    }
+    ;;
+
+    *)
+esac
+
+target="$opt"
+
+
+if lit "$target" | grep -q -P '^https?://'; then
+    wget "$target"
+fi

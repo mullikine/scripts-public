@@ -1,0 +1,42 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+find-edit-recently-modified() {
+    result="$(F recently-modified-here | fzf -m)"
+
+    if [ -n "$result" ]; then
+        result="$(p "$result" | qargs)"
+        
+        eval "v $result"
+    fi
+}
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+rm recently modified
+i  list-mru | v
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    r|m) cmd="find-edit-recently-modified" ;;
+    i) cmd="list-mru | v" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+echo "Consider switching to nix-env, which is like apt-get" 1>&2
+
+exec > >(hls -c red Error)
+
+sudo apt install -y --force-yes $@
+dpkg -L $@

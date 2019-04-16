@@ -1,0 +1,90 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+d  dir
+s  scripts
+f  tm find-window-from-session -no-activate -no-split
+I  tm sel localhost_im:finch
+g  tm sel ':glossary.txt*'
+G  tm sel ':google.*'
+1  tm sel localhost_ws:codelingo
+i  tm sel localhost_im:irssi
+<  tm sel ':integrate.org*'
+S  tm sel localhost_im:slack
+m  ranger $HOME/notes2018/ws/music
+e  tm sel ':explanations.txt*'
+q  tm sel ':questions.org*'
+p  tm sel ':perspective.org*'
+P  tm sel ':plan.org*'
+l  tm sel ':links.org*'
+L  tm sel ':learn.org*'
+t  tm sel ':todo.org*'
+r  tm sel ':remember.org*'
+R  tm sel ':read.org*'
+k  tm sel ':keep-in-mind.org*'
+K  tm sel ':knowledge.txt*'
+n  tm sel ':need.org*'
+w  tm sel ':watch.org*'
+N  tm sel localhost:notifications.txt».0
+C  tm sel localhost:clipboard.txt
+T  tm sel localhost_current:trello-my-cards.0
+S  tm sel localhost_im:slack.0
+A  tm sel localhost_current_repls:wolframalpha.0
+;  sh-repls
+HEREDOC
+
+# t  tm sel localhost_ws_functional-programming-fp:glossary.txt.0
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    d) cmd="sh-dir" ;;
+    s) cmd="CWD=$HOME/scripts zsh" ;;
+    f) cmd="tm find-window-from-session -no-activate -no-split" ;;
+    I) cmd="tm sel localhost_im:finch" ;;
+    g) cmd="tm sel ':glossary.txt*'" ;;
+    G) cmd="tm sel ':google.*'" ;;
+    1) cmd="tm sel localhost_ws:codelingo" ;;
+    i) cmd="tm sel localhost_im:irssi" ;;
+    \<) cmd="tm sel ':integrate.org*'" ;;
+    S) cmd="tm sel localhost_im:slack" ;;
+    m) cmd="ranger $HOME/notes2018/ws/music" ;;
+    e) cmd="tm sel ':explanations.txt*'" ;;
+    q) cmd="tm sel ':questions.org*'" ;;
+    p) cmd="tm sel ':perspective.org*'" ;;
+    P) cmd="tm sel ':plan.org*'" ;;
+    l) cmd="tm sel ':links.org*'" ;;
+    L) cmd="tm sel ':learn.org*'" ;;
+    t) cmd="tm sel ':todo.org*'" ;;
+    r) cmd="tm sel ':remember.org*'" ;;
+    R) cmd="tm sel ':read.org*'" ;;
+    k) cmd="tm sel ':keep-in-mind.org*'" ;;
+    K) cmd="tm sel ':knowledge.txt*'" ;;
+    n) cmd="tm sel ':need.org*'" ;;
+    w) cmd="tm sel ':watch.org*'" ;;
+    N) cmd="tm sel localhost:notifications.txt».0" ;;
+    C) cmd="tm sel localhost:clipboard.txt" ;;
+    T) cmd="tm sel localhost_current:trello-my-cards.0" ;;
+    S) cmd="tm sel localhost_im:slack.0" ;;
+    A) cmd="tm sel localhost_current_repls:wolframalpha.0" ;;
+    \;) cmd="sh-repls" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

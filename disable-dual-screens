@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# 13"
+# xrandr --output HDMI-2 --off
+
+# 15"
+xrandr --output HDMI-3 --off

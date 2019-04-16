@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+exec 1> >(mnm)
+
+git log --no-merges --author="mullikine" --name-only --pretty=format:"" | sort -u | sed '/^$/d' | sed "s=^=$(pwd)/="

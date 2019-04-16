@@ -1,0 +1,4 @@
+#!/bin/bash
+cd $DUMP$HOME/notes2018/programs/dosbox
+# -fullscreen
+dosbox -conf "configs/cb.conf" -c "mount c $DUMP$HOME/notes2018/programs/dosbox/c" -c C: -c "cd \CB" -c "mixer MASTER 20:20" -c "CB.EXE" -c "exit"

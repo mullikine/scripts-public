@@ -1,0 +1,57 @@
+#!/bin/bash
+export TTY
+
+: ${SEDOPTS:="-u"}
+
+. ~/.shell_environment
+
+sn="$(basename "$0")"
+
+# Use arrays here
+
+unminimise() {
+    sed $SEDOPTS -e "s#\$DUMP#${DUMP/}#g" \
+                 -e "s#\$NOTES#${NOTES}#g" \
+                 -e "s#\$BULK#${BULK}#g" \
+                 -e "s#\$EMACSD#${EMACSD}#g" \
+                 -e "s#\$VIMCONFIG#${VIMCONFIG}#g" \
+                 -e "s#\$VIMSNIPPETS#${VIMSNIPPETS}#g" \
+                 -e "s#\$HOME#${HOME}#g" \
+                 -e "s#\$FSNOTES#${FSNOTES}#g" \
+                 -e "s#\$MYGIT#${MYGIT}#g" \
+                 -e "s#\$BUILD#${BUILD}#g" \
+                 -e "s#\$LOGDIR#${LOGDIR}#g" \
+                 -e "s#^~/#${HOME}/#g" \
+                 -e "s#^~\$#${HOME}#g" \
+                 | cat
+}
+
+minimise() {
+    sed $SEDOPTS -e "s#/morgan##g" \
+                 -e "s#${HOME}/var/smulliga#${HOME}#g" \
+                 -e "s#${DUMP}#\$DUMP#g" \
+                 -e "s#${VIMSNIPPETS}#\$VIMSNIPPETS#g" \
+                 -e "s#${VIMCONFIG}#\$VIMCONFIG#g" \
+                 -e "s#${LOGDIR}#\$LOGDIR#g" \
+                 -e "s#${NOTES}#\$NOTES#g" \
+                 -e "s#${BULK}#\$BULK#g" \
+                 -e "s#${EMACSD}#\$EMACSD#g" \
+                 -e "s#${MYGIT}#\$MYGIT#g" \
+                 -e "s#${BUILD}#\$BUILD#g" \
+                 -e "s#${FSNOTES}#\$FSNOTES#g" \
+                 -e "s#${HOME}#\$HOME#g" \
+                 -e "s#^/home/[^/]\+#\$HOME#g" \
+                 -e "s#\([\"' =]\)/home/[^/]\+#\1\$HOME#g" \
+                 -e "s#^/Users/[^/]\+#\$HOME#g" \
+                 -e "s#\([\"' =]\)/Users/[^/]\+#\1\$HOME#g" \
+                 -e "s#\$HOME/source/git#\$MYGIT#g" \
+                 | cat
+}
+
+if test "$1" = "-x" || test "$sn" = "umn" || test "$sn" = "unminimise.sh"; then
+    unminimise
+elif test "$sn" = "m" || test "$sn" = "mnm" || test "$sn" = "minimise.sh"; then
+    unminimise | minimise
+else
+    cat
+fi

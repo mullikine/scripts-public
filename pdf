@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    split) {
+        columns="$1"
+        fp="$2"
+
+        mutool poster -x $columns "$fp" "$fp.split.$columns.pdf"
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

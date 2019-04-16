@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+#cmd="sp -e \"(spacemacs/toggle-holy-mode-off)\" $CMD"
+cmd="e -e \"(enable-evil)\" $CMD"
+eval "$cmd"

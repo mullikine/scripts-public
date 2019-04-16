@@ -1,0 +1,163 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+
+
+# TODO
+# If no filter command is given, and INVERT != y, only the selected record will be printed to output
+# If no filter command is given, and INVERT = y, everything except the selected record will be printetd to output
+# If a filter command is given, and INVERT != y, only the selected record will be filtered
+# If a filter command is given, and INVERT = y, everthing except the selected record will be filtered
+
+
+# Example
+# cat $HOME/source/git/mullikine/codelingo/tenets/codelingo/jenkinsx/intformat/codelingo.yaml | awk-apply-to-record "tenets:" "nl" | v
+# Print only ifconfig records that match
+# ifconfig 2>&1 | awk-apply-to-record '\n\n' 'sed -z -n /wlp3s0/p' | v
+
+
+# Something to note is that RECORD == 2 will start with the first match of the record separator
+
+# Example: The record separator for the current record is also filtered
+# ifconfig 2>&1 | awk-apply-to-record -R 3 'addr' 'sed -u s/[a-z]/_/g' | v
+# Unless you specify -irs
+# ifconfig 2>&1 | awk-apply-to-record -irs -R 2 'Link' 'sed -u s/[a-z]/_/g' | v
+
+SELECTED_RECORD_ID=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -R) {
+        SELECTED_RECORD_ID="$2"
+        shift
+        shift
+    }
+    ;;
+
+    # TODO
+    -v) {
+        INVERT=y
+        shift
+    }
+    ;;
+
+    -k|-irs) {
+        # Do not put RS into the filter
+        IGNORE_RS=y
+        shift
+    }
+    ;;
+
+    -r|-rrs) {
+        # Remove the RS at the end
+        REMOVE_RS=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+rsep="$1"
+# rsepe="$rsep"
+rsepe="$(p "$rsep" | esc \\)"
+filter_cmd="$2"
+
+
+sn="$(basename "$0")"
+test "$sn" = "awk-apply-to-records" && SELECTED_RECORD_ID=
+test "$sn" = "atrs" && SELECTED_RECORD_ID=
+
+
+
+# BEGIN { PROCINFO[cmd, "pty"] = 1 } 
+# fflush(cmd);  system(""); 
+# system("sleep 1"); 
+# sub(/a/, "_", $0); 
+
+
+# equivalent
+# printf "%s", RS |& cmd; printf "%s", $0 |& cmd; 
+# printf "%s%s", RS, $0 |& cmd;
+
+
+read -r -d '' awkscript <<'HEREDOC'
+{
+    # print NR
+    if (r == "" || NR == r) {
+        if (NR == 1) {
+            printf "%s", $0 |& cmd;
+        } else {
+            if (irs == "y") {
+                printf "%s", RS
+                printf "%s", $0 |& cmd;
+            } else {
+                printf "%s%s", RS, $0 |& cmd;
+            }
+        }
+
+        close(cmd, "to");
+
+        # This is needed because getline will not overwrite if nothing is read
+        $0 = "";
+
+        cmd |& getline $0;
+
+        # if (NR == 1) {
+        #     sub(/tenets:/, "", $0);
+        # } else {
+        #     sub(/tenets:/, RS, $0);
+        # }
+
+        fflush(cmd);
+        close(cmd);
+
+        # TODO: If the returned cmd is empty, the record must've been
+        # cleared. Consider then not printing the record at all. By
+        # default, awk adds a record separator.
+
+    } else {
+        if (NR > 1) {
+            print RS
+        }
+    }
+
+    #if (length($0) == 0) {
+    #    print NR
+    #    RS="";
+    #    $0 = "";
+    #    next;
+    #} else {
+    #    print "good"
+    #    print NR
+    #    print; system("");
+    #}
+
+    print; system("");
+}
+HEREDOC
+
+# { printf "%s", $0; system(""); }
+
+# lit "$awkscript"
+# exit 0
+
+
+# echo "sed -z \"s/__RS_PLACEHOLDER__/$rsep/\""
+# exit 0
+
+gawk -v irs="$IGNORE_RS" -v r="$SELECTED_RECORD_ID" -v RS="$rsep" -v ORS="" -v cmd="$filter_cmd | sed -z 's/$rsepe/__RS_PLACEHOLDER__/'" -v FS=" " -v OFS=" " "$awkscript" | sed -z "s/__RS_PLACEHOLDER__/$sep/g" | {
+    if test "$REMOVE_RS" = "y"; then
+        sed -z "s/$rsep//g"
+    else
+        cat
+    fi
+}
+
+# works
+# gawk -F '\n' -v RS="\n- name" -v cmd="nl" '{ printf "%s%s", RS, $0 |& cmd; close(cmd, "to"); cmd |& getline $0; fflush(cmd); close(cmd) } { print; system(""); }'
+
+# placeholder version
+# gawk -v RS="$1" -v ORS="" -v cmd="$2" -v FS=" " -v OFS=" " '{ print "__RS_PLACEHOLDER___" |& cmd; printf "%s", $0 |& cmd; close(cmd, "to"); cmd |& getline $0; fflush(cmd); close(cmd) } { print; system(""); }' | sed "s/__RS_PLACEHOLDER___/$1/"
+# one-liner -- good
+# gawk -v RS="$1" -v ORS="$1" -v cmd="$2" -v FS=" " -v OFS=" " '{ printf "%s", $0 |& cmd; close(cmd, "to"); cmd |& getline $0; fflush(cmd); close(cmd) } { print; system(""); }'

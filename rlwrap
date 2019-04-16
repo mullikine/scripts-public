@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+last_arg="${@: -1}"
+hfn="$(printf -- "%s" "$last_arg" | slugify)"
+
+hf="$HOME/notes2018/programs/rlwrap/history/${hfn}"
+
+/usr/bin/rlwrap -H "$hf" "$@"

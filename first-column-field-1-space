@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+remove-leading-and-trailing-spaces.sh | print-field.sh -d '[\t ]*' 1

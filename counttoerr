@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+# Greate for debugging infinite loops in shell scripts
+
+count=0
+awk1 | while IFS=$'\n' read -r line; do
+    printf -- "%s\n" "$line"
+    echo "$count" 1>&2
+    ((count++))
+done

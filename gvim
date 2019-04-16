@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xterm -ls -e "TERM=xterm-256color TMUX= tmux new \"v $@\""

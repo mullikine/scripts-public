@@ -1,0 +1,75 @@
+#!/bin/bash
+
+basedir="/sys/class/backlight/"
+
+# intel_backlight/
+#handler=$basedir$(ls $basedir)"/"
+handler="${basedir}/intel_backlight/"
+
+old=$(cat "${handler}brightness")
+new="$old"
+
+min=0
+max=$(cat "${handler}max_brightness")
+
+step="$(( max / 180 ))"
+factor=3
+
+
+percent="$(( 100 * old / max ))"
+
+
+case $1 in
+    percent) {
+        printf -- "%s" "$percent"
+    }
+    ;;
+
+    up) {
+        new="$(bc <<< "($old+$step)*$factor")"
+        # new=$(( (old + step) * factor ))
+    }
+    ;;
+
+    down) {
+        new="$(bc <<< "$old / $factor - $step")"
+        # new=$(( old / factor - step ))
+    }
+    ;;
+
+    max) {
+        new=$(( max ))
+    }
+    ;;
+
+    off) {
+        new=$(( 0 ))
+    }
+    ;;
+
+    min) {
+        # This should first get to min brightness then turn off
+        candidate="$(( min + step ))"
+        if [[ "$old" -gt "$candidate" ]]; then
+            new="$candidate"
+        else
+            new=0
+        fi
+    }
+    ;;
+
+    *)
+esac
+
+if [ "$new" -gt "$max" ]; then
+    new="$max"
+fi
+
+if [ "$new" -lt "$min" ]; then
+    new="$min"
+fi
+
+if [ "$new" -ne "$old" ]; then
+    sudo chmod 666 $handler"brightness"
+    echo "$new" > "${handler}brightness"
+fi

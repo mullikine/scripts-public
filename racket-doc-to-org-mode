@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# Select the paragraphs and pipe through something that will wrap all the hyphenated function names with a pair of ~
+# also wrap all the # keywords
+
+
+sed 's/\([a-z]\+!\?\(->\?[a-z]\+!\?\)\+\)/~\1~/g' | sed 's/\(#:[a-z]\+\)/~\1~/g'

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+if [ -n "$input" ]; then
+    lit "$input" | nv -c 'nmap q :q!<CR>' -c 'set nowrap number' "$@" -
+fi

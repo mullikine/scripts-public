@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+a -q volume-down -pc 20
+exit 0

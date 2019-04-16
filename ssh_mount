@@ -1,0 +1,46 @@
+#!/bin/bash
+user=$2
+folder=$3
+name=$4
+
+set -x
+set -m
+if [[ -z "${user}" ]]
+then
+    user=''
+    vol=$1
+    volname=$1
+else
+    user="${user}@"
+    vol="${1}_${user}"
+    volname="${1} ${user}"
+fi
+
+if [[ -z "${folder}" ]]
+then
+    folder=/
+fi
+
+if [[ -z "${name}" ]]
+then
+    :
+else
+    vol=${vol}-$name
+    echo vol = $vol
+fi
+#sshfs $user$1:/ /media/ssh-$vol/ -C -o ssh_command='autossh -M0',reconnect,auto_cache,defer_permissions,noappledouble,volname=$volname
+# Can't put environment variables in like this.
+#sshfs $user$1:/ /media/ssh-$vol/ -C -o ssh_command='AUTOSSH_POLL=10 AUTOSSH_MAXSTART=10 AUTOSSH_PORT=0 autossh',reconnect,auto_cache
+# not sure which shell it's using, but putting these evironment
+# variables into ssh_command does not work
+# doesn't like setting this the same as the default for some reason
+#AUTOSSH_MAXSTART="-1"
+sudo mkdir /media/ssh-$vol
+sudo chown $USER /media/ssh-$vol
+sudo chgrp $USER /media/ssh-$vol
+#sshfs $user$1:/ /media/ssh-$vol/ -C -o ssh_command='autossh',reconnect,auto_cache
+# be advised, autossh will cause the shell to freeze if the remote host
+# is disconnected.
+#sshfs $user$1:$folder /media/ssh-$vol/ -C -o ssh_command='autossh',idmap=user,reconnect,auto_cache -o allow_other
+echo "sshfs $user$1:$folder /media/ssh-$vol/ -C -o ssh_command='ssh',idmap=user,reconnect,auto_cache -o allow_other"
+sshfs $user$1:$folder /media/ssh-$vol/ -C -o ssh_command='ssh',idmap=user,reconnect,auto_cache -o allow_other

@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# I should use an alias to direct to this
+# And here I should check whether I'm looking at a Google Cloud
+# filesystem or whatever
+
+ls "$@"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+jq -R -c 'fromjson? | select(type == "object")'

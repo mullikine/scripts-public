@@ -1,0 +1,153 @@
+#!/bin/bash
+
+# Magit related commands.
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    magit) {
+        f=magit-status
+    }
+    ;;
+
+    magithub) {
+        f=magithub-dashboard
+    }
+    ;;
+
+    *)
+esac
+
+# Related:
+# $HOME/scripts/vc
+
+# export SOCKET=magit
+
+opt="$1"
+shift
+case "$opt" in
+    -d|debug) {
+        wd="$(pwd | s chomp | q)"
+        cd $MYGIT/magit/magit
+        make emacs-Q
+
+        # the following should work but does not. how maddening!
+        false && {
+            ELPA_DIR=$HOME/.emacs.d/elpa
+            ELPA_DIR=$$HOME$MYGIT/purcell/emacs.d/elpa-26.1
+
+            DASH_DIR="$(find -L $ELPA_DIR -maxdepth 1 -regex '.*/dash-[.0-9]*' 2> /dev/null | sort | tail -n 1)"
+            GHUB_DIR="$(find -L $ELPA_DIR -maxdepth 1 -regex '.*/ghub-[.0-9]*' 2> /dev/null | sort | tail -n 1)"
+            MAGIT_POPUP_DIR="$(find -L $ELPA_DIR -maxdepth 1 -regex '.*/magit-popup-[.0-9]*' 2> /dev/null | sort | tail -n 1)"
+            TREEPY_DIR="$(find -L $ELPA_DIR -maxdepth 1 -regex '.*/treepy-[.0-9]*' 2> /dev/null | sort | tail -n 1)"
+            WITH_EDITOR_DIR="$(find -L $ELPA_DIR -maxdepth 1 -regex '.*/with-editor-[.0-9]*' 2> /dev/null | sort | tail -n 1)"
+
+            emacs -Q -L $HOME$MYGIT/magit/magit/lisp \
+                -L "$DASH_DIR" \
+                -L "$GHUB_DIR" \
+                -L "$MAGIT_POPUP_DIR" \
+                -L "$TREEPY_DIR" \
+                -L "$WITH_EDITOR_DIR" \
+                --debug-init --eval "(progn (setq debug-on-error t) (require 'magit) (global-set-key \"\\C-xg\" 'magit-status) (cd $wd) (magit-status))"
+        }
+        exit 0
+    }
+    ;;
+
+
+    k|kill) {
+        e -fs magit k
+
+        exit 0
+    }
+    ;;
+
+    s|status) {
+        # Magit doesn't work very well with emacs24 and spacemacs.
+        # e -D spacemacs sd
+        # e -D spacemacs c -e "(progn (magit-status)( delete-other-windows ))"
+
+        # But I'm using emacs26 now
+        # e -fs magit sd
+        # e -fs magit c -e "(progn (magit-status)( delete-other-windows ))"
+
+        # e -D spacemacs sd
+        # sp sd
+        # pc sd
+        # e -D spacemacs c -e "(progn (magit-status)( delete-other-windows ))"
+        # pd c -e "(progn (magit-status)( delete-other-windows ))"
+
+        if vc g is-repo; then
+
+            # Steve Purcell's is not stable atm. Besides, I have seen
+            # character level diffs in spacemacs. My changes may have
+            # worked, at least partially. Looks like they work.
+
+            # pc c -e "($f)(delete-other-windows)"
+
+            #sp c -e "($f)(delete-other-windows)"
+            export SOCKET=
+            #e -D default -s magit c -e "(global-rainbow-delimiters-mode -1)(global-rainbow-identifiers-always-mode -1)($f)"
+
+            # me -2 -e "($f)"
+            # me -ei "$f"
+
+            # disable rainbow here: my-distributions.el
+            me -e "($f)"
+        else
+            lit "Not a git repo"
+        fi
+
+        exit 0
+    }
+    ;;
+
+    rl|reflog) {
+        tm n "$f :: NOT IMPLEMENTED"
+
+        # This should use x (terminal automation script)
+
+        exit 0
+    }
+    ;;
+
+    bl|blame) {
+        # tm n "$f :: NOT IMPLEMENTED"
+
+        fp="$1"
+
+        # I only need to open the file with emacs and then call magit-blame
+
+        if [ -n "$fp" ]; then
+            me -ci magit-blame "$fp"
+        else
+            echo "Not a file: $fp" 1>&2
+        fi
+
+        # This should use x (terminal automation script)
+
+        exit 0
+    }
+    ;;
+
+    *) {
+        if [ -f "$opt" ]; then
+            fp="$opt"
+            rp="$(realpath "$fp")"
+            dn="$(dirname "$rp")"
+            cd "$dn"
+            bn="$(basename "$fp")"
+            ext="${fp##*.}"
+            fn="${fp%.*}"
+
+            me -e "(find-file $(p "$fp" | q -ftln))(call-interactively 'magit-log-buffer-file)"
+            # (magit-log-buffer-file)
+            exit 0
+        fi
+    }
+esac
+
+# Default: Run this command again with the status command.
+$0 s

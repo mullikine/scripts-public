@@ -1,0 +1,44 @@
+#!/bin/bash
+export TTY
+
+PAGER="tless +F -S"
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -v) {
+        PAGER=v
+        shift
+    }
+    ;;
+
+    -vs) {
+        PAGER=vs
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+pager() {
+    if is_tty && stdin_exists; then
+        IFS= read -rd '' input < <(cat /dev/stdin)
+        if test -n "$input"; then
+            exec < <(printf -- "%s" "$input")
+            eval $PAGER $@
+        fi
+    else
+        cat
+    fi
+}
+
+pager "$@"

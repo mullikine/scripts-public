@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+perl -l -ne '
+    $_{$_} = -M;  # store file age (mtime - now)
+    END {
+        $,="\n";
+        @sorted = sort {$_{$a} <=> $_{$b}} keys %_;  # sort by increasing age
+        print @sorted[0..9];
+    }'

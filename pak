@@ -1,0 +1,40 @@
+#!/bin/bash
+
+MESSAGE=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -m) {
+        MESSAGE="$2. "
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+trap func_trap INT
+func_trap() {
+    :
+}
+
+key="$1"
+
+# Ensure we can read from the terminal
+exec 0</dev/tty
+
+if [ -n "$key" ]; then
+    printf -- "%s\n" "${MESSAGE}Press '$key' to continue"
+
+    read -n 1 -s ret
+    code="$?" # if this is not 0 then pak must not be working. Don't want an infinite loop
+    while test "$code" = "0" && ! [[ "$ret" == "$key" ]]; do
+        read -n 1 -s ret
+    done
+
+    if ! test "$code" = "0"; then
+        ns "pak can't read. quitting"
+    fi
+else
+    printf -- "%s\n" "${MESSAGE}Press any key..."
+    read -n 1 -s
+fi

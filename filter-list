@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -i) {
+        grep_opts+=" -i "
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+blacklist_fp="$1"
+
+case "$sn" in
+    filter-blacklist) {
+        grep_opts+=" -v "
+    }
+    ;;
+
+    filter-whitelist) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+awk1 | eval "lgrep $grep_opts" -f "$blacklist_fp"

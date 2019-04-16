@@ -1,0 +1,38 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+cd $DUMP/torrents
+
+# rtorrent -O use_udp_trackers=no
+
+opts=
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -t|-tcp) {
+        opts+=" -O use_udp_trackers=no "
+        shift
+    }
+    ;;
+
+    -f) { # annoyingly, this appears not to work
+        opts+=" -O close_low_diskspace=1 "
+        # This appears to have done the trick
+        opts+=" -O schedule=low_diskspace,5,60,close_low_diskspace=1M "
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+nvc /usr/bin/rtorrent $opts "$@"
+CWD="$(pwd)" zsh

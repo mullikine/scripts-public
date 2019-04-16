@@ -1,0 +1,83 @@
+#!/bin/bash
+export TTY
+
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+UP=y
+DOWN=y
+EXTENDED_MODE=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -u) {
+        DOWN=n
+        UP=y
+        shift
+    }
+    ;;
+
+    -d) {
+        DOWN=y
+        UP=n
+        shift
+    }
+    ;;
+
+    -x) {
+        EXTENDED_MODE=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+x="$1"; : ${x:="1"}
+y="$2"; : ${y:="1"}
+
+if [ -n "$3" ]; then
+    TTY="$3"
+fi
+
+: ${TTY:="$(tty)"}
+
+
+# Make it faster
+chr () {
+	printf "\\$(printf '%03o' "$1")"
+}
+
+
+# Not sure how this works. How does tmux do it?
+
+if test "$EXTENDED_MODE" = "y"; then
+    mousedown=0
+    mouseup=1
+
+    mousedown_code="$(echo -n -e "\e[<$mousedown"; printf -- "%s" ";$y;${x}m")"
+    mouseup_code="$(echo -n -e "\e[<$mouseup"; printf -- "%s" ";$y;${x}m")"
+
+else
+    # x="$(perl -e "print chr(33 + $x)")"
+    # y="$(perl -e "print chr(33 + $y)")"
+    x="$(chr $(( 33 + $x )) )"
+    y="$(chr $(( 33 + $y )) )"
+    mousedown="$(chr 32)" # ' '
+    mouseup="$(chr 35)" # '#'
+
+    mousedown_code="$(echo -n -e "\e[M$mousedown"; printf -- "%s" "$x$y")"
+    mouseup_code="$(echo -n -e "\e[M$mouseup"; printf -- "%s" "$x$y")"
+fi
+
+if test "$UP" = "n"; then
+    code="$mousedown_code"
+elif test "$DOWN" = "n"; then
+    code="$mouseup_code"
+else
+    code="$mousedown_code$mouseup_code"
+fi
+
+# printf -- "%s\n" "$code" | tv
+# printf -- "%s\n" "$code" > "$TTY"
+printf -- "%s" "$code"
+
+# ttyecho -n "$TTY" "$code"
+# ttyecho "$TTY" "$code"

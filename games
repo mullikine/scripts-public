@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+
+case "$opt" in
+    ateraan) {
+        telnet www.ateraan.com 4002
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

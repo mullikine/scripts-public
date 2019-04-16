@@ -1,0 +1,46 @@
+#!/bin/bash
+export TTY
+
+page_number=
+z_opts=
+shopt -s extglob
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    ++([0-9])) {
+        page_number="$(p "$opt" | sed 's/^.//')"
+        shift
+    }
+    ;;
+
+    -P|-p) {
+        page_number="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+read -r -d '' BOOKS <<HEREDOC
+$DUMP$HOME/notes2018/uni/cosc/480-project_FY/research/Source Code Retrieval from Large Software Libraries for Automatic.pdf
+$HOME/notes2018/uni/cosc/402_Advanced Computer Networks_S2/lecture6.pdf
+$DUMP$HOME/notes2018/uni/cosc/420_Neural Networks_S1/reading/Neural Networks, A Systematic Introduction by Raul Rojas.pdf
+HEREDOC
+
+if [ -n "$page_number" ]; then
+    z_opts+=" -P $page_number "
+fi
+
+set -m
+lit "$BOOKS" | fzgrep "$@" | awk 1 | while read -r line; do
+
+    # This does not make it a filename only.
+    # dn="$(p "$line" | u dn)"
+    # fn="$(p "$line" | u fn)"
+    # lit "$dn $fn" | less
+    # cd "$dn"
+    # z $z_opts "$fn" & disown
+
+    z $z_opts "$line" & disown
+done

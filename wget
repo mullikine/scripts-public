@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd "$@")"
+
+if printf -- "%s\n" "$CMD" | grep -q 'arxiv.org/pdf'; then
+    # LOL
+    /usr/bin/wget -U definitely-not-wget "$@"
+    exit $?
+fi
+
+CMD="$(p "$CMD" | github-url-to-raw)"
+
+# https://github.com/jwiegley/emacs-release/blob/master/lisp/progmodes/antlr-mode.el
+# https://raw.githubusercontent.com/jwiegley/emacs-release/master/lisp/progmodes/antlr-mode.el
+
+cmd="/usr/bin/wget --no-check-certificate $CMD"
+eval "$cmd"

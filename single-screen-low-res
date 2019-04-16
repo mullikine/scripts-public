@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+xrandr --output HDMI-2 --off

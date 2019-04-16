@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Or should this be for ElasticSearch?
+# No. Make 'elk' the elasticsearch script.
+
+# How about both?
+# What about explainshell
+
+# eshell takes an optional numeric argument that does nothing useful
+
+# e -D spacemacs c -e "(progn (eshell)(delete-other-windows))"
+
+uri="$1"; : ${uri:="."}
+
+sp -e "(cd (cast-dirname $(aqf "$uri")))(eshell)"

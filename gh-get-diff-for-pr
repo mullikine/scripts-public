@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sed 's~/github.com/~/patch-diff.githubusercontent.com/raw/~' | sed 's/$/.diff/'

@@ -1,0 +1,55 @@
+#!/bin/bash
+export TTY
+
+KNOWN_TEXT_FILES_ONLY=n
+
+: ${depth:="3"}
+grep_opts="-Hn"
+
+
+    -t|--text-only) { # This is a terribly inefficient option. Never use this
+        # I've given -I to grep. That should be sufficient.
+        KNOWN_TEXT_FILES_ONLY=y
+        shift
+    }
+    ;;
+
+
+file_filter() {
+    {
+        if test "$KNOWN_TEXT_FILES_ONLY" = "y"; then
+            awk1 | while IFS=$'\n' read -r line; do
+                if tt -t "$line"; then
+                    printf -- "%s\n" "$line"
+                fi
+            done
+        else
+            cat
+        fi
+    } | {
+        if [ -n "$filename_pattern" ]; then
+            grep -P "$filename_pattern"
+        else
+            cat
+        fi
+
+    }
+}
+
+file_path_pcre_filter() {
+    pattern="$1"
+
+    if [ -n "$pattern" ]; then
+        grep -P "$pattern"
+    else
+        cat
+    fi
+}
+
+{
+    if [ -n "$paths_file" ]; then
+        cat "$paths_file" | umn
+    else
+        find $OPTION . -maxdepth "$depth"
+    fi
+} | file_path_pcre_filter | file_filter | tr '\n' '\0' | eval "xargs -0 grep -s -I $grep_opts -- $(aqf "$pattern")"

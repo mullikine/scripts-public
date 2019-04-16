@@ -1,0 +1,142 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+# I could've finished off this, but the vim-based rtcmd is much better
+# $HOME/scripts/readline.py
+
+# tm n "$sn :: NOT IMPLEMENTED"
+# lit "$sn :: NOT IMPLEMENTED" | less
+
+# Need:
+# a repl with real-time event handling
+
+# In the first version of rtcmd I piped the data into it and then
+# provided the initial command in the arguments.
+
+pattern=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -E) {
+        CMD="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -nv) {
+        NEOVIM=y
+        shift
+    }
+    ;;
+
+    -|-in) {
+        STDIN_EXISTS=y
+        shift
+    }
+    ;;
+
+    ## This does not work
+    ++*) { # pattern
+        pattern="$(printf -- "%s" "$opt" | sed 's/^++//' | s chomp)"
+
+        vimpat+="+/\(\\<$pattern\\>\( -[^ ]\+\)* [^-]\)\@<=."
+
+        # vimopts_end+=" -c startinsert "
+        vimopts_end+=" -c StartAppend "
+        shift
+    }
+    ;;
+
+    +/*) { # pattern
+        pattern="$(printf -- "%s" "$opt" | sed 's=^+/==' | s chomp)"
+
+        vimpat+="+/$pattern"
+
+        # Don't use this until it's fixed.
+        # vimopts_start+=" \"+/$pattern\" "
+        # printf -- "%s\n" "$pattern"
+
+        # vimpat="+/\(\\<jq\\>\( -[^ ]\+\)* [^-]\)\@<=."
+        # vimopts_start+=" +/. "
+
+        # vimopts_end+=" -c startinsert "
+        vimopts_end+=" -c StartAppend "
+
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+stdin_exists && STDIN_EXISTS=y
+
+tf_stdin="$(nix tf stdin txt 0</dev/null || echo /dev/null)"
+
+if test "$STDIN_EXISTS" = "y"; then
+    cat > "$tf_stdin"
+fi
+
+exec 0</dev/null
+
+# TODO if there is stdin then get it into a file and add that somehow to the
+# command
+
+: ${CMD:="$(cmd "$@")"}
+
+# echo "$CMD" > /tmp/tmpcmd.txt
+
+if test "$STDIN_EXISTS" = "y"; then
+    # CMD="bash -c $(aqf "cat $(aqf "$tf_stdin") | $CMD")"
+
+    CMD="cat $(aqf "$tf_stdin") | $CMD"
+fi
+
+# : ${CMD:="v"}
+# CMD="cat $(aqf "$fp") | $CMD"
+# CREATED_PANE_ID="$(cat "$fp" | tm -f -S -tout sph -safe -d -P "$CMD")"
+
+cmdparas="$(echo -e -n "$CMD" | qfd)"
+
+# cmdparas="$(echo -e -n "$CMD" | qfd | tv)"
+# cmdparas="$(printf -- "%s" "$CMD" | qfd | tv)"
+# cmdparas="$(echo -e -n "$CMD" | qfd | tv)"
+# cmdparas="$(printf -- "%s" "$CMD" | tv)"
+
+# The scrape here is needed because the initial sesssion id starts with
+# a dollar which messes up when it reaches vim's Q function.
+
+# printf -- "%s\n" "$vimopts_end"
+# exit 0
+
+# the eval is needed because of cmdparas
+CREATED_PANE_ID="$(eval "tm -f -d spv $(test "$NEOVIM" = "y" && p "-nvt") -pakf -safe -d -P $cmdparas" | scrape '%[0-9]+')"
+
+exec </dev/tty `# see etty`
+# echo "$CMD" | v -rt "cat | tm -f -S -tout rs -xargs -t $(aqf "$CREATED_PANE_ID")"
+
+# CREATED_PANE_ID="$(p "$CREATED_PANE_ID" | esc '$' | bs '$')"
+
+# eval lit "$(cat /tmp/tmpcmd.txt)" | qargs
+
+# printf -- "%s" "$vimopts_start" > /tmp/vimopts.txt
+# exit 0
+
+# frustratingly, vimpat must be wrapped in quotes
+# this prevents me from doing vimopts_start
+
+# echo -e is an easy way to remove half the escapes.
+# eval "pl $CMD" has problems
+# Although, p "$CMD" results in extra slashes, it also places the string
+# in "", so the result might still be valid, albeit less pretty.
+
+# pl "v \"$vimpat\" -rt \"cat | tm -f -S -tout rs $(test \"$NEOVIM\" = \"y\" && p \"-nv\") -xargs -pakf -safe -t '$CREATED_PANE_ID'\" $vimopts_end"
+# pl "eval \"v $vimpat\" -rt \"cat | tm -f -S -tout rs $(test \"$NEOVIM\" = \"y\" && p \"-nv\") -xargs -pakf -safe -t '$CREATED_PANE_ID'\" $vimopts_end"
+# echo -e "$CMD" | eval "v $vimpat" -rt "cat | tm -f -S -tout rs $(test "$NEOVIM" = "y" && p "-nv") -xargs -pakf -safe -t '$CREATED_PANE_ID'" $vimopts_end
+# exit 0
+
+echo -e "$CMD" | v "$vimpat" -ft sh -rt "cat | tm -f -S -tout rs $(test "$NEOVIM" = "y" && p "-nv") -xargs -pakf -safe -t '$CREATED_PANE_ID'" $vimopts_end

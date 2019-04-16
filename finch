@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+precmd=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -2) {
+        precmd="TERM=screen-2color "
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+eval "$precmd /usr/bin/finch" "$@"

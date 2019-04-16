@@ -1,0 +1,12 @@
+# py i xlib
+#+NAME:get-wid-under-cursor-python
+#+BEGIN_SRC python
+  from Xlib.display import Display
+
+  display = Display()
+  window = display.screen().root
+  result = window.query_pointer()
+
+  print(result.child.id)
+#+END_SRC
+

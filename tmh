@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+# -noerror : Make sure the terminal does not wait if I do a C-c
+eval "tm -te -d sph -noerror -args $CMD"

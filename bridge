@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# Look for filenames within the contents of other files.
+# Graph them out.
+

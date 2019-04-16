@@ -1,0 +1,80 @@
+
+    # my $n=0;
+        # if (($n > 0) && (! defined $options{J})) {
+            # print $n . $delim;
+        # }
+
+        # chomp || ($chomp_result = 1);
+        # if ($chomp_result eq 1) {
+        #
+
+# $middle =~ s/^\s+|\s+$//g;
+# $str =~ s/^\s+//;
+
+# chomp($leading);
+# chomp($middle);
+# chomp($trailing);
+
+# while(<>) {
+#     # print (escape($_, "quote"))
+#     
+#     #say (backslash($_))
+# 
+#     # backslash() is evil. Replace with something that only replaces
+#     # slashes
+#     #print quote(backslash($_))
+# 
+#     # This works
+#     # print quote(printable($_))
+# 
+#     # But this is even better. 
+# 
+#     print qprintable($_) . "\n";
+# 
+#     # print qprintable($_);
+#     # print $_;
+# 
+#     # print qprintable($line);
+#     # print $line;
+#     # print qprintable($line) . "\n";
+# 
+#     # this actually works fine
+# 
+#     # sleep(1);
+#     #select()->flush();
+# 
+# 
+#     # print unquote(qprintable($_))
+# 
+#     #print quotemeta($_)
+#     #print quote(backslash($_))
+#     # print qqbackslash($_)
+#     #print quote(quotemeta($_))
+#     # print ($date, " $_");
+# }
+
+# cat
+
+
+# # Need to finish this.
+# 
+# use String::Escape qw( printable unprintable );
+# # Convert control, high-bit chars to \n or \xxx escapes
+# $output = printable($value);
+# # Convert escape sequences back to original chars
+# $value = unprintable($input);
+# 
+# use String::Escape qw( elide );
+# # Shorten strings to fit, if necessary
+# foreach (@_) { print elide( $_, 79 ) . "\n"; }
+# 
+# use String::Escape qw( string2list list2string );
+# # Pack and unpack simple lists by quoting each item
+# $list = list2string( @list );
+# @list = string2list( $list );
+# 
+# use String::Escape qw( escape );
+# # Defer selection of escaping routines until runtime
+# $escape_name = $use_quotes ? 'qprintable' : 'printable';
+# @escaped = escape($escape_name, @values);
+

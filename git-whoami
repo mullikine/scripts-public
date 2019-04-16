@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+git config user.name
+git config user.email

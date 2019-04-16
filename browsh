@@ -1,0 +1,57 @@
+#!/bin/bash
+export TTY
+
+url="$1"
+
+NEW_TAB=n
+KILL_FIRST=y
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -t) {
+        NEW_TAB=y
+        shift
+        shift
+    }
+    ;;
+
+    -k) {
+        KILL_FIRST=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$KILL_FIRST" = "y"; then
+    kill_firefox
+fi
+
+# Couldn't figure out how to get this to work
+
+# if ff_running; then
+    # browsh -websocket-port 3335 -startup-url "$url"
+# else
+# fi
+
+#cmd="/usr/local/bin/browsh -startup-url $CMD"
+
+# http://wizard/redirect.php?url=http://google.com
+
+# This worked!
+url="$(p "$url" | sed "s_file:///usr/share/doc/racket_http://racket_")"
+
+# url="$(p "$url" | xargs -l1 urlencode)"
+
+# new version has donate button and no improvements
+# cmd="/usr/local/bin/browsh --firefox.path \"$HOME/scripts/firefox-browsh\" --firefox.with-gui --startup-url \"$url\""
+
+# older version
+cmd="/usr/local/bin/browsh -firefox $(aqf "$HOME/dump$HOME/notes2018/programs/firefox57/firefox") -ff-profile browsh -with-gui -startup-url \"$url\""
+
+# cmd="/usr/local/bin/browsh -firefox $(aqf "$HOME/dump$HOME/notes2018/programs/firefox57/firefox") cmd="/usr/local/bin/browsh -ff-profile browsh -with-gui -startup-url \"$url\""
+#cmd="/usr/local/bin/browsh -ff-profile browsh -startup-url \"http://wizard/redirect.php?url=$url\""
+# This almost works.
+# cmd="/usr/local/bin/browsh -ff-profile browsh -with-gui -startup-url \"http://wizard/redirect.php?url=$url\""
+# eval "${cmd}"
+
+eval "${cmd}"

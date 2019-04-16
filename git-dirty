@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# Both methods work, I think. git diff is probably better
+# git diff --quiet
+test -n "$(git status -s)"

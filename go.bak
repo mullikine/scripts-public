@@ -1,0 +1,47 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+show-documentation() {
+    goprocids="$(i port2pid 6060)"
+    if ! p "$goprocids" | grep -q godoc; then
+        godoc -http=:6060 -goroot=$HOME/go &
+    fi
+
+    chrome "$http://localhost:6060/pkg/github.com/codelingo/lingo/app/commands/" &
+    return 0
+}
+
+opt="$1"
+case "$opt" in
+    docs) {
+        show-documentation
+        exit 0
+        shift
+    }
+    ;;
+
+    get) {
+        last_arg="${@: -1}"
+        set -- "${@:1:$(($#-1))}"
+
+        last_arg="$(p "$last_arg" | sed 's_https\?://__')"
+
+        /usr/local/go/bin/go "$@" "$last_arg"
+        exit $?
+    }
+    ;;
+
+    killdocs) {
+        goprocids="$(i port2pid 6060 | grep godoc | s field 2 | sort | uniq)"
+        pl "$goprocids" | xargs kill
+        exit 0
+        shift
+    }
+    ;;
+
+    *)
+esac
+
+/usr/local/go/bin/go "$@"

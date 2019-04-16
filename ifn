@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+tf_input="$(nix tf input || echo /dev/null)"
+trap "rm \"$tf_input\" 2>/dev/null" 0
+
+cat > "$tf_input"
+
+if test -s "$tf_input"; then
+    cat "$tf_input" | "$@"
+else
+    exit 1
+fi

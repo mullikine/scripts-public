@@ -1,0 +1,37 @@
+#!/bin/bash
+export TTY
+
+patA="$1"
+patB="$2"
+
+# sed "/$patA/{p;N;/$patB/d}"
+# sed "\$!N;s/\($patA\)\n\s\+\($patB\)/\1/"
+# This is more robust
+# sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/g"
+
+# sed "\$!h;x;h;N;s/\($patA\)\n\s\+\($patB\)/\1/"
+# sed "\$!{h;:a;x;h;N;s/\($patA\)\n\s\+\($patB\)/\1/;ta;}"
+
+# sed -n "\$!{h;:a;x;h;N;s/\($patA\)\n\s\+\($patB\)/\1/;ta;p}"
+
+# sed "\$!{N;s/\($patA\)\n\s\+\($patB\)/\1/}"
+
+# One reason why not to use -z is that I want to supply only part of the
+# pattern to the script, and I don't know how to match any char that is
+# not a newline
+# sed -z "s/\(\s\+$patA\)\n\s\+\(\s\+$patB\n\)/\1/}"
+
+# sed "\$!{h;:a;x;h;N;s/\($patA\)\n\s\+\($patB\)/\1/;ta;}"
+
+# debug
+# sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/;s/\(.*\)\n\(.*\)/A:\1\nB:\2/"
+
+# sed "\$!{h;:a;x;h;N;s/\($patA\)\n\s\+\($patB\)/\1/;ta}"
+
+# This is hacky but it probably works. I don't like it. But it works.
+# It DOESN'T work. But it solves half the problem.
+# Do more debugging.
+# sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/;s/\(.*$patB.*\)\n\(.*$patA.*\)/\1/"
+# sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/"
+
+sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/" | { echo; cat; } | sed "\$!N;s/\(.*$patA.*\)\n\(.*$patB.*\)/\1/" | sed 1d

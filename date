@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+: ${TZ:="NZ"}
+export TZ
+
+/bin/date "$@"

@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+url="$1"
+url_or_dirname_or_lasttwo="$(p "$url")"
+last_two="$(p "$url_or_dirname_or_lasttwo" | path-lasttwo)"
+start_bit="$(p "$url" | sed 's=\(.*/\)\([^/]\+/[^/]\+\)$=\1=')"
+
+exec 2>/dev/null
+
+curl_results="$(ci gh-curl -s -q -i -H "Accept: application/vnd.github.quicksilver-preview+json" "https://api.github.com/repos/$last_two" | ds gh-repo-preview 2>/dev/null | xurls | grep /repositories/ | sed -n 1p | xargs -l ci curl -s 2>/dev/null)"
+if test -n "$curl_results"; then
+    new_lastbit="$(p "$curl_results" | jq -r '.url' | path-lasttwo)"
+else
+    curl_results="$(ci gh-curl -nr -s "$url" | grep -P "You are being.*redirected" | xurls | grep //github.com/)"
+
+    if test -n "$curl_results"; then
+        printf -- "%s\n" "$curl_results" | sed 's/\.git$//'
+    else
+        printf -- "%s\n" "$url"
+    fi
+
+    exit 0
+fi
+
+echo "$start_bit$new_lastbit"

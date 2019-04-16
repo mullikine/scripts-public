@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+: ${fp:="$(pwd)"}
+
+dn="$(p "$fp" | u dn)"
+
+CWD="$dn" zsh

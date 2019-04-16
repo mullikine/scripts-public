@@ -1,0 +1,5 @@
+#!/bin/bash
+export TTY
+
+(umask 077; touch "$@")
+chmod 0600 "$@"

@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+pat="$1"
+: ${pat:=".*"}
+
+hls -f blue "$pat"

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# IFS= read -rd '' input < <(cat /dev/stdin)
+# 
+# printf -- "%s" | sed 's/f/-/g'
+
+sed -z -u 's/f/-/g'

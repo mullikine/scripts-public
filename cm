@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+# CMake related stuff
+
+if [ -f "CMakeLists.txt" ]; then
+    mkdir build
+    (
+        cd build
+
+        # The cache is evil. If make fails before a required package is
+        # installed, it will keep failing until you remove this
+        rm CMakeCache.txt
+
+        : ${CWD:="$(pwd)"}; cd "$CWD"
+
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DIFEM_USE_PETSC=1 -DIFEM_USE_PARALLEL_PETSC=0 -DIFEM_USE_PARALLEL_PETSC=0A -DIPEM_AS_SUBMODULE=1
+        tm -d -te sph -c "$CWD" zsh
+    )
+else
+    lit "No CMakeLists file found. Is this needed?"
+fi

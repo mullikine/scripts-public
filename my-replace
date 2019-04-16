@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+FIND="$1"
+REPLACE="$2"
+
+: ${FIND:=""}
+: ${REPLACE:=""}
+
+export FIND
+export REPLACE
+
+# ruby -p -i -e "gsub(ENV['FIND'], ENV['REPLACE'])" path/to/file
+
+ruby -lpe "gsub(ENV['FIND'], ENV['REPLACE'])"
+
+# replace text replacement

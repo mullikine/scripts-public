@@ -1,0 +1,91 @@
+#!/bin/bash
+SCREENWIDTH="$(op screenwidth)" # used for converting SVG files
+
+exec 2>/dev/null
+
+CMD=''
+lastarg=''
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    lastarg=$ARG
+    #CMD="$CMD $(echo "$ARG" | awk '{gsub(".", "\\\\&");print}')"
+    CMD="$CMD $(echo "$ARG" | sed 's/^/\"/' | sed 's/$/\"/')"
+done
+
+fp="$lastarg"
+dn="$(dirname "$fp")"
+cd "$dn"
+bn="$(basename "$fp")"
+
+firstfile="$bn"
+
+trap '' HUP
+shopt -s nocaseglob
+mkdir -p /run/shm/feh
+TMPDIR="$(mktemp -d /run/shm/feh/XXXXXXXXXX)"
+
+# use this for formats that don't work
+#for i in *.bmp; do
+#    convert "$i" "$TMPDIR/${i%.bmp}.png" 2>/dev/null
+#done
+
+#elif echo "$firstfile"|grep \.WMF\$ >/dev/null; then
+#    firstfile="$TMPDIR/${firstfile%.WMF}.png"
+
+if echo "$firstfile"|grep \.BMP\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.BMP}.png"
+elif echo "$firstfile"|grep \.bmp\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.bmp}.png"
+elif echo "$firstfile"|grep \.svg\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.svg}.png"
+elif echo "$firstfile"|grep \.ppm\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.ppm}.png"
+elif echo "$firstfile"|grep \.xpm\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.xpm}.png"
+elif echo "$firstfile"|grep \.xbm\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.xbm}.png"
+elif echo "$firstfile"|grep \.tiff\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.tiff}.png"
+elif echo "$firstfile"|grep \.ico\$ >/dev/null; then
+    firstfile="$TMPDIR/${firstfile%.ico}.png"
+fi
+#for i in *.wmf; do
+#    convert "$i" "$TMPDIR/${i%.WMF}.png"
+#done
+for i in *.BMP; do
+    convert "$i" "$TMPDIR/${i%.BMP}.png"
+done
+for i in *.bmp; do
+    convert "$i" "$TMPDIR/${i%.bmp}.png"
+done
+for i in *.ppm; do
+    convert "$i" "$TMPDIR/${i%.ppm}.png"
+done
+for i in *.xpm; do
+    convert "$i" "$TMPDIR/${i%.xpm}.png"
+done
+for i in *.xbm; do
+    convert "$i" "$TMPDIR/${i%.xbm}.png"
+done
+for i in *.tiff; do
+    convert "$i" "$TMPDIR/${i%.tiff}.png"
+done
+for i in *.ico; do
+    convert "$i" "$TMPDIR/${i%.ico}.png"
+done
+for i in *.svg; do
+    inkscape -z -e "$TMPDIR/${i%.svg}.png" -w "$SCREENWIDTH" "$i" > /dev/null
+done
+for i in `seq -w 1 20`; do
+    # use mathematica to solve the geometric sequence
+    # a20 = 0.1*r^100
+    # Solve[a20 == 10, r]
+    ( sleep "$(echo "0.1 * 1.27427^($i - 1)"|bc -l)";xdotool search --name "feh" windowsize 0 0 ) &
+done
+# pwd | less
+ls *.{png,jpg,gif,jpeg} "$TMPDIR/"* | /usr/bin/feh -f - --start-at="$firstfile" -x -B white -. -ps --zoom max --
+
+# this is a pretty aweful way to deal with these filelists that feh
+# creates.
+rm feh_*_filelist
+rm -rf "$TMPDIR"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+getent passwd $(id -un) | cut -d: -f6

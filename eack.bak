@@ -1,0 +1,8 @@
+# find_and_grep | mnm
+# echo "(cd \"$CWD\")(grep-mode)(occur \"$pattern\")(other-window 1)"
+#find_and_grep | mnm | e -noonly -e "(cd \"$CWD\")(grep-mode)(occur \"$pattern\")(other-window 1)"
+# find_and_grep | mnm | ec -e "(cd \"$CWD\")(grep-mode)(occur \"$pattern\")(other-window 1)(delete-other-windows)"
+#( find . -maxdepth "$depth" -exec grep -Hn "$pattern" {} \; ) 2>/dev/null | mnm | ec -e "(cd \"$CWD\")(grep-mode)"
+# find . -maxdepth "$depth" -exec grep -Hn {} \;
+# find -L . -maxdepth "$depth"
+# ( find -L . -maxdepth "$depth" -exec grep -Hn "$pattern" {} + ) 2>/dev/null | mnm | ec -e "(cd \"$CWD\")(grep-mode)"

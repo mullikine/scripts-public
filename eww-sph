@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+tm -d -te sph -fa eww "$@"

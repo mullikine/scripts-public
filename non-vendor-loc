@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+mainext="$1"
+: ${mainext:="go"}
+
+find-all-non-vendor.sh "$mainext" 0</dev/null | while read -r line; do cat "$line"; done | wc -l

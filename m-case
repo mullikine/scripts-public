@@ -1,0 +1,21 @@
+#!/bin/bash
+
+message="$@"
+
+: ${message:="Are you sure?"}
+
+printf -- "%s\n" "$message"
+echo
+
+read -p " [Yn]: " -n 1 -r
+[[ $REPLY =~ ^[Yy]$ ]]
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -*) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done

@@ -1,0 +1,95 @@
+#!/bin/bash
+export TTY
+
+# this appears to not affect nvim
+# But it breaks xonsh
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+b  bash
+v  nvt -vt100
+x  busybox
+k  ghci (haskell)
+K  sp ghci (haskell)
+T  turtle (haskell shellscript)
+i  sh-interpreter
+z  zsh
+r  racket
+R  rust-playground # R  rusti (rust)
+e  es-shell (extensible shell)
+m  eshell (emacs-shell)
+p  python
+f  fish
+g  go-scratch # g  xs gore (go) # G  gore (go-pry)
+G  go-playground
+u  irb (ruby)
+l  perl (rlwrap perl -dwe 1)
+L  perl (rlwrap re.pl) # This is not a great repl. # sudo cpanm Devel::REPL
+P  pry (ruby -- much improved)
+U  rbs (ruby one-off commands)
+H  hy
+h  nvt racket -iI hackett
+c  clisp (common lisp)
+C  clojure
+njtJ node
+O  xonsh
+B  inf-ruby
+t  ts-node
+/? cheat
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    b) cmd="CWD=$NOTES bash" ;;
+    x) cmd="CWD=$NOTES bb" ;;
+    z) cmd="CWD=$NOTES zsh" ;;
+    r) cmd="racket -iI racket" ;;
+    # R) cmd="rusti" ;;
+    R) cmd="sp -ci rust-playground" ;;
+    # p) cmd="python" ;;
+    p) cmd="xpti3" ;;
+    k) cmd="nvt ghci" ;;
+    K) cmd="sp-ghci" ;;
+    T) cmd="xs turtle" ;;
+    f) cmd="fish" ;;
+    e) cmd="ess" ;;
+    m) cmd="es" ;;
+    v) cmd="nvt -vt100" ;;
+    g) cmd="sp -ci go-scratch" ;;
+    G) cmd="sp -ci go-playground" ;;
+    # gore and go-pry are both terrible
+    # g) cmd="xs gore" ;;
+    # G) cmd="go-pry" ;;
+    u) cmd="irb" ;;
+    P) cmd="pry" ;;
+    U) cmd="rbs" ;;
+    H) cmd="hy" ;;
+    h) cmd="nvt racket -iI hackett" ;;
+    c) cmd="clisp" ;;
+    i) cmd="sh-install" ;;
+    l) cmd="rlwrap perl -dwe 1" ;;
+    L) cmd="rlwrap re.pl" ;;
+    # j) cmd="clojure1.6" ;;
+    C) cmd="clojure1.6" ;; # Can I use liquid here?
+    n|j|J) cmd="node" ;;
+    O) cmd="xonsh" ;;
+    B) cmd="e -ci inf-ruby" ;;
+    t) cmd="ts-node" ;;
+    /|\?) cmd="cheat" ;;
+esac
+echo
+echo "$cmd"
+
+# This breaks nvim but mnm does not
+# exec </dev/tty `# see etty`
+eval "$cmd"

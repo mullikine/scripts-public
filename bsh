@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+# This is a wrapper script for bash that sources a file
+# even when run as non-login non-interactive
+
+export OPTIONS
+
+bash -c "test -n \"$OPTIONS\" && set \"-$OPTIONS\"" "$@"
+# bash -c ". ~/.bashrc" "$@"

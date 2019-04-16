@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# sudo npm install json2csv -g
+
+/usr/local/bin/json2csv "$@"

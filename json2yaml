@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+ruby -ryaml -rjson -e 'puts YAML.dump(JSON.parse(STDIN.read))'

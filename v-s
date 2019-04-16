@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# this is for
+# vim +/"map <Alt>V open_with v-s" "$HOME/versioned/git/config/ranger/rc.conf"
+
+v -s "$@"

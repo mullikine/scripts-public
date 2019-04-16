@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+# Go get wrapper
+
+target="$1"
+
+np="$GOPATH/src/$target"
+
+if ! [ -e "$GOPATH" ]; then
+    go get -u "$target"
+fi
+
+cd "$np"
+CWD="$np" zsh

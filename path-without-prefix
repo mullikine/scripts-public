@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+local prefix="$1/"
+shift
+local arg
+for arg in "$@"
+do
+    echo "${arg#$prefix}"
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# eval "sudo vim -u NONE -c \"set mouse=a\" $CMD"
+# eval "sudo -E env "PATH=$PATH" v $CMD"
+
+sudo -E env "PATH=$PATH" v -s "$@"

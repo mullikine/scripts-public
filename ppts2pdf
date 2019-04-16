@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+shopt -s nullglob
+
+# for fp in $(glob '*.pdf'); do
+for fp in *.pdf; do
+    fn=$(basename "$fp")
+    dn=$(dirname "$fp")
+    ext="${fn##*.}"
+    mant="${fn%.*}"
+    
+    if ! test -f "${mant}.txt"; then
+        # pdf2txt "$fp" > "${mant}.txt"
+        for i in *.ppt; do conv "$i"; done
+    fi
+done

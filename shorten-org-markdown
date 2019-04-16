@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# Really want to write this
+
+sed '/# Table of Contents/,/^<a id=/d' | sed -z 's/\n\n<a id=[^ ]\+a>\n//g' | sed -z 's/^\n\+//'

@@ -1,0 +1,35 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# options might include
+# - ignore .git -- default true
+# - copy depth -- default 1
+
+dn1="$1"
+rd1="$(realpath "$dn1" | u dirsuffix)"
+dn2="$2"
+rd2="$(realpath "$dn2" | u dirsuffix)"
+
+td_dir="$(mktemp -t -d td_dir1XXXXXX || echo /dev/null)"
+trap "rmdir \"$td_dir\" 2>/dev/null" 0
+
+if [ -d "$rd1" ] && [ -d "$rd2" ]; then
+
+    # the slash is added earlier
+    rsync -rtlphx --exclude='.git/' "$rd1" "$td_dir"
+    cd "$td_dir"
+
+    tm-split-here -h
+
+    git init
+    git add -A .
+    git commit -m "$dn1"
+    rsync -rtlphx --exclude='.git/' "$rd2" "$td_dir"
+    git add -A .
+    git commit -m "$dn2"
+    magit
+    rm -rf "$td_dir"
+
+    CWD="$td_dir" zsh
+fi

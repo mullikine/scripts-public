@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+while read url; do
+    odn gh-get-redirect "$url" | awk1
+done

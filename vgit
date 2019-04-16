@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+path="$1"
+
+path="$(printf -- "%s" "$path" | github-url-to-file-path)"
+
+v "$path"

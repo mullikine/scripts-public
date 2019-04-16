@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# e -D spacemacs c -e "(ielm)(delete-other-windows)"
+
+sp -ic ielm

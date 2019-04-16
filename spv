@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#cmd="sp -e \"(spacemacs/toggle-holy-mode-off)\" $CMD"
+
+sp -e "(enable-evil)" "$@"

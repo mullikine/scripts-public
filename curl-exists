@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# if curl-exists "$@" "$last_arg"; then
+    # curl "$@" "$last_arg"
+# fi
+
+! curl -I 2>/dev/null "$@" | head -1 | grep 404 >/dev/null

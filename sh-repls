@@ -1,0 +1,32 @@
+#!/bin/bash
+export TTY
+
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+2  xpti2
+3  xpti3
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    2) cmd="tm sel localhost_current_repls:xpti2" ;;
+    3) cmd="tm sel localhost_current_repls:xpti3" ;;
+
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+export OPTIONS="$-"
+
+export BASH_ENV="$HOME/.bashrc"
+# export BASHOPTS=$BASHOPTS:xtrace
+
+# BASHOPTS=$BASHOPTS:xtrace test-export-options-subshell
+test-export-options-subshell

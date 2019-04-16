@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+: ${field:="1"}
+: ${delim:="[\t ]+"}
+
+while getopts -- f:d: opt &>/dev/null; do
+case $opt in
+    f)  field="$OPTARG";;
+    d)  delim="$OPTARG";;
+    -)  break ;;
+esac
+done
+shift "$((OPTIND-1))"
+
+pattern="$1"
+pattern="$(printf -- "%s" "$pattern" | bs /)"
+
+#printf -- "%s\n" "$pattern"
+#printf -- "%s\n" "$field"
+#printf -- "%s\n" "$delim"
+
+awk -F "$delim" "match(\$$field, /$pattern/) { print \$0; system(\"\")}"

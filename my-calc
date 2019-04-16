@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+# aka. mc
+
+opt="$1"
+shift
+case "$opt" in
+    colors) {
+        colortrans.py $1
+        shift
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

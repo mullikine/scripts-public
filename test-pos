@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    if test "$ARG" = "-4"; then
+        set -- "${@:1:i-1}" "${@:i+1}"; (( i-- )) # this does not remove it if it's the last element
+    fi
+done
+
+echo "$@"

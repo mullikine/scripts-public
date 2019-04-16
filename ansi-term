@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# This might actually work if I had the q script. I have to remake it.
+
+cmd="$1"; : ${cmd:="."}
+
+cmd="$(p "$cmd" | qne)"
+
+# lit "(progn (ansi-term \"$cmd\")(delete-other-windows))"
+# exit 0
+
+# Unfortunately there is no function that starts an 256 color terminal
+# that allows command parameters. Until then,
+# I do not yet know how to bind to single buffer's kill hook to quit
+# emacsclient using (delete-frame)
+# (define-key term-mode-map (kbd \"q\") '(lambda() (interactive) (kill-buffer) (delete-frame) ))
+
+e -D spacemacs c -e "(my-terminal-run \"$cmd\")(delete-other-windows)"

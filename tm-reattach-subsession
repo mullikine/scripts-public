@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+# dir basename
+dbn="$1"
+dbn="$(printf -- "%s" "$dbn" | xargs -l1 basename)"
+
+sesson_name="$(tmux display -p "#{session_name}")"
+
+cd "$dbn"; TMUX= tmux attach -t "${sesson_name}_${dbn}:"

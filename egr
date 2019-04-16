@@ -1,0 +1,43 @@
+#!/bin/bash
+
+( hs "$(basename "$0")" "$(ps -o comm= $PPID)" "-->" "$@" 0</dev/null ) &>/dev/null
+
+# This might actually work if I had the q script. I have to remake it.
+
+sn="$(basename "$0")"
+
+: ${lucky:=""}
+case "$sn" in
+    egl|google-lucky|gr-lucky) {
+        lucky=y
+    }
+    ;;
+
+    *)
+esac
+
+: ${lucky:=""}
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -l|-lucky) {
+        lucky=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+query="$(cmd "$@")"; : ${query:=""}
+
+engine=google
+if test "$lucky" = "y"; then
+    # query+="&btnI"
+    engine=google-lucky
+fi
+
+if ! pc -e "(dired $(aqf "$query"))"; then
+    # Can't put (delete-frame) here
+    # egr http code 500
+    me -e "(engine/search-$engine $(aqf "$query"))" && exit
+fi

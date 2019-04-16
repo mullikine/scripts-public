@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+exec &>/dev/null
+
+cd $HOME/programs/telegram/Telegram
+
+# ns "Do not use telegram"
+
+# https://telegram.me/cclsp
+
+./Telegram "$@" & disown

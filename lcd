@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+cd "$(locate "$1" | head -n 1 | u dn)"
+
+CWD="$(pwd)" zsh

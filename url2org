@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+url="$1"
+
+curl "$url" | html2org

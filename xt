@@ -1,0 +1,74 @@
+#!/bin/bash
+
+exec 2>/dev/null
+
+# Example:
+# xt tm ns overview $NOTES/scratch "e $NOTES/scratch/overview.org"
+
+xrdb -merge ~/.Xresources; xrdb -load ~/.Xresources
+
+DETACH=n
+FONT_SIZE=8
+FONT_SIZE=6
+use_term=xterm
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -d) {
+        DETACH=y
+        shift
+    }
+    ;;
+
+    -b) {
+        # "10" # a readable size but it's not great for reading pds
+        # "11" # this is for reading pdfs, it seeds to be big
+
+        FONT_SIZE=12
+        use_term=gnome
+        shift
+    }
+    ;;
+
+    -h) {
+        FONT_SIZE=13
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CMD="$(cmd "$@")"
+
+if [ -z "$CMD" ]; then
+    CMD=bash
+fi
+
+export SHELL=/bin/bash 
+
+
+
+# default font
+# xterm*faceName: Monospace:style=Bold:antialias=false
+# !!xterm*faceName: terminus
+# xterm*boldFont: xft:Monospace:pixelsize=20:style=bold
+
+
+
+# This means xterm uses bash instead of sh. If something in
+# .shell_environment causes an error, sh will not run CMD.
+
+if test "$DETACH" = "y"; then
+    set -m
+
+    if test "$use_term" = "gnome"; then
+        gnome-terminal --hide-menubar -e "$CMD" & disown
+    else
+        xterm -ls -fs "$FONT_SIZE" -e ". $HOME/.xterm-sh-rc; $CMD" & disown
+    fi
+else
+    if test "$use_term" = "gnome"; then
+        gnome-terminal --hide-menubar -e "$CMD"
+    else
+        xterm -ls -fs "$FONT_SIZE" -e ". $HOME/.xterm-sh-rc; $CMD"
+    fi
+fi

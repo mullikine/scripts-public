@@ -1,0 +1,47 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+fn=$(basename "$fp")
+dn=$(dirname "$fp")
+ext="${fn##*.}"
+mant="${fn%.*}"
+shift
+
+# This worked! for the brady bunch
+yt="$(p "$fp" | sed -n '/\(youtube.com\|youtu\.be\)/p')"
+if [ -n "$yt" ]; then
+    ext=yt
+fi
+
+echo
+printf -- "%s\n" "$mant" | hls -i -b dgrey -f yellow ".*"
+case "$ext" in
+    webm|mp3|m4a|mp4|mkv) {
+        cvlc "$fp" &>/dev/null
+    }
+    ;;
+
+    yt) { # this is a youtube url
+        # minitube "$fp" # doesn't work. never use this
+
+        # vlc still has problems
+        # /usr/bin/vlc --ignore-config -I dummy --play-and-exit --novideo "$fp"
+
+        # Download and play
+        # It could be an org mode link, so use xurls
+        path="$(printf -- "%s" "$fp" | xurls | head -n 1)"
+
+        yt -a "$path"
+    }
+    ;;
+
+    mid|MID) {
+        # timidity uses stdout (not stderr), but it doesn't like
+        # being piped
+        timidity "$fp"
+    }
+    ;;
+
+    *)
+esac

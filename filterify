@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+# Turn a "bind 1" script into a filter script
+
+input="$(cat)"
+
+"$@" "$input"

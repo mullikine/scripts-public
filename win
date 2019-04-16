@@ -1,0 +1,354 @@
+#!/bin/bash
+export TTY
+
+# All things window manager
+
+opt="$1"
+shift
+
+CMD="$(cmd "$@")"
+
+case "$opt" in
+    xt|xterm) {
+        #xterm -tn xterm-256color
+        xt -b
+    }
+    ;;
+
+    ruler) {
+        screenruler
+    }
+    ;;
+
+    lock) {
+        lock.sh
+    }
+    ;;
+
+    recompile-xmonad) {
+        xmonad --recompile
+        xmonad --restart
+    }
+    ;;
+
+    mail) {
+        notify-send "$opt :: NOT IMPLEMENTED"
+
+        # ff mail
+    }
+    ;;
+     
+    browser) {
+        chrome
+    }
+    ;;
+
+    music|music-player) {
+        # Change this to a tmux command line one
+
+        tm -te -d spv "cvlc $CMD"
+
+        # eval "cvlc -nw $CMD"
+    }
+    ;;
+
+    media-player) {
+        vlc "$@"
+    }
+    ;;
+
+    get-name) {
+        xdotool getwindowfocus getwindowname
+    }
+    ;;
+
+    get-wid) {
+        :
+
+        # xmonad doesn't support this
+        # xdotool getwindowfocus getwindowname
+    }
+    ;;
+    
+    turn-off-capslock) {
+        # py i xlib
+        read -r -d '' pycode <<-'EOF'
+from ctypes import *
+X11 = cdll.LoadLibrary("libX11.so.6")
+display = X11.XOpenDisplay(None)
+X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0))
+X11.XCloseDisplay(display)
+EOF
+
+        python3 <<<"$pycode"
+    }
+    ;;
+
+    get-wid-under-cursor-python) {
+        # py i xlib
+        read -r -d '' pycode <<-'EOF'
+from Xlib.display import Display
+
+display = Display()
+window = display.screen().root
+result = window.query_pointer()
+
+print(result.child.id)
+EOF
+
+        python3 <<<"$pycode"
+    }
+    ;;
+
+    get-wid-under-cursor) {
+        # This is of the window under the cursor, but I want the active
+        # window
+        xdotool getmouselocation --shell | grep WINDOW | c field -d '=' 2
+    }
+    ;;
+
+    get-winid-by-pid) {
+        findpid="$1"
+
+        known_windows=$(xwininfo -root -children|sed -e 's/^ *//'|grep -E "^0x"|awk '{ print $1 }')
+
+        for id in ${known_windows}
+        do
+            xp=$(xprop -id $id _NET_WM_PID)
+            if test $? -eq 0; then
+                pid=$(xprop -id $id _NET_WM_PID|cut -d'=' -f2|tr -d ' ')
+
+                if test "x${pid}" = x${findpid}
+                then
+                    echo "Windows Id: $id"
+                fi
+            fi
+        done
+    }
+    ;;
+
+    ie|image-editor) {
+        path="$(p "$1" | q)"
+        tm -S -tout spv -zsh "eval \"\$(resize)\"; unbuffer timg $path | tless -rS"
+        # eval "fehdf $CMD"
+
+        # fehdf -- look on ace for this
+    }
+    ;;
+
+    ae|archive-editor) {
+        tm n "$opt :: NOT IMPLEMENTED"
+
+        # ext rar     = tmux-show-archive.sh "$1"
+    }
+    ;;
+
+    mixer) {
+        xt tm ns -np -s -n alsamixer -c / alsamixer
+
+        # pamixer
+    }
+    ;;
+     
+    control-center) {
+        unity-control-center
+    }
+    ;;  
+
+    nw) {
+        xt tm ns -args calc / calc
+    }
+    ;;
+
+    calc|calculator) {
+        xt tm ns calc / calc
+    }
+    ;;
+
+    edit-clipboard) {
+        xt tm ns clipboard / vim
+    }
+    ;;
+
+    capture-text) {
+        opt="$1"
+        shift
+
+        dir=$DUMP$HOME/notes2018/ws/screenshots
+        cd "$dir"
+        tf_image="$(nix tf $(date-ts)_screen png "$dir" || echo /dev/null)"
+        scaled_image="$(nix tf screen_scaled png || echo /dev/null)"
+
+        case "$opt" in
+            screen) {
+                import "$tf_image"
+            }
+            ;;
+
+            root) {
+                import -window root "$tf_image"
+            }
+            ;;
+
+        esac
+
+        if ! test "$?" -eq "0"; then
+            exit 0
+        fi
+
+        if ! test -s "$tf_image"; then rm "$tf_image"; fi
+
+        # scaled_image
+        # 500 didn't really have much of an effect
+        convert "$tf_image" -scale 300% "$scaled_image"
+
+        tesseract "$scaled_image" stdout -l eng -psm 3 > "${tf_image}.txt"
+
+        cat "${tf_image}.txt" | remove-leading-and-trailing-spaces.sh | remove-leading-and-trailing-newlines.sh | s chomp | c ascify | xc -i
+
+        if ! test -s "${tf_image}.txt"; then rm "${tf_image}.txt"; fi
+
+        exit $?
+    }
+    ;;
+
+    screenshot) {
+        opt="$1"
+        shift
+
+        dir=$DUMP$HOME/notes2018/ws/screenshots
+        cd "$dir"
+        tf_image="$(nix tf $(date-ts)_screen png "$dir" || echo /dev/null)"
+        scaled_image="$(nix tf screen_scaled png || echo /dev/null)"
+
+        case "$opt" in
+            screen) {
+                import "$tf_image"
+            }
+            ;;
+
+            root) {
+                import -window root "$tf_image"
+            }
+            ;;
+
+        esac
+
+        if ! test "$?" -eq "0"; then
+            exit 0
+        fi
+
+        xt -d tm ns -np -s -n screenshots -c "$dir" ranger
+
+        if ! test -s "$tf_image"; then rm "$tf_image"; fi
+
+        # scaled_image
+        # 500 didn't really have much of an effect
+        convert "$tf_image" -scale 300% "$scaled_image"
+
+        tesseract "$scaled_image" stdout -l eng -psm 3 | c ascify > "${tf_image}.txt"
+
+        if ! test -s "${tf_image}.txt"; then rm "${tf_image}.txt"; fi
+
+        exit $?
+        
+        # screenshot.sh
+        # import -window root ~/rs.png
+    }
+    ;;
+
+    edit-xmonad-config) {
+        xt tm ns xmonad-config / "vim $HOME/.xmonad/xmonad.hs"
+    }
+    ;;
+
+    inv) {
+        xprop -f WM_CLASS 8s -set WM_CLASS 'compton-invert'
+        sleep 0.1
+        xdotool click 1
+    }
+    ;;
+
+    uninv) {
+        xprop -f WM_CLASS 8s -remove WM_CLASS
+        sleep 0.1
+        xdotool click 1
+    }
+    ;;
+
+    xterm-tmux) {
+        # tm start # I can put this here but I cannot put new window creation into start
+        tm xta "$@"
+    }
+    ;;
+
+    xterm-tmux-huge) {
+        tm xta -h localhost:
+    }
+    ;;
+
+    nvim-tmux) {
+        xt -b nvc -2 tmux attach -t localhost:
+    }
+    ;;
+
+    vt100-tmux) {
+        xterm -ls -e "resize &> /dev/null; sleep 0.1; TERM=vt100rev tmux attach -t localhost:"
+    }
+    ;;
+
+    xterm-inv) {
+        bash -c "set -x; set -m; xterm -ls -e $(aq "resize &> /dev/null; sleep 0.1; TERM=xterm-256color tmux attach -t localhost:")& PIDX=\$!; sleep 0.1; xprop -id \$($HOME/local/bin/getwid.sh \$PIDX) -f WM_CLASS 8s -set WM_CLASS 'compton-invert';"
+    }
+    ;;
+
+    vt100-inv) {
+        # I think I broke 'reverse' in vt100
+        # DONE Should I let t100 keep its reverse so I have a choice when I
+        # want to use it? I don't want to blanket-ban reverse.
+        # $HOME/notes2018/ws/terminfo/new/changes.diff
+        # I can't see selected text
+        bash -c "set -x; set -m; xterm -ls -e $(aq "resize &> /dev/null; sleep 0.1; TERM=vt100rev tmux attach -t localhost:")& PIDX=\$!; sleep 0.1; xprop -id \$($HOME/local/bin/getwid.sh \$PIDX) -f WM_CLASS 8s -set WM_CLASS 'compton-invert';"
+
+        xprop -f WM_CLASS 8s -set WM_CLASS 'compton-invert'
+        sleep 1
+        xdotool click 1
+    }
+    ;;
+
+    dmenu) {
+        dmenu_run -fn "-*-fixed-*-*-*-*-20-*-*-*-*-*-*-*" -nb "black" -nf "rgb:a0/a0/a0" -sb "rgb:00/80/80" -sf black
+    }
+    ;;
+
+    dmenu-new) {
+        $HOME/ws/xmonad/sendCommand 1
+        xdotool keyup Super_L
+        sleep 0.2
+        xdotool key F13 # picked up by tmux
+    }
+    ;;
+
+    unknown-menu) {
+        tm n "$opt :: NOT SURE WHAT THIS USED TO DO. tmux F15 or S-F3"
+
+        $HOME/ws/xmonad/sendCommand 1
+        xdotool keyup Super_L
+        sleep 0.1
+        xdotool key F15
+    }
+    ;;
+
+    ffdmenu) {
+        # Switch to workspace 1 and create a new fzf for selecting aa
+        # firefox profile.
+
+        $HOME/ws/xmonad/sendCommand 1
+        xdotool keyup Shift_L Super_L
+        sleep 0.1
+        xdotool key F14
+    }
+    ;;
+
+    *)
+esac

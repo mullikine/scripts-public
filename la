@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# language
+
+# ;pack;.sh;case
+opt="$1"
+case "$opt" in
+    first)
+    ;;
+
+    second) {
+    }
+    ;;
+    *)
+esac

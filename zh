@@ -1,0 +1,85 @@
+#!/bin/bash
+export TTY
+
+# Show schema for document
+
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -ft*) { # Because "$1" == "-ft kotlin", when used in shebang
+        file_type="${opt##* }"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+fp="$1"
+shift
+
+rp="$(realpath "$fp")"
+dn="${rp%/*}"
+
+first_line="$(head -n 1 "$fp")"
+
+bn="$(basename "$rp")"
+
+fn=$(basename "$rp")
+ext="${fn##*.}"
+mant="${fn%.*}"
+
+read first_line < "$rp"
+
+if [ -z "$file_type" ]; then
+    file_type="$ext"
+fi
+
+# tm -d dv "$file_type"
+
+case "$fn" in
+    pl-flow-*) {
+        file_type=json
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+case "$first_line" in
+    '{') {
+        file_type=json
+    }
+    ;;
+
+    *)
+esac
+
+case "$file_type" in
+    json) {
+        cat "$rp" | jq-showschema | v
+        exit 0
+    }
+    ;;
+
+    *) {
+        :
+    }
+    ;;
+esac
+
+if [ -f "$1" ]; then
+    {
+        lit "This must compile and run"
+        echo
+        echo
+        cat "$1" 
+    } | less
+    exit 0
+fi
+
+lit "$1" | less

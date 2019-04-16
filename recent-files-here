@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+days_ago=0
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -da|-days-ago) {
+        days_ago="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# Today's edited files, here
+
+find . -mindepth 1 -path '*/.git*' -prune -o -mtime -"$days_ago" -printf "%T@ %Tc %p\n" | sort -rn

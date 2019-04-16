@@ -1,0 +1,66 @@
+#!/bin/bash
+export TTY
+
+# For all things web
+# Youtube, etc.
+
+stdinexists() {
+    ! [ -t 0 ]
+}
+
+opt="$1"
+shift
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+case "$opt" in
+    title|get-title) {
+        url="$1"
+
+        if [ -z "$url" ] && stdinexists; then
+            url="$(cat)"
+        fi
+
+        case "$url" in
+            *onion*) { eval "my-torify wget -qO- $(aqf "$url")"; } ;;
+            *) { wget -qO- "$url"; } ;;
+        esac | \
+            perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)\s*<\/title/si' | recode html.. | c ascify
+    }
+    ;;
+
+    hn) {
+        eww "https://news.ycombinator.com"
+    }
+    ;;
+
+    g) {
+        eww "https://google.com"
+    }
+    ;;
+
+    mp|mirrorpage) {
+        eval "wget -pkE $CMD"
+    }
+    ;;
+
+    ms|mirrorsite) {
+        eval "wget -w1 -NpmkKEct1 $CMD"
+    }
+    ;;
+
+    mss|mirrorsubsite) {
+        eval "wget -np -rNpmkKEl 1 $CMD"
+    }
+    ;;
+
+    *)
+esac

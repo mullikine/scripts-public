@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    npm) {
+        sudo npm install -g npm
+    }
+    ;;
+
+    sort-paths) {
+        :
+    }
+    ;;
+
+    gq) {
+        sudo npm install -g graphqurl
+    }
+    ;;
+
+    *)
+esac

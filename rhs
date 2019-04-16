@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# rhs: Repository-hosting-services
+# Not right hand side
+
+opt="$1"
+shift
+case "$opt" in
+    github|gh) {
+        opt="$1"
+        shift
+        case "$opt" in
+            get) {
+                ci -t 86400 curl "https://api.github.com/search/repositories?q=tetris+language:assembly&sort=stars&order=desc"
+            }
+            ;;
+
+            template) {
+                :
+            }
+            ;;
+
+            *)
+        esac
+        :
+    }
+    ;;
+
+    gitlab|gl) {
+        opt="$1"
+        shift
+        case "$opt" in
+            get) {
+                url="$2"
+
+                curl --request GET --header "PRIVATE-TOKEN: 9koXpg98eAheJpvBs5tK" "$url"
+            }
+            ;;
+
+            template) {
+                :
+            }
+            ;;
+
+            *)
+        esac
+        :
+    }
+    ;;
+
+    *)
+esac
+

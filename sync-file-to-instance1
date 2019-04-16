@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+fp="$1"
+rp="$(realpath "$fp")"
+
+scp "$rp" shane@instance-1:"$rp"

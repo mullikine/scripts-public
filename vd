@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+extra_commands="silent! echom"
+
+# This is zippy
+# extra_commands+="|windo call GeneralSyntax()"
+# This is slow
+# extra_commands+="|windo call GeneralSyntax()|au BufEnter * call GeneralSyntax()"
+
+# I just needed to finish it all off with a redraw! (note the !)
+# windo set nofoldenable
+# windo normal! zr
+# windo set foldmethod=diff foldenable foldminlines=0
+cmd="$HOME/local/bin/vimdiff -c \"set noswapfile\" -c \"syntax off\" -c $(aqf "$extra_commands") -c \"wincmd w | windo set foldmethod=diff foldenable foldminlines=0\" -c \"normal! zM\" -c \"redraw!\" -c 'norm ]c[c' $CMD"
+
+# doesn't work
+# cmd="$HOME/local/bin/vimdiff -c \"set noswapfile\" -c \"syntax off\" -c \"normal! \"  $CMD"
+# cmd="$HOME/local/bin/vimdiff -c \"set noswapfile\" -c \"syntax off\" -c \"wincmd w | wincmd w | wincmd w\" $CMD"
+#cmd="$HOME/local/bin/vimdiff -c \"set noswapfile\" -c \"syntax off\" -c \"autocmd BufEnter exec 'wincmd w'\" $CMD"
+# cmd="$HOME/local/bin/vimdiff -c \"set noswapfile\" -c \"syntax off\" -c \"wincmd w\" -c \"normal! \"  $CMD"
+
+eval "$cmd"

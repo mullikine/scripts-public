@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+exec &>/dev/null
+
+cd $DUMP/downloads/tor-browser_en-US
+./start-tor-browser.desktop & disown

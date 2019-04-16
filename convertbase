@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+from="$1"
+: ${from:="10"}
+shift
+
+to="$1"
+: ${to:="10"}
+shift
+
+awk1 | while IFS=$'\n' read -r line; do
+    ruby<<EOF | uq -l
+p "$line".to_i($from).to_s($to)
+EOF
+done

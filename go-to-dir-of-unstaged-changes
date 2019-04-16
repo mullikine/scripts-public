@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+dp="$(git-list-untracked | sort-by-mtime | head -n 1 | u dn | u rp)"
+if [ -z "$dp" ]; then
+    dp="$(git-list-untracked | sort-by-mtime | add-prefix "$(vc root)/" | head -n 1 | u dn | u rp)"
+fi
+
+if [ -n "$dp" ]; then
+    echo "$dp"
+    cd "$dp"
+    CWD="$dp" zsh
+else
+    echo "No files changed unstaged or HEAD\^!" 1>&2
+fi
+

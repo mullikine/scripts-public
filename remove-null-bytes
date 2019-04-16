@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+python -c 'import sys; sys.stdout.write(sys.stdin.read().replace("\0", ""))'

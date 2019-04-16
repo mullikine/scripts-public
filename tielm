@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd "$@")"
+
+# cmd="/usr/bin/xterm -ls -en en_US.UTF-8 $CMD"
+# eval "$cmd"
+
+# x -d -tmc "ielm" -nto -e "ELISP>" -e "IELM:run" -s "$CMD" -scc m -s1 -a
+# x -d -tmc "ielm" -nto -e "ELISP>" -s "$CMD" -scc m -s1 -a
+# x -d -tmc "ielm" -nto -e "ELISP>" -s "$CMD" -c m -s1 -a
+
+x -d -tmc "ielm" -nto -e "ELISP>" -c n -s1 -s "$CMD" -c m -s1  -a

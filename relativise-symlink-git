@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+# Relativises a symlink using the root of the repo as a common
+# intersetion
+
+fp="$1"
+if [ -z "$fp" ]; then
+    exit 1
+fi
+
+root="$(vc root)"
+
+! test -n "$root" && exit 1
+
+if [ -h "$fp" ]; then
+    lp="$(readlink "$fp")"
+    if pl "$lp" | grep -q -P '^/'; then
+        from_top_new_fp="$(realpath "$lp" | remove-prefix "$root/")"
+        current_diff_root="$(p "$(pwd)" | remove-prefix "$root/")"
+        up_path="$(p "$current_diff_root" | sed 's/[^/]\+/../g')"
+        relp="$up_path/$(p "$from_top_new_fp" | remove-prefix "$root")"
+        ln -sf "$relp" "$fp"
+    fi
+fi
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+if test -f "stack.yaml"; then
+    args+=" --stack-yaml=stack.yaml "
+fi
+
+stack $args build || stack $args solver

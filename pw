@@ -1,0 +1,22 @@
+#!/bin/bash
+
+newdir="$NOTES/personal/passwords/"
+
+ans="$(qa -. edit \
+          -d pwd \
+          -y pw \
+          -n pwd)"
+
+case "$ans" in
+    edit) cmd="v $0" ;;
+    pwd) { pwd; exit 0; } ;;
+    pw) { 
+        cd "$newdir"
+        export CWD="$newdir"
+        zsh
+        exit 0
+    }
+    ;;
+esac
+
+eval "$cmd"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sudo dmidecode -s system-product-name

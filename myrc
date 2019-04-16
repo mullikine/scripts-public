@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# github_token() {
+#     cat $HOME/.myrc.yaml | yq -r '.github_token'
+# 
+#     return 0
+# }
+
+cat $HOME/.myrc.yaml | yq -r "$@"

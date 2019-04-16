@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+query="$(p "$input" | urlencode)"
+
+url="https://explainshell.com/explain?cmd=$query"
+
+echo "$url"
+
+exec </dev/tty
+eww "$url"

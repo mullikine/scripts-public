@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+. $HOME/notes2018/ws/sourcegraph/library.sh
+
+opt="$1"
+shift
+case "$opt" in
+    run) {
+        run_server
+        :
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

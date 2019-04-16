@@ -1,0 +1,40 @@
+#!/bin/bash
+export TTY
+
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+clip="$(xc -)"
+lit "clipboard: $(aqf "$clip")"
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+o  open
+c  copy
+g  google
+O  v $(which open)
+b  basenameify
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    o) cmd="tm rs -args open $(aqf "$clip")" ;;
+    g) cmd="tm rs -args egr $(aqf "$clip")" ;;
+    o) cmd="xcit -i $(aqf "$clip")" ;;
+    O) cmd="tspv v $(which open)" ;;
+    b) cmd="basename $(aqf "$clip") | xc -n -i" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

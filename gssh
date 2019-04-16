@@ -1,0 +1,13 @@
+#!/bin/bash
+
+HOST="$1"
+
+if [[ $HOST = *"@"* ]] ; then
+    USER=$(echo $HOST | cut -d'@' -f1)
+    HOST=$(echo $HOST | cut -d'@' -f2)
+fi
+
+gcloud config list | grep 'Your active'
+ZONE=$(gcloud compute instances list |grep -E "^$HOST[[:space:]]" | awk '{print $2}')
+echo zone: $ZONE
+gcloud compute ssh --zone=$ZONE "$@"

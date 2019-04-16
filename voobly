@@ -1,0 +1,14 @@
+#!/bin/bash
+
+exec 2>/dev/null
+
+export WINEPREFIX=$HOME/.local/share/wineprefixes/aohd32
+
+# cd $HOME/.local/share/wineprefixes/aohd32/drive_c/Program\ Files/Steam/SteamApps/common/Age2HD
+
+cd $DL
+
+wine explorer /desktop=AOHD,1280x800 voobly-v2.2.5.59.exe $@
+
+# cd ~/.local/share/wineprefixes/aohd32/drive_c/Program\ Files/Steam
+# wine explorer /desktop=AOHD,1280x800 Steam.exe $@

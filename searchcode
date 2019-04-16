@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# If I want I can make this get the raw links to the search results and
+# fetch the raw links, opening them in emacs, and then running
+# mult-occur, instead of a very simple elinks-dump
+
+awk 1 | while IFS=$'\n' read -r line; do
+    query="$(lit "$line" | s urlencode)"
+
+    elinks-dump "https://searchcode.com/?q=$query"
+    # lit "https://searchcode.com/?q=$query"
+done

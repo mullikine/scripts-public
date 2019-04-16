@@ -1,0 +1,21 @@
+#!/bin/bash
+
+exec 2>/dev/null
+sudo umount -l Logs
+sudo umount /dev/ram9
+rm -rf Logs
+mkdir Logs
+sudo mkfs -f -q /dev/ram9 8192
+sudo mount /dev/ram9 Logs
+sudo chmod 777 Logs
+
+export WINEPREFIX=$HOME/.local/share/wineprefixes/aohd32
+
+# cd $HOME/.local/share/wineprefixes/aohd32/drive_c/Program\ Files/Steam/SteamApps/common/Age2HD
+
+cd ~/.local/share/wineprefixes/aohd32/drive_c/Program\ Files/Steam
+wine explorer /desktop=AOHD,1280x800 Steam.exe $@
+
+rm *.STEAMSTART
+rm *.mdmp
+sudo umount /dev/ram9

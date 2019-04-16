@@ -1,0 +1,31 @@
+#!/bin/bash
+export TTY
+
+# The arguments should have their strings evaluated (escape codes)
+# before put into eval
+
+sn="$(basename "$0")"
+
+tm n "$sn :: NOT IMPLEMENTED"
+
+exit 0
+
+# But it already works with sed
+echo -e "\t" | sed "s/\t/-/"
+ev sed "s/\t/-/"
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -E) {
+        DO_EXEC=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test "$DO_EXEC" = "y"; then
+    eval "$(echo -e "$1")"
+else
+    "$@"
+fi

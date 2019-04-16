@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+cmd="/usr/bin/clisp --silent -q $CMD"
+
+# Alternative rc files can be specified
+# cmd="/usr/bin/clisp -i $HOME/.clisprc $CMD"
+
+eval "$cmd"

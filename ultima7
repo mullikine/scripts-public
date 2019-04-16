@@ -1,0 +1,5 @@
+#!/bin/bash
+cd $HOME/dump$HOME/notes2018/programs/dosbox
+# -fullscreen
+# dosbox -conf "configs/keen.conf" -c "mount c $HOME/dump$HOME/notes2018/programs/dosbox/c" -c C: -c "cd U7" -c "mixer MASTER 20:20" -c "INSTALL.EXE" -c "exit"
+dosbox -conf "configs/keen.conf" -c "mount c $HOME/dump$HOME/notes2018/programs/dosbox/c" -c C: -c "cd U7" -c "mixer MASTER 20:20" -c "DOSBOX.BAT" -c "exit"

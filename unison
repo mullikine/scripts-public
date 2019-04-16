@@ -1,0 +1,30 @@
+#!/bin/bash
+export TTY
+
+# remember
+# v unison
+
+# This script should contain all commands for keeping things in sync
+# between different machines
+
+# It should use both rsync and unison, as well as anything else I may
+# need
+
+# I should also use it as a scratch pad for writing down things I need
+# to sync
+
+# laptop to gc
+# $HOME/scripts/sh-xt
+
+# Use this
+# https://www.cis.upenn.edu/~bcpierce/unison/index.html
+
+rs_gc_to_laptop() {
+    # Not as much room on laptop. Don't sync everything
+
+    rsync -aAXvc --ignore-times --rsync-path="sudo rsync" instance-1:$HOME/notes2018/ ~/notes2018
+}
+
+rs_laptop_to_gc() {
+    rsync -aAXvc --ignore-times --rsync-path="sudo rsync" $HOME/ instance-1:$HOME
+}

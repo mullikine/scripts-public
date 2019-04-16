@@ -1,0 +1,152 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# This is the place for unix-like programs but ones with terminal
+# interfaces
+
+# Related:
+# $HOME/scripts/u
+
+# If stout is a tty
+is_stdout_tty() {
+    [[ -t 1 ]]
+}
+
+opt="$1"
+shift
+case "$opt" in
+    rtl|rt-locate|realtime-locate) {
+        notify-send "$opt :: NOT IMPLEMENTED"
+
+        rtcmd.py -c "/usr/bin/locate -i -P -r | less -S"
+    }
+    ;;
+
+    vipe) {
+        tm sph vipe
+    }
+    ;;
+    
+    # This might not be very useful atm. What I reall need is to use
+    # " | f z" but for fzf to open the result in an editor if I want.
+    coe|cat-or-edit) {
+        # echo hi | f z
+        # echo hi | f z | cat
+
+        if is_stdout_tty; then
+            head -n 1 | xargs vim
+        else
+            cat
+        fi
+    }
+    ;;
+
+    fhp|find-here-path) {
+        # pattern="$1"
+
+        F find-no-git -i "$@"
+
+        # notify-send "$opt :: NOT IMPLEMENTED"
+    }
+    ;;
+
+    dp|delete-paths) {
+        # This script deletes paths given from stdin after asking if you are really sure.
+
+        #input="$(cat | mnm | c wrl qne)"
+        input="$(cat | mnm)"
+        # echo "$input" | tv &>/dev/null
+        files="$(printf -- "%s" "$input" | u dirsuffix)"
+        # printf -- "%s\0" "$input" | xargs -0 -L 1 lit
+
+        # lit "$files" | tm -S -tout nw v
+        # exit 0
+
+        prettied_files="$(printf -- "%s" "$input" | u dirsuffix | while read line; do
+        # printf -- "*%s*     " "$line"
+        printf -- "%s\n" "$line"
+        done
+        )"
+        
+        # | u dirsuffix | xargs printf -- "(%s) ")"
+        #prettied_files="$(lit "($input)")"
+        
+        # lit "$prettied_files" | tm -S -tout nw v
+        # exit 0
+
+        lastmessage="You are about to delete some files:\n$prettied_files"
+
+        # If not a tty but TTY is exported from outside, attach the tty
+        if test "$mytty" = "not a tty" && ! [ -z ${TTY+x} ]; then
+            lit "Attaching tty" 1>&2
+            exec 0<"$TTY"
+            exec 1>"$TTY"
+        else
+            # Otherwise, this probably has its own tty and only needs normal
+            # reattachment (maybe stdin was temporarily redirected)
+            exec </dev/tty
+        fi
+
+        if ! [[ -t 1 ]]; then
+            notify-send "No tty. Not proceeding."
+            lit "No tty. Not proceeding."
+            exit 0
+        fi
+
+        # dialog --title "PAUSE" "$@" --pause "$lastmessage" 20 70 5
+        # if ! [ "$?" -eq 0 ]; then
+        #     clear
+        #     lit "Cancelled"
+        #     exit 0
+        # fi
+
+        clear
+        printf -- "$lastmessage"
+        echo
+
+        if ! [ "$?" -eq 0 ]; then
+            lit "Not proceeding to delete files"
+            exit 0
+        fi
+
+        # Don't use dialog here because it uses the enter key
+        #dialog --title "YES/NO BOX" --clear \
+        #        --yesno "Are you sure?" 15 61
+
+
+        #notify-send "$(tty)"
+
+        # lit "$files" | tm -tout nw "vim -"
+
+        echo
+        lit "Unminimised:"
+        #lit "$files" | umn | nix rp # | s indent
+        lit "$files" | umn # | s indent
+        echo
+
+        lit "CWD: $(pwd)"
+        lit "Command: xargs rm -rf"
+        echo
+
+        if yn "Are you sure? "; then
+            # do dangerous stuff
+            # lit "$files" | umn | less
+            lit "$files" | umn | while read line; do
+                rm -rf "$line"
+            done
+            # lit "$files" | umn | tm -S -tout nw v
+            #lit "$files" | umn | xargs rm -rf
+            lit "... Done."
+            echo ls:
+            echo
+            ls
+        fi
+
+        retval=$?
+    }
+    ;;
+
+    *)
+esac

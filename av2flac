@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+last_arg="${@: -1}"
+fp="$last_arg"
+rp="$(realpath "$fp")"
+dn="$(dirname "$rp")"
+cd "$dn"
+bn="$(basename "$fp")"
+ext="${bn##*.}"
+fn="${bn%.*}"
+
+case "$ext" in
+    m4a|mp3) {
+        np="$dn/$fn.flac"
+        if ! [ -f "$np" ]; then
+            cd "$dn"
+            unbuffer ffmpeg -y -i "$bn" -f flac "$fn.flac" &>/dev/null
+        fi
+        mp="$dn/${fn}-mono.flac"
+        if ! [ -f "$mp" ]; then
+            cd "$dn"
+            # make it mono
+            # ffmpeg -y -i "$bn" -f flac -ac 1 "${fn}-mono.flac"
+            unbuffer ffmpeg -y -i "$bn" -f flac -ac 1 "${fn}-mono.flac" &>/dev/null
+        fi
+        printf -- "%s\n" "$mp"
+    }
+    ;;
+
+    *)
+esac

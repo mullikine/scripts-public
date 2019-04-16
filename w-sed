@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    w-sed) { f="$1"; } ;;
+    *) { f="$sn"; } ;;
+esac
+
+case "$f" in
+    remove-leading-blank-lines) { sed '/./,$!d'; } ;;
+    remove-trailing-blank-lines) { sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba'; } ;;
+    *) cat;;
+esac

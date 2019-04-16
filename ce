@@ -1,0 +1,160 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# make public one object
+# gsutil acl ch -u AllUsers:R gs://[BUCKET_NAME]/[OBJECT_NAME]
+
+# make public entire bucket
+# gsutil iam ch allUsers:objectViewer gs://[BUCKET_NAME]
+
+# 'gs://libertyprime-transcription$np'
+
+: ${GOOGLE_APPLICATION_CREDENTIALS:="$HOME/notes2018/personal/passwords/google-cloud/access-cloud-storage.json"}
+export GOOGLE_APPLICATION_CREDENTIALS
+
+cmd="/usr/bin/xterm -ls -en en_US.UTF-8 $CMD"
+
+opt="$1"
+shift
+
+
+last_arg="${@: -1}"
+if [ -e "$last_arg" ]; then
+    fp="$last_arg"
+    rp="$(realpath "$fp")"
+    dn="$(dirname "$rp")"
+    # echo "$storage_dir"
+    # exit 0
+    bn="$(basename "$fp")"
+    ext="${fp##*.}"
+    fn="${fp%.*}"
+fi
+
+case "$opt" in
+    mkp|mkpublic) {
+        opath="$1"
+        opath="$(realpath "$opath" | sed 's_^/media/__')"
+
+        # This worked, so there is no need for # | esc " "
+
+        gsutil acl ch -u AllUsers:R "gs://$opath"
+
+        opath="$(printf -- "%s" "$opath" | urlencode)"
+        printf -- "%s\n" "http://storage.googleapis.com/$opath"
+    }
+    ;;
+
+    pat) {
+        gcloud auth application-default print-access-token
+    }
+    ;;
+
+    stop-instances) {
+        # gcloud compute instances stop example-instance-1 example-instance-2
+        gcloud compute instances stop "$@" --zone=australia-southeast1-b
+        CMD="$(cmd "$@")"
+        notify-send "stopped $CMD"
+    }
+    ;;
+
+    start-instances) {
+        # gcloud compute instances stop example-instance-1 example-instance-2
+        gcloud compute instances start "$@" --zone=australia-southeast1-b
+    }
+    ;;
+
+    mount) {
+        vol_name="$1"
+
+        if [ -z "$vol_name" ]; then
+            exit 1
+        fi
+
+        dir="/media/$vol_name"
+
+        sudo mkdir -p "$dir"
+        sudo chown $USER "$dir"
+        sudo chgrp $USER "$dir"
+
+        gcsfuse "$vol_name" "$dir"
+    }
+    ;;
+
+    # ce store $HOME/versioned/git/config/finch
+    store) { # store this path in google storage
+        mount_name="$1"
+        shift
+
+        case "$mount_name" in
+            near) { mount_name="sea-near"; } ;;
+            cold) { mount_name="sea-cold"; } ;;
+            transcription) { mount_name="libertyprime-transcription"; } ;;
+            *)
+        esac
+
+
+        storage_dir="/media/$mount_name$dn"
+        mkdir -p "$storage_dir"
+
+        # fp="$(p "$fp" | u rmdirsuffix)"
+        fp="$(printf -- "%s" "$fp" | sed 's/\/$//')"
+
+        # set -x -v
+        # echo "rsync -rtlphx --progress \"$fp\" \"$storage_dir\""
+        rsync -rtlphx --progress "$fp" "$storage_dir"
+        exit 0
+    }
+    ;;
+
+    # $HOME/versioned/git/config/finch
+    near|cold) { # make a filepath near
+        CMD="$(
+        for (( i = 1; i < $#; i++ )); do
+            eval ARG=\${$i}
+            printf -- "%s" "$ARG" | q
+            printf ' '
+        done
+        eval ARG=\${$i}
+        printf -- "%s" "$ARG" | q
+        )"
+
+        eval "ce store $opt $CMD"
+
+        exit 0
+    }
+    ;;
+
+    transcribe) {
+        # ffmpeg -i 4.m4a -f flac 4.flac
+        np="$(av2flac "$rp" | xc -)"
+
+        ce store transcription "$np"
+
+        pat="$(gcloud auth application-default print-access-token)"
+
+        echo "transcribing 'uri':'gs://libertyprime-transcription$np'"
+
+        curl -s -H "Content-Type: application/json" \
+            -H "Authorization: Bearer "$pat \
+            https://speech.googleapis.com/v1p1beta1/speech:longrunningrecognize \
+            --data "{
+          'config': {
+            'encoding': 'flac',
+            'languageCode': 'en-US',
+            'enableWordTimeOffsets': false,
+            'enableAutomaticPunctuation': true,
+            'model': 'phone_call',
+            'useEnhanced': true
+          },
+          'audio': {
+            'uri':'gs://libertyprime-transcription$np'
+          }
+        }"
+    }
+    ;;
+
+
+    *)
+esac

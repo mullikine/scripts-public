@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+github-add-upstream
+
+cd "$(vc get-top-level)"
+updir="../$(vc upstream-name)"
+if [ -d "$updir" ]; then
+    cd "$updir"
+    pwd
+else
+    gc "$(vc upurl)"
+fi

@@ -1,0 +1,48 @@
+#!/bin/bash
+export TTY
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if is_tty; then
+    ( hs "$(basename "$0")" "$@" "#" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+fi
+
+from="$1"
+to="$2"
+
+interpretdate() {
+    q="$1"
+    q="$(printf -- "%s" "$q" | sed "s/^[0-9]\+$/@&/")"
+
+    case "$q" in
+        ''|*now*|*NOW*) {
+            # normally lowercase because elasticsearch
+            # can't change the case. see https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/date-math-expressions.html
+            # How can I change the case of certain strings?
+            # q="$(p "$q" | s lc)"
+            q="$(p "$q" | sed 's/day/d/')"
+            q="$(p "$q" | sed 's/min/m/')"
+            q="$(p "$q" | sed 's/month/M/')"
+            q="$(p "$q" | sed 's/year/y/')"
+            q="$(p "$q" | sed 's/week/w/')"
+            q="$(p "$q" | sed 's/hour/h/')"
+            q="$(p "$q" | sed 's/sec\(ond\)\?s\?/s/')"
+            echo "$q"
+        }
+        ;;
+
+        *) {
+            date-lucene -d "$q"
+        }
+        ;;
+    esac
+}
+
+from="$(interpretdate "$from")"
+to="$(interpretdate "$to")"
+
+
+printf -- "%s\n" "@timestamp:[ $from TO $to ]" | tee /dev/stderr

@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# I can also use the api to do this
+# https://products.wolframalpha.com/api/documentation/#output-parameter
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+# flatten out the query
+query="$@"
+
+ci mma "ExportString[WolframAlpha[$(aqf "$query"), $(aqf "XML")], $(aqf "XML")]" | xml2json

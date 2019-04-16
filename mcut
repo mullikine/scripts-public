@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+: ${field:="1"}
+: ${delim:="[\t ]+"}
+
+while getopts -- f:d: opt &>/dev/null; do
+case $opt in
+    f)  field="$OPTARG";;
+    d)  delim="$OPTARG";;
+esac
+done
+
+# echo "$field"
+# echo "$delim"
+
+awk -F "$delim" "{print \$$field}"

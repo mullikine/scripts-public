@@ -1,0 +1,404 @@
+#!/bin/bash
+# export TTY="$(tty)"
+
+
+# Kernel update broke fzf
+# https://github.com/junegunn/fzf/issues/1486#start-of-content
+
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+# free bindings
+# alt-q # taken
+# alt-x
+# alt-y
+# ctrl-alt-a
+# ctrl-alt-b
+# ctrl-alt-c # taken
+# ctrl-alt-d
+# ctrl-alt-e
+# ctrl-alt-f # taken
+# ctrl-alt-g
+# ctrl-alt-h
+# ctrl-alt-i
+# ctrl-alt-j
+# ctrl-alt-k
+# ctrl-alt-l
+# ctrl-alt-m
+# ctrl-alt-n
+# ctrl-alt-o
+# ctrl-alt-p
+# ctrl-alt-q
+# ctrl-alt-r
+# ctrl-alt-s
+# ctrl-alt-t
+# ctrl-alt-u
+# ctrl-alt-v
+# ctrl-alt-w
+# ctrl-alt-x # taken
+# ctrl-alt-y
+# ctrl-alt-z
+
+tf_input="$(nix tf fzf txt || echo /dev/null)"
+trap "rm \"$tf_input\" 2>/dev/null" 0
+
+last_arg="${@: -1}"
+
+: ${CWD:="$(pwd)"}
+
+if stdin_exists; then
+    cat > "$tf_input"
+else
+    if test -f "$last_arg"; then
+        set -- "${@:1:$(($#-1))}" # shift last
+        cat "$last_arg" > "$tf_input"
+    else
+        exit 0
+    fi
+fi
+
+# exec < <(tee "$tf_input")
+
+# exec < /dev/tty
+# bash -i
+
+# This is so we have LINES and COLUMNS to play with
+# eval `resize`
+
+# {q}  --  current query string
+#  {}  --  current file
+# {+}  --  selected files
+#          missing a way to select ALL the input. instead, capture the
+#          input into a variable. actually, capture to a file so fzf
+#          streams the input.
+
+#preview="lit {} | umn | xargs head -n $LINES"
+#preview="lit {} | fzf-scope -n $LINES"
+
+preview="fzf-scope"
+
+preview_hidden=y
+do_sort=y
+
+# preview_opts="right:30%"
+preview_opts="up:30%"
+
+minimise=n
+
+ANSI=n
+MULTI=y
+COMPLETE_WITH_PREVIEW=n
+
+do_top=y
+do_reverse=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -m) {
+        minimise=y
+        shift
+    }
+    ;;
+
+    -R) {
+        # rosie match all things
+        :
+    }
+    ;;
+
+    -C) {
+        handle_comments=y
+        ANSI=y
+        shift
+    }
+    ;;
+
+    -nm) {
+        MULTI=n
+        shift
+    }
+    ;;
+
+    -A) {
+        ANSI=y
+        shift
+    }
+    ;;
+
+    -p) {
+        preview_hidden=n
+        shift
+    }
+    ;;
+
+    -P) {
+        preview_hidden=n
+        preview_opts="right:50%"
+        shift
+    }
+    ;;
+
+    -pcomplete) {
+        COMPLETE_WITH_PREVIEW=y
+        shift
+    }
+    ;;
+
+    -rev|--reverse) {
+        do_reverse=y
+        shift
+    }
+    ;;
+
+    -nr|--noreverse) {
+        do_reverse=n
+        shift
+    }
+    ;;
+
+    --top) {
+        do_bottom=n
+        shift
+    }
+    ;;
+
+    --bottom) {
+        do_bottom=y
+        shift
+    }
+    ;;
+
+    -s) {
+        do_sort=y
+        shift
+    }
+    ;;
+
+    +s) {
+        do_sort=n
+        shift
+    }
+    ;;
+
+    -p|-pcmd) {
+        preview="fzf-scope -n $lines"
+        shift
+    }
+    ;;
+
+    -pscript) {
+        preview="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -r) {
+        preview_opts="right:50%"
+        shift
+    }
+    ;;
+
+    -rr) {
+        preview_opts="right:30%"
+        shift
+    }
+    ;;
+
+    -t) {
+        preview_opts="up:30%"
+        shift
+    }
+    ;;
+
+    -b) {
+        preview_opts="down:1"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+filter_in() {
+    {
+        if test "$minimise" = "y"; then
+            mnm
+        else
+            cat
+        fi
+    } | {
+        if test "$handle_comments" = "y"; then
+            hls -i -r -f orange '#.*'
+        else
+            cat
+        fi
+    } | {
+        if test "$do_reverse" = "y"; then
+            tac
+        else
+            cat
+        fi
+    }
+}
+
+filter_out() {
+    {
+        if test "$minimise" = "y"; then
+            umn
+        else
+            cat
+        fi
+    } | {
+        if test "$handle_comments" = "y"; then
+            strip-ansi | sed 's/#[^#]\+$//' | sed 's/\s\+$//'
+        else
+            cat
+        fi
+    }
+}
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    aq "$ARG"
+    printf ' '
+done
+eval ARG=\${$i}
+aq "$ARG"
+)"
+
+opts=""
+
+if test "$MULTI" = "y"; then
+    opts+=" -m "
+fi
+
+if test "$ANSI" = "y"; then
+    opts+=" --ansi "
+fi
+
+if ! test "$do_sort" = "y"; then
+    opts+=" +s "
+fi
+
+if ! test "$do_bottom" = "y"; then
+    opts+=" --reverse "
+fi
+
+if [ -n "$preview" ]; then
+    if test "$preview_hidden" = "y"; then
+        preview_opts="$preview_opts:hidden"
+    fi
+
+    opts+=" --preview=$(aqf "lit {} | $preview") --preview-window=$preview_opts "
+
+    # opts+="--preview=\"lit {} | umn | xargs head\" --preview-window=up:30%"
+    # opts+="--preview=\"lit {} | umn | xargs file\" --preview-window=down:1"
+fi
+
+bindings=""
+#bindings+="ctrl-a:select-all+accept,"
+bindings+="alt-a:select-all,"
+bindings+="f1:abort,"
+# bindings+="alt-f1:abort," # there is no alt-f1 annoyingly
+bindings+="alt-u:deselect-all,"
+bindings+="ctrl-k:kill-line,"
+bindings+="alt-k:jump,"
+bindings+="tab:toggle-preview,"
+
+# But right (and C-M-Right) is used to move along the pattern at the
+# top, not just the results list
+# bindings+="right:toggle,"
+bindings+="ctrl-alt-f:toggle,"
+bindings+="alt-z:toggle,"
+bindings+="ctrl-alt-x:up+toggle,"
+bindings+="ctrl-alt-c:down+toggle,"
+
+bindings+="up:up,"
+bindings+="down:down,"
+bindings+="ctrl-p:up+toggle,"
+bindings+="ctrl-n:down+toggle,"
+bindings+="change:top," # triggered whenever the query string is changed.
+# alt-0 doesn't work.
+# bindings+="alt-0:top,"
+bindings+="alt-t:top,"
+# No function to go to the last result
+# bindings+="alt-4:bottom,"
+
+# tf_input
+
+bindings+="alt-r:execute-silent(lit {+} | awk 1 | head -n 1 | u drn | tm -f -S -tout spv -xargs ranger),"
+bindings+="alt-o:execute-silent(lit {+} | awk 1 | head -n 1 | tm -f S -tout spv -xargs rifle),"
+bindings+="alt-l:execute-silent(lit {+} | tm -f -S -tout spv v),"
+bindings+="alt-e:execute-silent(lit {+} | tm -f -S -tout spv -xargs sp),"
+# I want ctrl-e to go to the end of the line
+# bindings+="ctrl-e:execute-silent(lit {+} | tm -f -S -tout sph -xargs sp),"
+bindings+="alt-v:execute-silent(lit {+} | tm -f -S -tout spv -xargs v),"
+bindings+="alt-x:execute-silent(lit {+} | tm -f -S -tout sph -xargs v),"
+# bindings+="ctrl-alt-v:execute-silent(lit {+} | tm -f -S -tout sph -xargs v),"
+bindings+="alt-q:execute-silent(lit {+} | tm -f -S -tout spv -xargs edit-with),"
+bindings+="alt-s:execute-silent(lit {+} | umn | u drn | xargs tm -d sph -c),"
+bindings+="alt-h:execute-silent(lit {+} | umn | u drn | xargs tm -d spv -c),"
+bindings+="alt-w:execute-silent(tm -f -d spv 'v '$tf_input),"
+# bindings+="alt-h:execute-silent(lit {+} | tm -f -S -tout sph -xargs v),"
+bindings+="alt-f:execute-silent(lit {+} | fzf-thing),"
+bindings+="alt-i:execute-silent(lit {+} | awk 1 | $preview | tm -f -S -i spv -noerror 'fzf -nm'),"
+
+# TODO scrape-file-fast.sh doesn't catch them all and scrape-files.sh is slow
+# bindings+="alt-y:execute-silent( lit '$preview' | scrape-files.sh | awk 1 | tm -f -S -i spv -noerror 'fzf -nm'),"
+bindings+="alt-p:execute-silent(lit {+} | fzf-thing)," # this should put the preview in a new window
+#bindings+="alt-1:execute-silent(lit {+} | fzf-thing)," # alt-1 does not work
+bindings+="alt-n:execute-silent(lit {+} | u fn | xc),"
+bindings+="alt-d:execute-silent(lit {+} | awk 1 | xargs -l1 dirname | xc -i -n),"
+bindings+="alt-g:execute-silent(lit {+} | awk 1 | xargs -l1 realpath | xc -i -n),"
+bindings+="alt-c:execute-silent(lit {+} | umn | s chomp | sed 's/#[^#]\+$//' | sed 's/\s\+$//' | xc -i -n),"
+bindings+="alt-m:execute-silent(lit {+} | mnm | s chomp | xc -i -n),"
+bindings+="alt-j:execute-silent(lit {+} | awk 1 | $preview | head -n 1 | s chomp | xc -i)," # copy first result of preview
+bindings="$(p "$bindings" | sed 's/.$//')"
+# bindings="$(p "$bindings" | sed 's/.$//' | qne)"
+
+# opts+=" --bind=$(apq "$bindings") "
+
+opts+=" --bind=$(aqfd "$bindings") "
+
+# pl "$opts" > /tmp/fsfargs.txt
+
+cmd="$HOME/source/git/fzf/bin/fzf --algo=v2 $opts $CMD"
+
+# pl "$cmd" | tv &>/dev/null
+
+# This does not allow us to catch fzf's error code
+# filter_in | eval "$cmd" | filter_out
+
+my_out="$(cat "$tf_input" | filter_in | eval "$cmd" | { if test $ANSI = y; then strip-ansi; else cat; fi; })"
+ret="$?"
+printf -- "%s" "$my_out" | filter_out
+exit "$ret"
+
+# exit 130 means cancelled
+
+#| {
+#    if test "$COMPLETE_WITH_PREVIEW" = "y"; then
+#        # filter through the preview command
+#        # Or instead of doing this, I can make a new binding
+#        # Both these options are difficult to make work. Instead, don't
+#        use the -pcomplete option
+#        :
+#    else
+#        cat
+#    fi
+#}
+
+# fzf --multi --preview='head -10 {+}'
+# git log --oneline | fzf --multi --preview 'git show {+1}'
+# e.g. fzf --preview='head -$LINES {}'
+# ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}" --header-lines=1
+
+# KEY BINDINGS
+# --bind
+# alt-c:
+
+# Create some bindings
+# This must not create an error
+# find-all-no-git.sh | fzf -p --multi

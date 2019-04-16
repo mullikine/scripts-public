@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+wlcmd="cat"
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -E) {
+        wlcmd="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+field="$1"
+: ${field:="url"}
+
+echo "select(any(.$field == \$whitelist[]; .))" 1>&2
+echo "select(any(.$field == \$whitelist[]\"; .))" 1>&2
+
+jq --argfile whitelist "$(eval "$wlcmd" | jq-load-list | tf json)" "select(any(.$field == \$whitelist[]; .))"
+
+# Not sure how to get this to work
+# jq --argfile whitelist "$(eval "$wlcmd" | tf json)" "select(any(.$field contains(\$whitelist[]); .))"

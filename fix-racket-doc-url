@@ -1,0 +1,35 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -w) {
+        PREFER_WEB=y
+        shift
+    }
+    ;;
+
+    -l) {
+        PREFER_WEB=n
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+sed \
+    -e "s~file://$HOME/.racket/7.0/doc~http://racket~" \
+    -e "s~file:///usr/local/racket/share/racket/doc~http://racket~" \
+    -e "s~file:///usr/share/doc/racket~http://racket~" \
+    -e "s~file://$HOME/.racket/6.3/doc~http://racket~" \
+    -e "s~//docs.racket-lang.org~//racket~" \
+    -e "s~file:////\?home/shane/.docsets~http://docsets~" |
+    {
+        if test "$PREFER_WEB" = "y"; then
+            sed -e "s~//racket/~//docs.racket-lang.org/~"
+        elif test "$PREFER_WEB" = "l"; then
+            sed -e "s~//docs.racket-lang.org/~//racket/~"
+        else
+            cat
+        fi
+    }

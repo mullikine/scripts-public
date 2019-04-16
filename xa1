@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# my own xargs. But this is actually more like wrl
+
+awk1 | while IFS=$'\n' read -r line; do
+    "$@" $line
+done

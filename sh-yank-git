@@ -1,0 +1,27 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+B branch
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    B) cmd="vc branch | xc" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

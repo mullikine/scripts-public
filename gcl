@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# https://gist.github.com/scjody/992a61892ebe157b18db33fc3fb874ad
+
+if [[ -z "$1" ]]; then
+    gcloud config configurations list;
+else
+    case "$1" in
+        # These clauses implement aliases for my most commonly used configurations.
+        # Change them to support your needs or remove them.
+        prod)
+            gcloud config configurations activate default
+        ;;
+        test)
+            gcloud config configurations activate plotly-testing
+            ;;
+         *)
+            gcloud config configurations activate "$1"
+        ;;
+    esac;
+fi

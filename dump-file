@@ -1,0 +1,59 @@
+#!/bin/bash
+export TTY
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+# copy a file and its path into another directory
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -d) {
+        destination_dir="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -o) {
+        overwrite=y
+    }
+    ;;
+
+    *) break;
+esac; done
+
+fp="$1"
+rp="$(realpath "$fp")"
+dn="$(dirname "$rp")"
+bn="$(basename "$fp")"
+cd "$dn"
+
+CWD="$(pwd)"
+cd "$CWD"
+: ${destination_dir:="n"}
+
+if ! { lit "$CWD" | grep -q -P "^$destination_dir"; }; then
+    ndir="$(p "$CWD" | sed "s=^=$destination_dir=" | sed 's=//=/=g')"
+    mkdir -p "$ndir"
+
+    nfp="$ndir/$bn"
+
+    if [ -f "$nfp" ]; then
+        test "$overwrite" = "y" && cp -a "$rp" "$ndir"
+    else
+        cp -a "$rp" "$ndir"
+    fi
+
+    bn="$(basename "$rp")"
+
+    if is_tty; then
+        CWD="$ndir" zsh
+    else
+        lit "$nfp"
+    fi
+else
+    tm n "Putting file back is not yet implemented"
+    # yn "would you like to put this back?"
+fi

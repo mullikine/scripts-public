@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+funcname="$1"
+
+mma "?$funcname"

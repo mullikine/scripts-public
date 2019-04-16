@@ -1,0 +1,88 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+
+# ansi-term "gr -w \"http://pubs.opengroup.org\" -- off_t"
+# gr -a -w "http://pubs.opengroup.org" -- off_t
+
+# emacsclient dies instantly, probably because it doesn't have a tty.
+#export BROWSER=eww
+
+# I get eww going but it doesn't highlight links.
+# export BROWSER="eww-sph"
+
+# You can run 'gr' from eshell. But then we want to split. w3m doesn't
+# do too well from inside eshell.
+# export BROWSER=w3m
+# export BROWSER="w3m-sph"
+
+BROWSER="term-web-handler"
+
+case "$opt" in
+    gr) {
+        tm n "$f :: NOT IMPLEMENTED"
+
+        shift
+        exit $?
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+ansi_term=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -a) {
+        ansi_term=y
+        shift
+    }
+    ;;
+
+    -b) {
+        BROWSER="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# By default, use googler
+
+CMD=''
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    CMD="$CMD $(printf -- "%s" "$ARG" | q)"
+done
+
+# Want to do different things depending on the link I get back.
+export BROWSER
+
+lit "googler $CMD"
+# exit 0
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if is_tty; then
+    if test "$ansi_term" = "y"; then
+        ansi-term "gr $CMD"
+    else
+        eval "googler $CMD"
+    fi
+else
+    if test "$ansi_term" = "y"; then
+        ansi-term "gr --noprompt $CMD"
+    else
+        eval "googler --noprompt $CMD"
+    fi
+fi

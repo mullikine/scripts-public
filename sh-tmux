@@ -1,0 +1,81 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+# This can't work because the menu prints before it runs. The menu must appear elsewhere
+fzf_cmd_last_output() {
+    sel="$(fqa 'first-column-field-1-space' | sed 's/#.*//' )"
+
+    echo
+
+    if [ -n "$sel" ]; then
+        printf -- "%s\n" "Running: $sel »" 1>&2
+        tm -f get-last-output '»' | eval "$sel"
+    fi
+}
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+1  tmux select-layout even-horizontal
+2  tmux select-layout even-vertical
+3  tmux select-layout main-horizontal
+4  tmux select-layout main-vertical
+5  tmux select-layout tiled
+b  tm breakp
+v  tm capture vim (TODO)
+r  tm asciinema
+a  tmux attach
+l  tmux attach -t localhost:
+S  tmux -L shane attach
+f  tm goto-fzf
+s  tm -f -d sph
+S  tm -f -d spv
+h  tm -f -d spv
+g  sh-tmux-sel
+Y  tm copy-current-line
+nw tmux attach || tmux new zsh
+T  tat # tmux touchbar attach
+,  fzf_cmd_last_output
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    1) cmd="( sleep 0.5; tmux select-layout even-horizontal ) &" ;;
+    2) cmd="( sleep 0.5; tmux select-layout even-vertical ) &" ;;
+    3) cmd="( sleep 0.5; tmux select-layout main-horizontal ) &" ;;
+    4) cmd="( sleep 0.5; tmux select-layout main-vertical ) &" ;;
+    5) cmd="( sleep 0.5; tmux select-layout tiled ) &" ;;
+
+    # these must run after the menu window has closed
+    b) cmd="tmux run -b $(aqf "tm breakp")" ;;
+    r) cmd="tmux run -b $(aqf "tm asciinema")" ;;
+    a) cmd="tmux attach" ;;
+    l) cmd="tmux attach -t localhost" ;;
+    S) cmd="tmux -L shane attach" ;;
+    f) cmd="tmux run -b $(aqf "tm find-window-from-session -no-activate")" ;;
+    g) cmd="sh-tmux-sel" ;;
+    Y) cmd="tmux run -b $(aqf "tm copy-current-line")" ;;
+    s) cmd="tm -f -d sph" ;;
+    S) cmd="tm -f -d spv" ;;
+    h) cmd="tm -f -d spv" ;;
+    T) cmd="tat" ;;
+    n|w) cmd="tmux attach || tmux new zsh" ;;
+    ,) cmd="fzf_cmd_last_output" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

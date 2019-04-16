@@ -1,0 +1,21 @@
+#!/bin/bash
+export TTY
+
+# Makes beamer presentations out of the list of files given
+# make-presentations *.org
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+# exec &>/dev/null
+{
+eval "emacs --script $HOME/scripts/make-presentations.el $CMD"
+} &>/dev/null
+eval "printf -- \"%s\\n\"  $CMD" | sed 's/\.org$/\.pdf/'

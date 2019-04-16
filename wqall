@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# This is so we have LINES and COLUMNS to play with
+eval `resize`
+
+#preview="lit {} | umn | xargs head -n $LINES"
+preview="lit {} | fzf-scope -n $LINES"
+previewq="$(p "$preview" | qne)"
+
+preview_hidden=y
+do_sort=n
+
+preview_opts="right:30%"
+
+MULTI=y
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -m) {
+        minimise=y
+        shift
+    }
+    ;;
+
+    -nm) {
+        MULTI=n
+        shift
+    }
+    ;;
+
+    -p) {
+        preview_hidden=n
+        shift
+    }
+    ;;
+
+    -s) { # or I can just pass --sort
+        tm n "fzf $opt :: NOT IMPLEMENTED"
+        do_sort=y
+        shift
+    }
+    ;;
+
+    -P|-pcmd) {
+        preview="lit {} | fzf-scope -n $LINES"
+        previewq="$(p "$preview" | qne)"
+    }
+    ;;
+
+    -r) {
+        preview_opts="right:50%"
+        shift
+    }
+    ;;
+
+    -rr) {
+        preview_opts="right:30%"
+        shift
+    }
+    ;;
+
+    -t) {
+        preview_opts="up:30%"
+        shift
+    }
+    ;;
+
+    -b) {
+        preview_opts="down:1"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+filter_in() {
+    if test "$minimise" = "y"; then
+        mnm
+    else
+        cat
+    fi
+}
+
+filter_out() {
+    if test "$minimise" = "y"; then
+        umn
+    else
+        cat
+    fi
+}
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+opts=""
+
+if test "$MULTI" = "y"; then
+    opts+=" -m "
+    :
+fi
+
+if [ -n "$preview" ]; then
+    if test "$preview_hidden" = "y"; then
+        preview_opts="$preview_opts:hidden"
+    fi
+
+    opts+=" --preview=\"$previewq\" --preview-window=$preview_opts "
+
+    # opts+="--preview=\"lit {} | umn | xargs head\" --preview-window=up:30%"
+    # opts+="--preview=\"lit {} | umn | xargs file\" --preview-window=down:1"
+fi
+
+bindings=""
+#bindings+="ctrl-a:select-all+accept,"
+bindings+="alt-a:select-all,"
+bindings+="f1:abort,"
+# bindings+="alt-f1:abort," # there is no alt-f1 annoyingly
+bindings+="alt-u:deselect-all,"
+bindings+="ctrl-k:kill-line,"
+bindings+="alt-k:jump,"
+bindings+="tab:toggle-preview,"
+
+# But right (and C-M-Right) is used to move along the pattern at the
+# top, not just the results list
+# bindings+="right:toggle,"
+bindings+="ctrl-alt-f:toggle,"
+bindings+="ctrl-alt-x:up+toggle,"
+bindings+="ctrl-alt-c:down+toggle,"
+
+bindings+="up:up,"
+bindings+="down:down,"
+bindings+="ctrl-p:up+toggle,"
+bindings+="ctrl-n:down+toggle,"
+bindings+="change:top," # triggered whenever the query string is changed.
+# alt-0 doesn't work.
+# bindings+="alt-0:top,"
+bindings+="alt-t:top,"
+# No function to go to the last result
+# bindings+="alt-4:bottom,"
+
+bindings+="alt-r:execute-silent(lit {+} | awk 1 | head -n 1 | u dn | tm -S -tout spv -xargs ranger),"
+bindings+="alt-l:execute-silent(lit {+} | tm -S -tout spv v),"
+bindings+="alt-e:execute-silent(lit {+} | tm -S -tout spv -xargs sp),"
+bindings+="alt-v:execute-silent(lit {+} | tm -S -tout spv -xargs v),"
+bindings+="alt-f:execute-silent(lit {+} | fzf-thing),"
+bindings+="alt-n:execute-silent(lit {+} | u fn | xc),"
+bindings+="alt-d:execute-silent(lit {+} | awk 1 | xargs -l1 dirname | xc),"
+bindings+="alt-c:execute-silent(lit {+} | umn | s chomp | sed 's/#[^#]\+$//' | sed 's/\s\+$//' | xc),"
+bindings+="alt-m:execute-silent(lit {+} | mnm | s chomp | xc),"
+bindings="$(p "$bindings" | sed 's/.$//' | qne)"
+
+opts+=" --bind=\"$bindings\" "
+
+cmd="$HOME/source/git/fzf/bin/fzf --reverse --algo=v2 $opts $CMD"
+filter_in | eval "$cmd" | filter_out
+
+# fzf --multi --preview='head -10 {+}'
+# git log --oneline | fzf --multi --preview 'git show {+1}'
+# e.g. fzf --preview='head -$LINES {}'
+# ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}" --header-lines=1
+
+# KEY BINDINGS
+# --bind
+# alt-c:
+
+# Create some bindings
+# This must not create an error
+# find-all-no-git.sh | fzf -p --multi

@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+heading=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -h) {
+        heading=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+# find gochecknoinits -type f -exec wc {} \; | 
+
+awk1 | while IFS=$'\n' read -r line; do
+    f-ebw | sed 's/ \+/\t/g' | tsv2org-table
+done
+
+/usr/bin/wc "$@"

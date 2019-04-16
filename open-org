@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+# depending on what is given, open in as org
+
+slug="$(echo "$@" | tr -d '\n' | slugify | cut -c -10)"
+
+uri="$1"
+shift
+
+case "$uri" in
+    http*) {
+        tf_org="$(nix tf "$slug" org || echo /dev/null)"
+
+        curl "$uri" 2>/dev/null > "$tf_org"
+
+        if test -s "$tf_org"; then
+            cat "$tf_org" | html2org | sed '/BEGIN_HTML/,/END_HTML/d' | max-one-empty-line.sh | sponge "$tf_org"
+        fi
+
+        printf -- "%s" "$tf_org"
+    }
+    ;;
+
+    *)
+esac

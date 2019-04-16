@@ -1,0 +1,455 @@
+#!/bin/bash
+
+echo "GH search results"
+
+exec 1> >(orgindent 2)
+# exec 2>/dev/null
+
+# tables used
+# -----------
+#         bigquery-public-data.github_repos.contents
+# bq show bigquery-public-data:github_repos.contents
+# bq show bigquery-public-data:samples.wikipedia
+# bq show --format=prettyjson bigquery-public-data:samples.wikipedia | jq '.schema.fields'
+
+
+# join
+# DONE github_repos.files.id to github_repos.contents.id
+# DISCARD get repo_name -- join with ghtorrent-bq.projects.name
+# ensure forked_from is NIL
+#   ghtorrent-bq.projects.forked_from
+
+#
+# SELECT * FROM `ghtorrent-bq.ght_2018_04_01.projects` LIMIT 1
+# url ends in /GEO-IASS/co-oi
+
+# name is a the short name (non-inclusive of author)
+
+# ghtorrent-bq.projects.forked_from
+# ghtorrent-bq.projects.name
+# 1
+# 13551614
+# https://api.github.com/repos/mumuzi/qinli
+# 6177658
+# qinli
+
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# downloads the files to a temporary directory
+# provides an 'eack' link
+# creates links to each temporary file at the point where there is a
+# match
+get_files=n
+
+# This only works with 'get_files' enabled
+# Provides links to the matching lines selected in github
+line_numbers=n
+
+limit=10
+
+get_titles=n
+search_samples=y
+path_re=
+exclude_path_re=
+query=
+: ${MAX_FILE_SIZE:="500"}
+
+# exported in from gh
+if test "$FULL_SEARCH" = "y"; then
+    search_samples=n
+fi
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        limit="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -ft|-p|-path) {
+        path_re="$2"
+        shift
+        shift
+    }
+    ;;
+
+    # A heuristic that will make my queries cheaper
+    -L|-lang) {
+        LANGUAGE="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -np|-notpath) {
+        exclude_path_re="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -c|-contents|-t) {
+        query="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -snips|-snippets) {
+        MAX_FILE_SIZE=500
+        shift
+    }
+    ;;
+
+    -b|-lf|-large-files) {
+        MAX_FILE_SIZE=500000
+        get_titles=n
+        shift
+    }
+    ;;
+
+    -ss) {
+        search_samples=y
+        shift
+    }
+    ;;
+
+    -fs) { # full search
+        search_samples=n
+        shift
+    }
+    ;;
+
+    -ght) { # ghtorrent
+        GHTORRENT=y
+        shift
+    }
+    ;;
+
+    -T) {
+        get_titles=y
+        shift
+    }
+    ;;
+
+    -F) {
+        get_files=y
+        shift
+    }
+    ;;
+
+    -L) {
+        get_files=y
+        line_numbers=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+lit () {
+    printf -- "%s\n" "$@"
+}
+
+# read -r path_re
+# read -r path_re
+# read -r query # this does not interpret \b
+
+lit "$query\n$path_re\n$limit" >> ~/bqme-history.log
+lit "* Parameters"
+
+read -r -d '' parastable <<HEREDOC
+| path | n limit | terms | date
+|-
+| $path_re | $limit results | $query | $(date)
+HEREDOC
+
+lit "$parastable"
+
+lit
+
+# TODO download the schema
+# bq show --format json bigquery-public-data:samples.wikipedia
+# bq show --format json bigquery-public-data:github_repos.sample_contents | python -m json.tool
+# bq show --format=prettyjson bigquery-public-data:samples.wikipedia | jq '.schema.fields'
+# bq show --format=prettyjson bigquery-public-data:github_repos.sample_contents | jq '.schema.fields'
+# bq show --schema --format=prettyjson bigquery-public-data:github_repos.sample_contents
+
+
+# TODO search the schema to construct queries
+
+# bigquery-public-data
+# github_repos
+# sample_repos
+# repo_name
+
+# This works
+# SELECT sample_repo_name, content, sample_path FROM `bigquery-public-data.github_repos.sample_contents` WHERE REGEXP_CONTAINS(content, r"csv") AND REGEXP_CONTAINS(sample_path, r'.py') LIMIT 10
+
+# read -r -d '' query <<- "HEREDOC"
+# "#standardSQL
+# SELECT
+#   sample_repo_name,
+#   sample_path,
+#   (SELECT STRING_AGG(snip) FROM snippets.snip) AS snippets
+# FROM (
+#   SELECT
+#     sample_repo_name, sample_path, REGEXP_EXTRACT_ALL(content, r'.*$query.*') AS snip
+#   FROM (
+#     SELECT sample_repo_name, content, sample_path FROM \`bigquery-public-data.github_repos.sample_contents\` WHERE REGEXP_CONTAINS(content, r'$query') AND REGEXP_CONTAINS(sample_path, r'$path_re')
+#   )
+# ) snippets LIMIT $limit"
+# HEREDOC
+
+if test "$search_samples" = "y"; then
+read -r -d '' sql <<HEREDOC
+#standardSQL
+SELECT
+  sample_repo_name,
+  sample_path,
+  (SELECT STRING_AGG(snip) FROM snippets.snip) AS snippets
+FROM (
+  SELECT
+    sample_repo_name, sample_path, REGEXP_EXTRACT_ALL(content, r'.*$query.*') AS snip
+  FROM (
+    SELECT sample_repo_name, content, sample_path FROM \`bigquery-public-data.github_repos.sample_contents\`
+        WHERE TRUE
+        $(
+        if [ -n "$query" ]; then
+            lit "AND REGEXP_CONTAINS(content, r'$query')"
+        fi
+
+        if [ -n "$path_re" ]; then
+            lit "AND REGEXP_CONTAINS(sample_path, r'$path_re')"
+        fi
+
+        if [ -n "$exclude_path_re" ]; then
+            lit "AND NOT REGEXP_CONTAINS(sample_path, r'$exclude_path_re')"
+        fi
+        )
+  )
+) snippets LIMIT $limit
+HEREDOC
+
+else
+
+read -r -d '' sql <<HEREDOC
+#standardSQL
+SELECT
+  repo_name,
+  path,
+  (SELECT STRING_AGG(snip) FROM snippets.snip) AS snippets
+FROM (
+  SELECT
+    files.repo_name, files.path,
+        $(
+        if [ -n "$query" ]; then
+            lit "REGEXP_EXTRACT_ALL(contents.content, r'.*$query.*') AS snip"
+        else
+            lit "\"\" AS snip"
+        fi
+        )
+  FROM (
+    # test the file size in tiny (snippet size)
+    SELECT id, size, content, binary FROM \`bigquery-public-data.github_repos.contents\`
+        WHERE TRUE
+        AND binary = false
+        AND size < $MAX_FILE_SIZE
+        $(
+        if [ -n "$query" ]; then
+            lit "AND REGEXP_CONTAINS(content, r'$query')"
+        fi
+        )
+  ) as contents
+  JOIN
+  (
+    SELECT repo_name, id, path FROM \`bigquery-public-data.github_repos.files\`
+        WHERE TRUE
+        $(
+        if [ -n "$path_re" ]; then
+            lit "AND REGEXP_CONTAINS(path, r'$path_re')"
+        fi
+
+        if [ -n "$exclude_path_re" ]; then
+            lit "AND NOT REGEXP_CONTAINS(path, r'$exclude_path_re')"
+        fi
+    )
+  ) as files
+  ON contents.id = files.id
+) snippets LIMIT $limit
+HEREDOC
+fi
+
+# just overwrite it
+if test "$GHTORRENT" = "y"; then
+    read -r -d '' sql <<HEREDOC
+#standardSQL
+SELECT
+  contents_search_results.repo_name,
+  contents_search_results.path,
+  contents_search_results.final_snippets,
+  contents_search_results.repo_id,
+  contents_search_results.forked_from,
+  ranking_info.stars
+FROM
+(
+    SELECT
+      final_contents_table.repo_name,
+      final_contents_table.path,
+      final_contents_table.final_snippets,
+      final_contents_table.repo_id,
+      final_contents_table.forked_from
+    FROM
+    (
+      SELECT
+        ght.id as repo_id,
+        pd.repo_name as repo_name,
+        pd.path as path,
+        pd.bqsnippets as final_snippets,
+        ght.forked_from as forked_from
+      FROM
+      (
+      SELECT id, REGEXP_EXTRACT(url, r"[^/]+/[^/]+$") as repo_name, forked_from FROM \`ghtorrent-bq.ght_2018_04_01.projects\` WHERE $(if test -n "$LANGUAGE"; then echo -n "language = \"$LANGUAGE\" AND"; fi) forked_from IS NULL
+      ) ght
+      JOIN
+      (
+        SELECT
+          repo_name,
+          path,
+          (SELECT STRING_AGG(snip) FROM snippets.snip) AS bqsnippets
+        FROM (
+          SELECT
+            files.repo_name, files.path,
+                $(
+                if [ -n "$query" ]; then
+                    lit "REGEXP_EXTRACT_ALL(contents.content, r'.*$query.*') AS snip"
+                else
+                    lit "\"\" AS snip"
+                fi
+                )
+          FROM (
+            # test the file size in tiny (snippet size)
+            SELECT id, size, content, binary FROM \`bigquery-public-data.github_repos.contents\`
+                WHERE TRUE
+                AND binary = false
+                AND size < $MAX_FILE_SIZE
+                $(
+                if [ -n "$query" ]; then
+                    lit "AND REGEXP_CONTAINS(content, r'$query')"
+                fi
+                )
+          ) as contents
+          JOIN
+          (
+            SELECT repo_name, id, path FROM \`bigquery-public-data.github_repos.files\`
+                WHERE TRUE
+                $(
+                if [ -n "$path_re" ]; then
+                    lit "AND REGEXP_CONTAINS(path, r'$path_re')"
+                fi
+                )
+
+                $(
+                if [ -n "$exclude_path_re" ]; then
+                    lit "AND NOT REGEXP_CONTAINS(path, r'$exclude_path_re')"
+                fi
+                )
+          ) as files
+          ON contents.id = files.id
+        ) snippets
+      ) pd
+      ON pd.repo_name = ght.repo_name
+    ) final_contents_table
+) contents_search_results
+JOIN
+(
+  SELECT repo_id, COUNT(DISTINCT user_id) as stars FROM \`ghtorrent-bq.ght_2018_04_01.watchers\`
+      GROUP BY repo_id
+) ranking_info
+ON contents_search_results.repo_id = ranking_info.repo_id
+ORDER BY stars DESC
+LIMIT $limit
+HEREDOC
+fi
+
+
+# Can do an inner join -- just need to find something to join on -- project name perhaps
+# Or some kind of ID -- owner ID or repo ID
+
+
+# join two big query tables -- #standardSQL
+
+# select sum(a.is_male)
+# from
+# (select is_male, year from publicdata.samples.natality) a
+# inner join
+# (select year from moshap.my_years) b
+# on a.year = b.year
+
+
+
+format_snippet() {
+    sed -e 's/^"//' -e 's/"$//' -e 's/""/"/g' -e 's/,\(\s\s\+\|\t\)/\n\1/g'
+}
+
+get_link() {
+    if test "$get_titles" = "y"; then
+        ci org clink "$@"
+    else
+        UPDATE=y ci org -no-titles clink "$@"
+    fi
+}
+
+# lit "$sql" | tv
+# exit 0
+
+
+# si +bigquery-gh "$sql"
+# exit 0
+
+lit "* query"
+lit "#+BEGIN_SRC sql"
+lit "$sql" | indent 2
+lit "#+END_SRC"
+lit
+lit "* results"
+lit "$sql" | tee /tmp/wizard-last-query.txt | ci bq -q --format=csv query --max_rows=100000 | {
+    count2=0
+    awk 1 | sed 1,2d | while IFS=$'\n' read -r line; do
+        repo="$(lit "$line" | awk -F, '{print $1}')"
+        path="$(lit "$line" | awk -F, '{print $2}')"
+        stars="$(lit "$line" | awk -F, '{print $6}')"
+        snips="$(lit "$line" | sed 's/^[^,]\+,[^,]\+,//')"
+
+        link="https://github.com/$repo/blob/master/${path}#L2-L10"
+        rawlink="https://raw.githubusercontent.com/$repo/master/$path"
+
+        if url-exists.js "$rawlink"; then
+            td_tempdir="$(mktemp -t -d td_tempdirXXXXXX || echo /dev/null)"
+            wget -P "$td_tempdir" "$rawlink" &>/dev/null
+            fpath="$(wfind "$td_tempdir")"
+        fi
+
+        bn="$(basename "$path")"
+        lit "** ${count2}: $repo"
+        lit "|stars"
+        lit "|-"
+        lit "|$stars"
+
+        # lit "+ line : $line"
+        lit "+ link :: $(printf -- "%s\n" "$link" | get_link)"
+        lit "+ raw :: [[$rawlink][$bn]]"
+        if [ -n "$fpath" ]; then
+            lit "+ local :: [[$fpath][$fpath]]"
+        fi
+        lit "#+BEGIN_SRC text"
+        lit "$snips" | format_snippet
+        lit "#+END_SRC"
+        lit
+
+        count2=$(( $count2 + 1 ))
+    done
+}

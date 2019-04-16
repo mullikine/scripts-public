@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+# This works differently from "awk-apply-to-record"
+# It runs the same command across all records
+
+gawk -v RS="$1" -v ORS="$1" -v cmd="$2" -v FS=" " -v OFS=" " '{ printf "%s%s", $0, $RS |& cmd; } {print; system("")} END{close(cmd, "to"); cmd |& getline $0; fflush(cmd); close(cmd); print; system("")}'

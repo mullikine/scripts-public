@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+
+tf_soak="$(nix tf soak || echo /dev/null)"
+trap "rm \"$tf_soak\" 2>/dev/null" 0
+
+# IFS= read -rd '' input < <(cat /dev/stdin)
+# printf -- "%s" "$input"
+
+cat > "$tf_soak"
+cat "$tf_soak"

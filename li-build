@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+exec 2> >(colorise-build.sh)
+
+cd "$HOME/go/src/github.com/codelingo/lingo"
+echo "building lingo" 1>&2
+
+(
+    set -xv
+    dep ensure
+    go build && ( go install )
+    ls -ldt $HOME/go/bin/lingo | hls -i -r ".*" | hls -i -f blue lingo
+    # echo this is file that lingo wrapper script runs
+)
+
+ret="$?"
+
+
+if ! test "$ret" -eq "0"; then
+    echo build failed 1>&2
+fi
+
+exit "$ret"

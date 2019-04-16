@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    ranger) {
+        ranger -kill-all
+    }
+    ;;
+
+    v|vim) {
+        v -kill-all
+    }
+    ;;
+
+    *) {
+        {
+            kill "$@"
+            killall "$@"
+        } &>/dev/null
+    }
+    ;;
+esac

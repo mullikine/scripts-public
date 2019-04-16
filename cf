@@ -1,0 +1,47 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# edit config
+
+opt="$1"
+shift
+case "$opt" in
+    b|bash) {
+        vim ~/.bashrc
+    }
+    ;;
+
+    z|zsh) {
+        vim ~/.zshrc
+    }
+    ;;
+
+    v|vim) {
+        vim ~/.vimrc
+    }
+    ;;
+
+    xm|xmonad) {
+        vim ~/.xmonad/xmonad.hs
+    }
+    ;;
+
+    xmb|xb|xmobar) {
+        vim ~/.xmobarrc
+    }
+    ;;
+
+    t|tm|tmux) {
+        vim ~/.tmux.conf
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

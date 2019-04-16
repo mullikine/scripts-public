@@ -1,0 +1,18 @@
+#!/bin/bash
+export TTY
+
+pid="$$"
+echo "$pid"
+
+(
+    sleep 5
+    kill -KILL "$pid"
+    ns yo
+)
+# Why can't a backgrounded job kill its parent?
+
+"$@"
+ret="$?"
+
+kill $$
+exit "$ret"

@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+delim="$1"
+: ${delim:=","}
+
+sort -u -t"$delim" -k1,1

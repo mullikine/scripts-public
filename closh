@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+# For some reason, I have great difficulty getting closh to run from a
+# wrapper script.
+# Also, I want it to use unbuffer.
+
+exec </dev/tty
+
+export NVM_DIR="$HOME/.nvm"
+
+export TTY
+
+# load nvm
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+. "$NVM_DIR/nvm.sh"
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+cmd="/usr/local/bin/closh $CMD"
+
+# cmd="rlwrap unbuffer /usr/local/bin/closh $CMD"
+
+eval "$cmd"

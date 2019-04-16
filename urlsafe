@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+python -c "import urllib, sys ; print urllib.quote_plus(sys.stdin.read())"          # url safe string

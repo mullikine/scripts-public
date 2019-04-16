@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+# Bundle this dir up
+
+fp="."
+rp="$(realpath "$fp")"
+dn="$(dirname "$rp")"
+dn="$(basename "$dn")"
+
+newpath="$(get-dump-name)/${dn}.tar"
+rm -f "$newpath"
+
+yn "Bundle thits dir. Are you sure?" && tar -cf "$newpath" . &>/dev/null
+printf -- "%s\n" "$newpath" | xc -i

@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+# All things filters
+
+# scrape urls
+
+opt="$1"
+shift
+case "$opt" in
+    urls) {
+        # gensub does not modify in-place. It's different from gsub
+        awk 1 | awk '/((http|ftp):\/\/.[^" ]*)/{ print gensub(/.*((https|http|ftp):\/\/.[^" ]*).*/, "\\1", $1); }'
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

@@ -1,0 +1,33 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# sudo renice -n -5 -p 22143 22185 22186 22187 22214 23128
+# renice raise 22143 22185 22186 22187 22214 23128
+# renice lower 22143 22185 22186 22187 22214 23128
+
+# Need sudo for negative priority change
+
+opts=
+
+opt="$1"
+case "$opt" in
+    raise) {
+        shift
+
+        opts=" -n -5 "
+    }
+    ;;
+
+    lower) {
+        shift
+
+        opts=" -n 5 "
+    }
+    ;;
+
+    *)
+esac
+
+eval "sudo /usr/bin/renice $opts \"\$@\""

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+# I'm not sure what this script should be

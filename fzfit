@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# fzf-it /vim_mru_files.txt
+
+# fzf-it
+
+# First parameter is the file to fzf
+
+if [ -f "$1" ]; then
+    cat "$1" | fzf
+fi

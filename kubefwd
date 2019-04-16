@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# Install it from the releases
+# https://github.com/txn2/kubefwd/releases/download/1.4.10/kubefwd_amd64.deb
+
+sudo -E env "PATH=$PATH" /usr/local/bin/kubefwd "$@" --verbose 

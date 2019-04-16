@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+# Expand the glob, filter by basename not having . or __
+
+predicate="xargs -L1 basename | grep -v \"\\.\" | grep -v __ | tine"
+
+cmd="glob -b $(aqf "/usr/local/lib/python*/dist-packages/*") | eipct $(aqf "$predicate")"
+
+is_tty() {
+    [[ -t 1 ]]
+}
+
+pager() {
+    if is_tty; then
+        fzf
+    else
+        cat
+    fi
+}
+
+# eval "$cmd"
+
+ci -t 3600 -E "$cmd" | pager

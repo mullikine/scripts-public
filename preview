@@ -1,0 +1,6 @@
+#!/bin/sh
+export TTY
+
+# cat "$@" | rosie match all.things | less -rS
+
+EDITOR=v less -S "$@"

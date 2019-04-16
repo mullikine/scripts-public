@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+rt_cmd="$(cat $HOME/notes2018/ws/fuzzy/rtcmd.txt | fzf)"
+
+if test -n "$rt_cmd"; then
+    rtcmd -E "$rt_cmd"
+fi

@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# ff-view is used by racket emacs and we need to be able to inject elisp
+# into ff to search for something inside eww browser.
+# Instead of doing something really hacky, create a new browser
+# function, -es. It will still be hacky, I have to derive the search
+# term from the url
+
+# ns "$url"
+
+# cmd="firefox $CMD"
+
+# ns "$CMD"
+
+# kill_firefox
+
+# cmd="tm -d spv -d -fargs ff $CMD"
+# cmd="tm -d spv -fargs ff $CMD"
+# eval "$cmd"
+
+tm -f -d spv -fargs ff "$@"

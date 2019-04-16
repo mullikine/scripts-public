@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+shift
+case "$opt" in
+    wa) { printf -- "%s" "XKLGJL-89Y88HHRWG"; }; ;;
+esac

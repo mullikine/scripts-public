@@ -1,0 +1,26 @@
+#!/bin/bash
+
+compgen -c
+exit 0
+
+if which "compgen" &>/dev/null; then
+    compgen -c
+    exit 0
+fi
+
+# Examples:
+# list-executables
+# list-executables $HOME/scripts
+# u lx $HOME/scripts:$HOME/local/bin
+
+paths="$1"
+
+paths="$1"; : ${paths:="$PATH"}
+
+IFS=: read -ra dirs_in_path <<< "$paths"
+
+for dir in "${dirs_in_path[@]}"; do
+    for file in "$dir"/*; do
+        [[ -x $file && -f $file ]] && printf '%s\n' "${file##*/}"
+    done
+done

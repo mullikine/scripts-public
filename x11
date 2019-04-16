@@ -1,0 +1,65 @@
+#!/bin/bash
+export TTY
+
+set -m
+
+COMPTON_RUNNING=
+if pgrep compton &>/dev/null; then
+    COMPTON_RUNNING=y
+    killall compton
+fi
+
+opt="$1"
+shift
+case "$opt" in
+    doubleresmon1) {
+        xrandr --output HDMI-2 --scale 2
+    }
+    ;;
+
+    normal|right|left|inverted) {
+        xrandr --output eDP-1 --rotate "$opt"
+    }
+    ;;
+
+    rotate-left) {
+        orientation="$(xrandr | grep eDP-1 | awk '{print $5}' | sed 's/[^a-z]//g')"
+        echo "$orientation"
+        case "$orientation" in
+            normal) orientation=left ;;
+            left) orientation=inverted ;;
+            inverted) orientation=right ;;
+            right) orientation=normal ;;
+        esac
+
+        echo "$orientation"
+        xrandr --output eDP-1 --rotate "$orientation"
+    }
+    ;;
+
+    rotate-right) {
+        orientation="$(xrandr | grep eDP-1 | awk '{print $5}' | sed 's/[^a-z]//g')"
+        echo "$orientation"
+        case "$orientation" in
+            normal) orientation=right ;;
+            right) orientation=inverted ;;
+            inverted) orientation=left ;;
+            left) orientation=normal ;;
+        esac
+
+        echo "$orientation"
+        xrandr --output eDP-1 --rotate "$orientation"
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+if test "$COMPTON_RUNNING" = "y"; then
+    compton & disown
+fi

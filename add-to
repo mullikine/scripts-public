@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+path="$1"
+shift
+
+case "$path" in
+    words) {
+        path="$HOME/notes2018/ws/english/words.txt"
+    }
+    ;;
+
+    glossary) {
+        path="$HOME/notes2018/glossary.txt"
+    }
+    ;;
+
+    *)
+esac
+
+echo "$@" >> "$path"

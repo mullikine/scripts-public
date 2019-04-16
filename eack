@@ -1,0 +1,304 @@
+#!/bin/bash
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# rememeber
+# eack -p .go cli
+
+#ns "make this use emacs multi-occur mode"
+
+CWD="$(pwd)"
+
+# Some tmux splits give the wrong value for CWD.
+# : ${CWD:="$(pwd)"}; cd "$CWD"
+
+# grep -HnR $@ . 2>/dev/null | mnm | ec -e "(cd \"$CWD\")(grep-mode)"
+
+FOLLOW=n
+EXCLUDE_VENDOR=y
+EXCLUDE_GIT=y
+OCCUR=y
+PCRE=n
+CASE_INSENSITIVE=n
+LITERAL=n
+TOP=n
+KNOWN_TEXT_FILES_ONLY=n
+filename_pattern=
+
+# empty by default
+paths_file=
+
+: ${depth:="3"}
+: ${context:="0"} # Used for both grep AND occur. This makes -A and -B tricky
+: ${before_context:="0"}
+: ${after_context:="0"}
+
+sn="$(basename "$0")"
+case "$sn" in
+    dack) { # deep ack from top
+        TOP=y
+        depth=10
+    }
+    ;;
+
+    dac|ead|eackd) { # deep ack
+        depth=10
+    }
+    ;;
+
+    lack) { # literal ack
+        TOP=y
+        LITERAL=y
+        depth=10
+    }
+    ;;
+esac
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -d) {
+        depth="$2"
+        if tt -i "$depth"; then
+            # -d was supplied an integer, use it
+            shift
+        else
+            depth=5
+            # Do not shift for the parameter which is not an integer
+        fi
+        shift
+    }
+    ;;
+
+    -F|-paths-file) { # A file containing a list of files to grep over
+        paths_file="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -p|-path) {
+        filename_pattern="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -C|-context) {
+        context="$2"
+        before_context="$2"
+        after_context="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -B) {
+        before_context="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -A) {
+        after_context="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -f|--follow) {
+        FOLLOW=y
+        shift
+    }
+    ;;
+
+    -o|--occur) {
+        OCCUR=y
+        shift
+    }
+    ;;
+
+    -no|--nooccur) {
+        OCCUR=n
+        shift
+    }
+    ;;
+
+    -T|--top) { # This is a terribly inefficient option. Never use this
+        TOP=y
+        shift
+    }
+    ;;
+
+    -t|--text-only) { # This is a terribly inefficient option. Never use this
+        # I've given -I to grep. That should be sufficient.
+        KNOWN_TEXT_FILES_ONLY=y
+        shift
+    }
+    ;;
+
+    -i|--insensitive) {
+        CASE_INSENSITIVE=y
+        shift
+    }
+    ;;
+
+    -l|--literal) {
+        LITERAL=y
+        shift
+    }
+    ;;
+
+    -P|--pcre) {
+        PCRE=y
+        OCCUR=n # '\(' will break it
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+printf -- "%s\n" "Depth $depth" 1>&2
+
+if test "$TOP" = "y"; then
+    export CWD="$(vc git get-top-level)"; cd "$CWD" && pwd
+fi
+
+CMD="$(lit -s "$@")"
+
+# Need to be able to have multiple patterns here
+# except it might also trip up occur-mode
+# So run each file path through a gauntlet of pattern matching before
+# feeding to eack
+
+pattern="$CMD"
+
+if [ -z "$pattern" ]; then
+    printf -- "%s\n" "No pattern" 1>&2
+    exit 0
+fi
+
+#pattern="$(p "$pattern" | qne)"
+# grep understands "\b"
+# it getts this correct. so don't escape
+# xargs -0 grep -I -Hn -P -- "defalias 's\b"
+# pattern="$(p "$pattern")"
+
+if test "$FOLLOW" = "y"; then
+    OPTION=-L
+else
+    OPTION=-P
+fi
+
+grep_opts="-Hn"
+test "$EXCLUDE_VENDOR" = "y" && grep_opts+=" --exclude=\"*vendor/*\" --exclude=\"*Godeps/*\""
+test "$EXCLUDE_GIT" = "y" && grep_opts+=" --exclude=\"*.git/*\""
+test "$CASE_INSENSITIVE" = "y" && grep_opts+=" -i"
+test "$LITERAL" = "y" && grep_opts+=" -F"
+test "$PCRE" = "y" && grep_opts+=" -P"
+
+file_filter() {
+    {
+        if test "$KNOWN_TEXT_FILES_ONLY" = "y"; then
+            awk1 | while IFS=$'\n' read -r line; do
+                if tt -t "$line"; then
+                    printf -- "%s\n" "$line"
+                fi
+            done
+        else
+            cat
+        fi
+    } | {
+        if [ -n "$filename_pattern" ]; then
+            grep -P "$filename_pattern"
+        else
+            cat
+        fi
+
+    }
+}
+
+# lit "xargs -0 grep -s -I $grep_opts -- $(aqf "$pattern")"
+# exit 0
+
+# p "$grep_opts" | tv &>/dev/null
+# p "xargs -0 grep -I $grep_opts -- $pattern" | tv &>/dev/null
+
+file_path_pcre_filter() {
+    pattern="$1"
+
+    if [ -n "$pattern" ]; then
+        grep -P "$pattern"
+    else
+        cat
+    fi
+}
+
+find_and_grep() {
+    # ( find $OPTION . -maxdepth "$depth" -print0 | xargs -0 grep $grep_opts -- "$pattern" ) 2>/dev/null
+
+    # lit "xargs -0 grep -s -I $grep_opts -- $(aqf "$pattern")" | tv
+
+    {
+        if [ -n "$paths_file" ]; then
+            cat "$paths_file" | umn
+        else
+            find $OPTION . -maxdepth "$depth"
+        fi
+    } | file_path_pcre_filter | file_filter | tr '\n' '\0' | eval "xargs -0 grep -s -I $grep_opts $( test "$context" != "0" && printf -- "%s" "-C $context" ) -- $(aqf "$pattern")"
+    return 0
+}
+
+read -r -d '' maps <<- 'HEREDOC'
+	(define-key compilation-button-map (kbd "C-m") 'grep-go-vim)
+	(define-key compilation-button-map (kbd "C-j") 'compile-goto-error)
+	HEREDOC
+
+# lit "(cd $(aqf "$CWD"))(grep-mode)$(p "$maps" | tr -d '\n')"
+
+# lit "$pattern" | tv
+# exit 0
+
+# (ic '(occur $(aqf "$pattern")))
+# (ic ')
+
+
+if test "$OCCUR" = "y"; then
+    slug="$(p "$pattern" | slugify)"
+    occur_string="(occur $(aqf "$pattern") $context)(other-window 1)(delete-other-windows)(rename-buffer $(a- qf "*occur-$slug*") t)(ekm $(aqf "M-n"))"
+
+    # I need to be able to do multiple 'occur' modes within emacs.
+    # occur_string="(occur $(aqf "$pattern") $context)(other-window 1)"
+else
+    occur_string=
+fi
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+pager() {
+    if is_tty; then
+        tless -rS $@
+    else
+        cat
+    fi
+}
+
+ # | tv
+find_and_grep | {
+    IFS= read -rd '' input < <(cat /dev/stdin)
+    if [ -n "$input" ]; then
+        # | mnm
+        printf -- "%s\n" "$input" | e -noonly -e "(cd $(aqf "$CWD"))(grep-mode)$(p "$maps" | tr -d '\n')$occur_string"
+
+        result="$?"
+        if ! test "$result" -eq 0; then
+            printf -- "%s\n" "$input" | pager
+        fi
+    else
+        printf -- "%s\n" "No results" 1>&2
+    fi
+}

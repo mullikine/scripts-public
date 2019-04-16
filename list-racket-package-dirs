@@ -1,0 +1,9 @@
+#!/usr/bin/env racket
+#lang racket
+(require setup/dirs)
+
+;; (require (planet williams/describe/describe))
+;; (describe (find-pkgs-dir))
+
+(println (path->string (find-pkgs-dir)))
+(println (path->string (find-user-pkgs-dir)))

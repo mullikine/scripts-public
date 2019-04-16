@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+per_second="$1"
+: ${per_second:="3"}
+
+pv -L "$per_second" -q

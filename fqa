@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+for var in "$@"
+do
+    printf -- "%s\n" "$var"
+done | fzf

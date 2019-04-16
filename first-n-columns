@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+d="	"
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -d) {
+        d="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+n="$1"
+: ${n:="1"}
+
+cut -d "$d" -f 1-"$n"

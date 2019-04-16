@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+# $DUMP$HOME/notes2018/programs/firefox63/firefox "$@"
+
+# Didn't work
+# /var/smulliga/programs/firefox42/firefox "$@"
+
+exec &>/dev/null
+# unbuffer /var/smulliga/programs/firefox46/firefox "$@"
+# I want adblock to work
+# unbuffer /var/smulliga/programs/firefox48/firefox "$@"
+
+# Aparently this was supported up into 2017
+unbuffer /var/smulliga/programs/firefox45esr/firefox "$@"

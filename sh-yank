@@ -1,0 +1,133 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+fzf-exe-deep() {
+    sel="$(find . -type f -executable | mnm | fzf)"
+
+    if [ -n "$sel" ]; then
+        printf -- "%s" "$sel" | umn | u rp | s chomp | {
+            IFS= read -rd '' input < <(cat /dev/stdin)
+
+            printf -- "%s" "$input" | xc -n -i
+
+            ls -ldt --color=always "$input"
+        }
+    fi
+}
+
+fzf-files-copy-deep() {
+    sel="$(F f | mnm | fzf)"
+
+    if [ -n "$sel" ]; then
+        printf -- "%s" "$sel" | umn | u rp | mnm | xc -n -i
+    fi
+}
+
+fzf-dirs-copy-deep() {
+    # sel="$(F d | u bn | fzf | mnm)"
+    sel="$(F d | mnm | fzf)"
+
+    if [ -n "$sel" ]; then
+        printf -- "%s" "$sel" | umn | u rp | mnm | xc -n -i
+    fi
+}
+
+fzf-related-paths() {
+    # sel="$(F find-files-here | u bn | fzf | mnm)"
+    sel="$(F find-files-here | xargs cat | scrape-paths-fast.sh | fzf)"
+
+    if [ -n "$sel" ]; then
+        # printf -- "%s" "$(pwd)/$sel" | xc -i
+        printf -- "%s" "$sel" | umn | u rp | mnm | xc -n -i
+    fi
+}
+
+fzf-files-copy() {
+    # sel="$(F find-files-here | u bn | fzf | mnm)"
+    sel="$(F find-files-here | fzf)"
+
+    if [ -n "$sel" ]; then
+        # printf -- "%s" "$(pwd)/$sel" | xc -i
+        printf -- "%s" "$sel" | umn | u rp | mnm | xc -n -i
+    fi
+}
+
+fzf-dirs-copy() {
+    sel="$(F find-dirs-here | fzf)"
+
+    if [ -n "$sel" ]; then
+        printf -- "%s" "$sel" | umn | u rp | mnm | xc -n -i
+    fi
+}
+
+fzf-programs() {
+    list-executables | fzf
+}
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+cd current directory
+DB current directory basename
+t  tmux capture
+g  git url
+N  vc bn (copy branch name)
+I  git issues url
+P  git PRs url
+G  git url (includes branch and path)
+#  vc get-hash | xc -n -i
+f  fzf-files-copy
+F  fzf-files-copy-deep
+xX fzf-exe-deep
+r  recent-files-here -da 3 | fzf
+CR fzf-related-paths
+s  fzf-dirs-copy
+S  fzf-dirs-copy-deep
+M  copy metasyntactic variables
+s  git-show-my-files | fzf
+p  fzf-programs
+m  select-kibana-query
+'  tmux capture and filter 
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    c|d) cmd="pwd | xc -i -n" ;;
+    D|B) cmd="pwd | u bn | xc -i -n" ;;
+    t) cmd="tm -te -d capture -clean -history" ;;
+    g) { cmd="vc url | xc -n -i -"; }; ;;
+    N) { cmd="vc bn | xc -n -i -"; }; ;;
+    I) { cmd="vc url | add-suffix /issues | xc -n -i -"; }; ;;
+    P) { cmd="vc url | add-suffix /pulls | xc -n -i -"; }; ;;
+    G) { cmd="git-file-to-url | xc -n -i -"; }; ;;
+    f) cmd="fzf-files-copy" ;;
+    r) cmd="recent-files-here -da 3 | fzf" ;;
+    C|R) cmd="fzf-related-paths" ;;
+    F) cmd="fzf-files-copy-deep" ;;
+    x|X) cmd="fzf-exe-deep" ;;
+    s) cmd="fzf-dirs-copy" ;;
+    \#) cmd="vc get-hash | xc -n -i" ;;
+    M) cmd="cat $HOME/notes2018/ws/programming/metasyntactic-variable-list.txt | xc -n -i" ;;
+    S) cmd="fzf-dirs-copy-deep" ;;
+    m) cmd="git-show-my-files | fzf" ;;
+    k) cmd="select-kibana-query" ;;
+    p) cmd="fzf-programs" ;;
+    \') cmd="tm cap-pane | tm -f -S -tout sph -noerror \"f filter-with-fzf\"" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

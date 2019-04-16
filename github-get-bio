@@ -1,0 +1,4 @@
+#!/bin/zsh
+export TTY
+
+ci gql-github =(echo "query { viewer { bio }}") | jq -r ".data.viewer.bio"

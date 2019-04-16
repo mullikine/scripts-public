@@ -1,0 +1,40 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+PARENT_COMMAND="$(ps -o comm= $PPID)"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+myhoogle() {
+    $HOME/.local/bin/hoogle --count=10000 "$@"
+}
+
+{ 
+    case "$PARENT_COMMAND" in
+        replify|zsh) {
+            # If -info is not one of the parameters
+            # How do I do this in haskell, seriously?
+
+            if ! lit "$@" | grep -q -- --info; then
+                myhoogle --info -- "$@"
+            fi
+        }
+        ;;
+
+        *)
+    esac
+
+    myhoogle -- "$@"
+} | {
+    if is_tty; then
+        vs
+    else
+        cat
+    fi
+}
+

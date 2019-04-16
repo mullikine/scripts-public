@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+word="$1"
+
+e -e "(wordnut-search $(aqf "$word"))"

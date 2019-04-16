@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+n="$1"
+: ${n:="1"}
+
+# : ${delim:="[\t ]+"}
+: ${delim:="	"}
+
+while getopts -- f:d: opt &>/dev/null; do
+case $opt in
+    d)  delim="$OPTARG";;
+esac
+done
+
+
+# awk '{print $NF}'
+# cut -d "$delim" "-f${n}-"
+
+# awk -F "$delim" -v n="$n" '{for (--n; n >= 0; n--){ printf "%s/", $(NF-n)} print ""}'
+# awk -F "$delim" -v n="$n" '{for (--n; n >= 0; n--){ printf "%s%s\n", $FS, $(NF-n)} print ""}'
+
+rev | first-n-columns -d "$delim" "$n" | rev
+
+
+# awk -F "$delim" -v n="$n" '{print $(NF-n+1)" "$NF}'

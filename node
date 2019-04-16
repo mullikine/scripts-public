@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# $HOME/notes2018/ws/node/setup.org
+
+/usr/local/n/versions/node/10.10.0/bin/node "$@"

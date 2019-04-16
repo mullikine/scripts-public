@@ -1,0 +1,16 @@
+#!/bin/bash
+export TTY
+
+shopt -s nullglob
+
+# for fp in $(glob '*.pdf'); do
+for fp in *.pdf; do
+    fn=$(basename "$fp")
+    dn=$(dirname "$fp")
+    ext="${fn##*.}"
+    mant="${fn%.*}"
+    
+    if ! test -f "${mant}.txt"; then
+        $HOME/scripts/pdf2txt "$fp" | c ascify > "${mant}.txt"
+    fi
+done

@@ -1,0 +1,39 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" "<==" "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+last_arg="${@: -1}"
+
+# /usr/bin/raco "$@"
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+pager() {
+    if is_tty; then
+        vs $@
+    else
+        cat
+    fi
+}
+
+if test "$last_arg" = "-h"; then
+    /usr/local/racket/bin/raco "$@" 2>&1 | pager
+    exit $?
+fi
+
+/usr/local/racket/bin/raco "$@"
+
+echo "$$ $cmd" | udl | hls -i -f dred -b nblack ".*"
+
+# | hls -i -f red -b dblue cmake
+
+# Don't colorise using pipes because rackjure
+
+# exec 1> >(colorise-build-stdout.sh)
+# exec 2> >(colorise-build.sh)
+
+eval "$cmd"

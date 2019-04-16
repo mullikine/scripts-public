@@ -1,0 +1,28 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    --install) {
+        sudo rm /usr/bin/sensible-browser
+        sudo ln -s $HOME/scripts/sensible-browser /usr/bin/sensible-browser
+        exit 0
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+cmd="eww $CMD"
+
+eval "$cmd"

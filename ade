@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+# This script doubles the number of backslashes and then adds one
+
+n=1
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -[0-9]*) {
+        n="$(a- "mcut -d- -f2" "$opt")"
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+for (( i = 0; i < $n; i++ )); do
+    apply de "$@" # | sponge /dev/stdin
+done

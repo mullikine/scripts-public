@@ -1,0 +1,3 @@
+#!/bin/bash
+
+locate -d ~/dump/programs/updatedb/home

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+IFS= read -rd '' prefix < <(cat /dev/stdin)

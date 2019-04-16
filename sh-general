@@ -1,0 +1,109 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+^M show clipboard
+,T tm config
+\`  sh-remote
+9  git d HEAD\^!
+a  sh-apps
+R  sh-rtcmd
+A  sh-apis
+y  sh-yank
+I  sh-install
+i  sh-interpreter
+t  sh-today
+f  sh-find
+F  sh-files
+;  sh-repls
+d  sh-dir
+g  sh-go
+G  sh-git GIT
+k  sh-kill
+H  sh-history
+r  sh-rc
+c  sh-commands
+L  sh-langs
+o  sh-clipboard
+l  sh-links
+S  sh-ssh
+n  sh-new
+1  sh-lingo
+2  sh-rbp
+b  sh-backup
+m  sh-monitor
+w  sh-tmux
+P  playground
+u  sh-unix
+C  tm sel localhost:clipboard.txt
+z  sh-fuzzy
+U  switch-to-utility
+^? tm-shortcuts
+/  sh-search
+?  sh-man
+N  nvt zsh
+HEREDOC
+
+# n  notes
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    ) cmd="xc | tless && tm edit-x-clipboard" ;;
+    9) cmd="git d HEAD\^!" ;;
+    ,|T) cmd="tm config" ;;
+    \`) cmd="sh-remote" ;;
+    a) cmd="sh-apps" ;;
+    R) cmd="sh-rtcmd" ;;
+    A) cmd="sh-apis" ;;
+    n) cmd="clear; sh-new" ;;
+    i) cmd="sh-interpreter" ;;
+    t) cmd="sh-today" ;;
+    f) cmd="sh-find" ;;
+    F) cmd="sh-files" ;;
+    \;) cmd="sh-repls" ;;
+    d) cmd="sh-dir" ;;
+    r) cmd="sh-rc" ;;
+    g) cmd="sh-go" ;;
+    y) cmd="sh-yank" ;;
+    I) cmd="sh-install" ;;
+    G) cmd="sh-git" ;;
+    o) cmd="sh-clipboard" ;;
+    c) cmd="sh-commands" ;;
+    l) cmd="sh-links" ;;
+    L) cmd="sh-langs" ;;
+    S) cmd="sh-ssh" ;;
+    k) cmd="sh-kill" ;;
+    H) cmd="sh-history" ;;
+    1) cmd="sh-lingo" ;;
+    2) cmd="sh-rbp" ;;
+    b) cmd="sh-backup" ;;
+    m) cmd="sh-monitor" ;;
+    w) cmd="sh-tmux" ;;
+    u) cmd="sh-unix" ;;
+    C) cmd="tm sel localhost:clipboard.txt" ;;
+    z) cmd="sh-fuzzy" ;;
+    P) cmd="rlwrap replify tmpg" ;;
+    U) cmd="switch-to-utility" ;;
+    ) cmd="tm-shortcuts" ;;
+    /) cmd="sh-search" ;;
+    \?) cmd="sh-man" ;;
+    N) cmd="nvt zsh" ;;
+esac
+echo
+echo "$cmd"
+eval "$cmd"
+
+# n) cmd="CWD=$NOTES zsh" ;;

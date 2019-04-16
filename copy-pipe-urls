@@ -1,0 +1,14 @@
+#!/bin/bash
+export TTY
+
+# Used with git push to scrape and copy urls that pass through stdout
+
+IFS= read -rd '' input < <(cat /dev/stdin)
+
+urls="$(p "$input" | awk 1 | xurls)"
+
+if [ -n "$urls" ]; then
+    p "$urls" | xc -i
+fi
+
+p "$input"

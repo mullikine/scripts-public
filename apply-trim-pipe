@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# apply-trim-untrim q " slkadfjldks jflkdsaj flkads     " | v
+
+f="$(cmd "$@")"
+
+awk 1 | awk1 | while IFS=$'\n' read -r line; do
+    printf -- "%s" "$line" | sed -E 's/^(\s*).*/\1/'
+    printf -- "%s" "$line" | sed -E 's/^\s*(.*[^[:space:]])\s*$/\1/' | eval "$f"
+    printf -- "%s\n" "$line" | sed -E 's/^.*[^[:space:]](\s*)$/\1/'
+done

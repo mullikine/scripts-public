@@ -1,0 +1,51 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# Annoyingly cant' do this because emac's man command runs this
+# eval `resize`
+
+if [ -z "$COLUMNS" ]; then
+    eval `resize`
+fi
+
+if [ -n "$COLUMNS" ] && [ "$COLUMNS" -gt 90 ]; then
+    COLUMNS=90
+fi
+
+# Some man pages will want more COLUMNS, but deny them. Also, silence
+# the errors with 2>/dev/null
+
+# for tshark
+# export MANWIDTH=1000 man
+
+# export PAGER=tless
+
+export PAGER=less
+
+is_tty() {
+    # If stout is a tty
+    [[ -t 1 ]]
+}
+
+if is_tty; then
+    # This does not help speed much
+    # -c 'set nohls'
+    #cmd="/usr/bin/man $CMD | nv -c 'nmap q :q!<CR>' -c 'set nohls' -"
+
+    # This looks nice but it's too slow
+    #cmd="/usr/bin/man $CMD | nv -c 'nmap q :q!<CR>' -"
+    # cmd="/usr/bin/man $CMD 2>/dev/null | v"
+    # cmd="/usr/bin/man $CMD 2>/dev/null | rosie-all | tless -r"
+    # cmd="/usr/bin/man $CMD 2>/dev/null | tless -nv" # too slow
+    # cmd="/usr/bin/man $CMD 2>/dev/null | tless -s"
+
+    # /usr/bin/man "$@" 2>/dev/null | tless -s
+    /usr/bin/man "$@" 2>/dev/null
+else
+    cmd=" $CMD 2>/dev/null"
+    /usr/bin/man "$@" 2>/dev/null
+fi
+
+eval "$cmd"

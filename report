@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# Run a command and make a report
+
+# stashit

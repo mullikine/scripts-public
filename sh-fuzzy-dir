@@ -1,0 +1,40 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started alreaddy.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+g  select-git-repo
+w  select-ws-dir
+o  select-go-package
+r  select-recent-dir
+h  select-dir-from-here
+d  select-dir-from-directories-file
+HEREDOC
+
+echo "$0" | udl
+echo "$options"
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    g) cmd="select-git-repo" ;;
+    w) cmd="select-ws-dir" ;;
+    o) cmd="select-go-package" ;;
+    r) cmd="select-recent-dir" ;;
+    h) cmd="select-dir-from-here" ;;
+    d) cmd="select-dir-from-directories-file" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

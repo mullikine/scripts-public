@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+{
+printf -- "| |lines|words|bytes\n"
+printf -- "|-\n|total|"
+datamash sum 2 sum 3 sum 4 | spaces-to-tabs | tr "\t" "|"
+}| xc -i -

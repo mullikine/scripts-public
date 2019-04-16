@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+org="$1"
+lang="$2"
+
+: ${org:="cloudbees"}
+
+if test -n "$lang"; then
+    lang="&language=go"
+fi
+
+ci lynx -dump "https://github.com/$org?utf8=%E2%9C%93&q=&type=$lang" | xurls | grep "^https://github.com/$org" | grep -v -P '[&?]' | gh-filter-nonrepo-urls | grep -P "$org/[^/]*$" | sort | uniq | pager

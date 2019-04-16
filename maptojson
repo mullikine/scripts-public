@@ -1,0 +1,7 @@
+#!/bin/bash
+export TTY
+
+delim="$1"
+: ${delim:=":"}
+
+jq -r -R -s 'split("\n")[:-1] | map( split("'$delim'") | {(.[0]): .[1:] | join("'$delim'")} ) | add'

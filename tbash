@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# tmux bash
+# works like interactive bash but opens in a new tmux window
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -c) {
+        init_cmd="$2"
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+tm sph "$init_cmd"
+return $?

@@ -1,0 +1,11 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+f="$1"
+shift
+
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    cat "$ARG" | eval "$f" | sponge "$ARG"
+done

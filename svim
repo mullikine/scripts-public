@@ -1,0 +1,8 @@
+#!/bin/bash
+CMD=''
+for (( i = 1; i <= $#; i++ )); do
+    eval ARG=\${$i}
+    CMD="$CMD $(printf -- "%s" "$ARG" | q)"
+done
+cmd="sudo -E vim $CMD"
+eval "$cmd"

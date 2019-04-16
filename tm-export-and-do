@@ -1,0 +1,42 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -export) {
+        exports="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -t) {
+        tmux_target_session="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -d) {
+        DEBUG_MODE=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+full_slug="$(echo "$@" | tr -d '\n' | slugify)"
+start_slug="$(p "$full_slug" | cut -c -5)"
+end_slug="$(p "$full_slug" | rev | cut -c -15 | rev)"
+win_name="${start_slug}-${end_slug}-$$"
+
+tm \
+    -export "$exports" \
+    -s \
+    nw -t "$tmux_target_session" \
+       -n "$win_name" \
+       -fargs \
+       -d \
+       "$@"

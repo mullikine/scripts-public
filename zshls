@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+x -zsh -s "ls" -c m -a

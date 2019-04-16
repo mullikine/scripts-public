@@ -1,0 +1,40 @@
+#!/bin/bash
+export TTY
+
+displaytime() {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  (( $D > 0 )) && printf '%d days ' $D
+  (( $H > 0 )) && printf '%d hours ' $H
+  (( $M > 0 )) && printf '%d minutes ' $M
+  (( $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+  printf '%d seconds\n' $S
+}
+
+stdin_exists() {
+    # this makes it so the first key pressed in the terminal is a
+    # dead key. it's broken
+    # IFS= read -t0.1 -rd '' input < <(cat /dev/stdin)
+    # exec < <(printf -- "%s" "$input")
+    # [ -n "$input" ]
+
+    ! [ -t 0 ]
+    # ! [ -t 0 ] && read -t 0
+}
+
+
+if stdin_exists; then
+    awk1 | while IFS=$'\n' read -r line; do
+        if [ -n "$line" ]; then
+            displaytime "$line"
+        fi
+    done
+fi
+
+for opt in "$@"
+do
+    displaytime "$opt"
+done

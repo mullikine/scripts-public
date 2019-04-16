@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+awk1 | while IFS=$'\n' read -r line; do
+    cat "$line" | "$@"
+done

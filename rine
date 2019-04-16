@@ -1,0 +1,17 @@
+#!/bin/bash
+export TTY
+
+# # pipe-run if not empty
+# rine xsv select "$(( col + 1 ))"
+# pine xsv select "$(( col + 1 ))"
+
+tf_stdiin="$(nix tf stdiin || echo /dev/null)"
+trap "rm \"$tf_stdiin\" 2>/dev/null" 0
+
+cat > "$tf_stdiin"
+
+if test -s "$tf_stdiin"; then
+    cat "$tf_stdiin" | eval "$@"
+else
+    cat
+fi

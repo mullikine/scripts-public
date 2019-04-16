@@ -1,0 +1,41 @@
+#!/bin/bash
+export TTY
+
+# deploy/duplicate files/scripts to another server
+
+# TODO I want to keep symlinks intact and sync both the real path and the
+# symmlink
+
+# $1 = hostname
+# remaning args = glob of file / folder paths
+
+hn="$1"
+shift
+
+case "$hn" in
+    p) {
+        hn=pipeline
+    }
+    ;;
+
+    *)
+esac
+
+for fp in "$@"
+do
+    # If it's a symlink, rsync the symlink and rsync the thing it
+    # points to
+
+    # If it's a dir, rsync it all across
+    if test -d "$fp"; then
+        rsync -aAXvc --ignore-times "$fp" $hn:
+    fi
+
+    rsync -aAXvc --ignore-times "$fp" $hn:
+    dn="$(dirname "$fp")"
+
+    rp="$(realpath "$fp")"
+
+    # TODO
+    # - make the remote dirs
+done

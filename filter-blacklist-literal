@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+last_arg="${@: -1}"
+set -- "${@:1:$(($#-1))}" # shift last arg
+blacklist_fp="$last_arg"
+
+# Examples
+# filter-blacklist-literal <(cat1 $HOME/source/git/codelingo/marketing/batches/batch-*/PRs.txt | sed 's=/pull/[0-9]\+$==')
+# filter-blacklist-literal -i <(cat1 $HOME/source/git/codelingo/marketing/batches/batch-*/PRs.txt | sed 's=/pull/[0-9]\+$==')
+
+awk1 | lgrep -v "$@" -f "$blacklist_fp"

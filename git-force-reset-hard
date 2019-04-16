@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+enable=n
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    "") { shift; }; ;;
+    -f) {
+        enable=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if ! test "$enable" = "y"; then
+    echo "You need -f for this to run." 1>&2
+    exit 1
+fi
+
+{
+git checkout master
+git fetch origin
+git reset --hard origin/master
+} &>/dev/null

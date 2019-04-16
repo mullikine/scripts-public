@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+#re='(github|gitlab|bitbucket|gopkg).(com|org|in)'
+#slashed="$(echo "$re" | esc '|().')"
+
+xurls |
+    sed -n '/:\/\/github\.com\/[^/]\+\/[^/]\+/p' |
+    sed '/[?=]/d' |
+    sed 's/[#].*//' |
+    sed 's/\(:\/\/github\.com\/[^/]\+\/[^/]\+\).*/\1/' |
+    grep -v -P '\.com/(about|site|trending|features)' #| 
+    # uniq
+
+    # awk1 | while IFS=$'\n' read -r line; do
+    #     author="$(printf -- "%s\n" "$line" | sed -n "s_^[a-z]\\+://[w.]*$slashed/\\([^/]\+\\).*_\\3_p")"
+    #     repo="$(printf -- "%s\n" "$line" | sed -n "s_^[a-z]\\+://[w.]*$slashed/[^/]\\+/\\([^/]\\+\\).*_\\3_p" | sed 's/\.git$//')"
+    #     echo "$repo"
+    # done

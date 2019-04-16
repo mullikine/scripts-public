@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -q|-w) {
+        query=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+app="$1"
+app="$(which -a "$app" | xargs -l1 realpath | uniqnosort | head -n 2 | tail -n 1)"
+if test "$query" = "y"; then
+    printf -- "%s" "$app"
+else
+    echo "using alternative $app" 1>&2
+    shift
+    $app "$@"
+fi

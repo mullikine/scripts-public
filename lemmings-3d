@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd $HOME/dump$HOME/notes2018/programs/dosbox
+#$HOME/computer/programs/dosbox/c/lemmings-3d
+# -fullscreen
+#dosbox -conf "configs/keen.conf" -c "mount c $HOME/computer/programs/dosbox/c" -c C: -c "cd \LEMMINGS-3D" -c "mixer MASTER 20:20" -c "SETUP.EXE" -c "exit"
+#dosbox -c "mount c $HOME/computer/programs/dosbox/c" -c C: -c "cd \LEM3D" -c "mixer MASTER 20:20" -c "SETUP.EXE" -c "exit"
+#dosbox -c "mount c $HOME/computer/programs/dosbox/c" -c C: -c "cd \LEM3D"
+dosbox -conf "configs/keen.conf" -c "mount c $HOME/dump$HOME/notes2018/programs/dosbox/c" -c C: -c "cd \LEM3D" -c "mixer MASTER 20:20" -c "L3D.EXE" -c "exit"

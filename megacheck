@@ -1,0 +1,20 @@
+#!/bin/bash
+export TTY
+
+# This is to prevent emacs from lagging my entire system
+# megacheck is for static analysis
+
+:
+exit 0
+
+bn="$(basename "$0")"
+real_prog="$(which -a "$bn" | sed 1d | head -n 1)"
+eval "$real_prog"
+
+# which -a "$bn" | sed 1d | head -n 1
+
+# notify-send "$bn" "Nope! I refuse to lag the computer."
+# 
+# set -m
+# unbuffer a beep warning &
+# disown

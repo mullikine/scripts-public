@@ -1,0 +1,29 @@
+#!/bin/bash
+export TTY
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+CMD="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    printf -- "%s" "$ARG" | q
+    printf ' '
+done
+eval ARG=\${$i}
+printf -- "%s" "$ARG" | q
+)"
+
+if stdin_exists; then
+    IFS= read -rd '' input < <(cat /dev/stdin | q)
+    CMD="$input"
+fi
+
+cmd="/usr/bin/locate $CMD"
+
+# echo "$cmd"
+# exit 0
+# lit "$CMD" > /tmp/loc.txt
+
+eval "$cmd"

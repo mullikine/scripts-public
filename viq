@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+CMD="$(cmd "$@")"
+# : ${CMD:="-n \"/.dd\""}
+: ${CMD:="-m \"/.\\<CR>dd\""}
+
+cmdname=edm
+s chomp | rtcmd ++$cmdname -E "$cmdname $CMD | vi -"

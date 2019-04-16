@@ -1,0 +1,31 @@
+#!/bin/bash
+export TTY
+
+if pl "$TERM" | grep -q -P '256color'; then
+    export TERM=xterm-256color
+else
+    export TERM=xterm-2color
+fi
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -2) {
+        export TERM=xterm-2color
+        MONOCHROME=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+if test -f "$HOME/local/bin/w3m"; then
+	binpath="$HOME/local/bin/w3m"
+elif test -f "/usr/bin/w3m"; then
+	binpath="/usr/bin/w3m"
+fi
+
+if test "$MONOCHROME" = "y"; then
+    "$binpath" -M "$@"
+else
+    "$binpath" "$@"
+fi

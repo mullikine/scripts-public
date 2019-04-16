@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# This script deletes paths given from stdin after asking if you are really sure.
+
+files="$(xargs printf -- "(%s)\n")"
+# files="$(cat)"
+
+files="You are about to delete some files:\n\n$files"
+
+dialog --title "PAUSE" "$@" --pause "$files" 20 70 5
+
+DIALOG_ERROR=254
+export DIALOG_ERROR
+
+dialog --title "YES/NO BOX" --clear \
+        --yesno "Are you sure?" 15 61
+
+retval=$?

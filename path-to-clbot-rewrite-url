@@ -1,0 +1,8 @@
+#!/bin/bash
+export TTY
+
+bn="$(basename "$(dirname "$(pwd)")")"
+
+# path-lasttwo | cut -d / -f 2 | sed 's=^=https://github.com/CodeLingoBot/=' | sed 's=$=/tree/rewrite='
+
+path-lasttwo | cut -d / -f 2 | sed 's=^=https://github.com/CodeLingoBot/=' | sed 's=$=/commits/rewrite='

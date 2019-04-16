@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+trap func_trap INT
+func_trap() {
+    ns "C-c disabled" &>/dev/null
+}
+
+read n
+sleep 5

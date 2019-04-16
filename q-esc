@@ -1,0 +1,18 @@
+#!/usr/bin/perl -X
+
+#http://search.cpan.org/~evo/String-Escape-2010.002/Escape.pm#INSTALLATION
+# echo | esc
+
+# sudo cpanm String::Escape
+
+use String::Escape qw( backslash );
+
+$| = 1; # make the current file handle (stdout) hot. This has the same effect as disabling buffering
+# I CANT use unbuffer
+
+# I don't know if I want this. It also puts many different characters
+# such as : into hex
+
+while(<>) {
+    print backslash($_)
+}

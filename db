@@ -1,0 +1,32 @@
+#!/bin/bash
+export TTY
+   
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+if stdin_exists; then
+    input="$(cat)"
+fi
+
+opt="$1"
+shift
+
+CMD="$(cmdne "$@")"
+
+case "$opt" in
+    mysql) {
+        if ! stdin_exists; then
+            input="$CMD"
+        fi
+        mysql -u root -poracle -e "$input" fileindexdb
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

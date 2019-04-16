@@ -1,0 +1,93 @@
+#!/bin/bash
+export TTY
+
+eval `resize`
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -nw) {
+        NEW_WINDOW=y
+        shift
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# lit "$@" | tm -S -tout nw "v"
+# exit 0
+
+# It is annoyingly difficult to kill vlc
+# killall -9 vlc
+
+ARGS="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    if p "$ARG" | grep -q -P '^-'; then
+        printf -- "%s" "$ARG" | qne
+        printf ' '
+    fi
+done
+eval ARG=\${$i}
+if p "$ARG" | grep -q -P '^-'; then
+    printf -- "%s" "$ARG" | qne
+fi
+)"
+
+# lit "ARGS:$ARGS"
+
+FILES="$(
+for (( i = 1; i < $#; i++ )); do
+    eval ARG=\${$i}
+    if ! p "$ARG" | grep -q -P '^-'; then
+        printf -- "%s\n" "$ARG"
+        printf ' '
+    fi
+done
+eval ARG=\${$i}
+if ! p "$ARG" | grep -q -P '^-'; then
+    if lit "$ARG" | grep -q -P '\.m3u$'; then
+        cat "$ARG" | umn
+    else
+        printf -- "%s\n" "$ARG"
+    fi
+fi
+)"
+
+tf_playlist="$(nix tf playlist m3u || echo /dev/null)"
+# trap "rm \"$tf_playlist\" 2>/dev/null" 0
+
+# lit "$ARGS $FILES $@" | tm -S -tout nw "v"
+# exit 0
+
+lit "$FILES" | u rp > "$tf_playlist"
+
+# cmd="/usr/bin/vlc -I ncurses --novideo $CMD"
+# eval "$cmd"
+
+
+# CMD="$(p "$CMD" | qne)"
+
+
+# lit "/usr/bin/vlc -I ncurses --novideo $ARGS $tf_playlist"
+# exit 1
+
+# --play-and-exit appears to not be working. Therefore, add vlc://quit
+# vlc://quit
+# Well that's not working...
+# It's not even working with --ignore-config at the end
+# Disable curses
+# -I ncurses
+
+if test "$NEW_WINDOW" = "y"; then
+    tm -te -d nw "/usr/bin/vlc --ignore-config -I dummy --play-and-exit --novideo $ARGS $tf_playlist vlc://quit"
+else
+    cmd="/usr/bin/vlc --ignore-config -I dummy --play-and-exit --novideo $ARGS $tf_playlist vlc://quit"
+
+    # echo "$cmd" | udl
+    # eval "$cmd" &>/dev/null # this hides the error. I am currently
+    # getting a pulse audio error
+    eval "$cmd"
+fi
+
+# tm -te -d nw "/usr/bin/vlc $ARGS $tf_playlist"

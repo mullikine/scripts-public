@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+# Add preview for what is contained in the branch
+
+git branch | fzf

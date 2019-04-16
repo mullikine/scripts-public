@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+# This file is for summarising things
+# Used like scope.sh
+
+# Cat through it, with options or provide parameters which may include
+# filenames.
+cat

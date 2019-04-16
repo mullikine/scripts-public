@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+# Return a path to the converted file
+# Create a function for emacs
+
+/usr/bin/xterm -ls -en en_US.UTF-8 "$@"
+
+jupyter nbconvert --to script

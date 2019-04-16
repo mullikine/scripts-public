@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+rsync -aAXvc --ignore-times --rsync-path="sudo rsync" $HOME/ instance-1:/morgan$HOME; ce stop-instances instance-1

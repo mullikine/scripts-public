@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+# For each library, find the so file and find the include dir
+
+# set(CURSES_LIBRARY "/lib/x86_64-linux-gnu/libncurses.so.5.9")
+# set(CURSES_INCLUDE_PATH "/opt/include")
+
+# Then add to all 'Find<Lib>.cmake' files the above lines
+
+# l FindCurses.cmake | grep /cmake-
+

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+bash -c "$HOME/notes2018/ws/codelingo/scripts/stream-errors.sh | xurls | tail -n 1 | xc -n -i" & disown

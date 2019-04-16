@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# All things cpp development related
+
+opt="$1"
+shift
+case "$opt" in
+    run rtags-server) {
+        # Can I run this inside of emacs. Does emacs have a process
+        # manager I can use?
+
+        rdm
+    }
+    ;;
+
+    run rtags-server) { 
+        # This is usually done automatically by emacs, I think, but is
+        # useful for debugging?
+
+        # Load compile_commands.json from directory
+        rc -J .
+    }
+    ;;
+    
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

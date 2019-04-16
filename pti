@@ -1,0 +1,95 @@
+#!/bin/bash
+export TTY
+
+export EDITOR=vim
+
+export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.full.py
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    pti3|xpitpython3) {
+        PY_VERSION=3
+    }
+    ;;
+
+    pti36|pitpython6) {
+        PY_VERSION=36
+    }
+    ;;
+
+    *) {
+        PY_VERSION=2
+    }
+    ;;
+
+esac
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -n) {
+        window_name="$2"
+        shift
+        shift
+    }
+    ;;
+
+    -rc) {
+        shift
+        opt="$1"
+        shift
+        case "$opt" in
+            full) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.full.py
+            }
+            ;;
+
+            basic) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.basic.py
+            }
+            ;;
+
+            debug) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.debug.py
+            }
+            ;;
+
+            math) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.math.py
+            }
+            ;;
+
+            shane) {
+                export PYTHONSTARTUP=$HOME/notes2018/ws/python/rc/pythonrc.shane.py
+            }
+            ;;
+
+            *) {
+                export PYTHONSTARTUP=$HOME/.pythonrc
+            }
+            ;;
+        esac
+    }
+    ;;
+
+    *) break;
+esac; done
+
+case "$PY_VERSION" in
+    2) {
+        ptipython2
+    }
+    ;;
+
+    3) {
+        ptipython3
+    }
+    ;;
+
+    36) {
+        ptipython36
+        # ptpython3.6
+    }
+    ;;
+
+    *)
+esac

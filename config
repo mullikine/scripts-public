@@ -1,0 +1,41 @@
+#!/bin/bash
+export TTY
+
+# I should make this a fuzzy selector from the config files
+# Can I make a fuzzy selector that generates some lisp for hydra?
+
+opt="$1"
+shift
+case "$opt" in
+    compton) {
+        v $HOME/.compton.conf
+    }
+    ;;
+
+    xmonad) {
+        v $HOME/.xmonad/xmonad.hs $HOME/versioned/git/config/xmonad/xmobarrc
+    }
+    ;;
+
+    tmux) {
+        v $HOME/.tmux.conf
+    }
+    ;;
+
+    zsh) {
+        v $HOME/.zshrc
+    }
+    ;;
+
+    bash) {
+        v $HOME/.bashrc
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

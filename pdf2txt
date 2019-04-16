@@ -1,0 +1,12 @@
+#!/bin/bash
+export TTY
+
+is_stdout_pipe() {
+    [[ -p /dev/stdout ]]
+}
+
+if is_stdout_pipe; then
+    /usr/bin/pdf2txt "$@" | c ascify
+else
+    /usr/bin/pdf2txt "$@"
+fi

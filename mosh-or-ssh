@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# Try mosh and if that fails, fall back to normal ssh
+
+sn="$(basename "$0")"
+
+ns "$sn: This should fail if mosh can't connect. That's not happening. Detect port is open first"
+
+# mosh "$@" || ssh "$@"
+ssh "$@"

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+jq -r '.[] | . + (. |= {n_changes_naive : (.n_changes_naive // "0")} + . )'

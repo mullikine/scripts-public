@@ -1,0 +1,59 @@
+#!/bin/bash
+export TTY
+
+# All things related to ctags and source code information
+
+# Need a way of summarising the symbols in arbitrary files
+
+exec 1> >(mnm)
+
+sn="$(basename "$0")"
+
+case "$sn" in
+    ctags-hr) {
+        opt=describe-file
+        # break; break breaks from a loop, not a switch
+    }
+    ;;
+
+    *) {
+        opt="$1"
+        shift
+    }
+    ;;
+esac
+
+case "$opt" in
+    build) {
+        cd $HOME$MYGIT/universal-ctags/ctags
+        ./autogen.sh
+        ./configure --prefix=$HOME/local
+        make -j 10
+    }
+    ;;
+
+    list) {
+        # ctags -x --c-types=f source.c|cut -c51- |sed -e 's/$/;/g' > header.h
+
+        ctags -x "$@"
+    }
+    ;;
+
+    describe-file) {
+        ctags -x "$@" | c field 1 | s uniq 2>/dev/null
+    }
+    ;;
+
+    src) {
+        cd $HOME$MYGIT/universal-ctags/ctags/parsers
+        zsh
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+/bin/ls --color=tty -A -F $@ | sed 's/[*=>@]$//'

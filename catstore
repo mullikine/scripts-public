@@ -1,0 +1,6 @@
+#!/bin/bash
+export TTY
+
+notify-send "Not sure what this was supposed to do"
+
+IFS= read -rd '' input < <(cat /dev/stdin)

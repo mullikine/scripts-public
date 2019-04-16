@@ -1,0 +1,160 @@
+#!/bin/bash
+
+# Cache manager
+
+# Usage:
+# ci run de get-environment-dirs-exports
+
+# refresh_timeout
+
+# This script only caches if the script run is successful.
+
+# The default is used for many things, be reasonable. 1 day?
+
+# TIMEOUT=300 # 5 minutes
+# TIMEOUT=10000000 # # 115 days; htime 10000000
+TIMEOUT=10000000 # # 115 days; htime 10000000
+TIMEOUT=86400 # 1 day
+# UPDATE=
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -t) {
+        TIMEOUT="$2"
+        shift
+        shift
+    }
+    ;;
+
+    # Long timeout
+    -lt) {
+        TIMEOUT=10000000 # # 115 days; htime 10000000
+        shift
+    }
+    ;;
+
+    -q) {
+        RETURN_CACHE_FILE_PATH=y
+        shift
+    }
+    ;;
+
+    -meta) {
+        EXTRA_METADATA="_$2"
+
+        # Great for environment variables
+        # Otherwise, env vars are ingored
+        # ci -meta "$BASENAME" org clink "$@"
+        shift
+        shift
+    }
+    ;;
+
+    -nt) {
+        TIMEOUT="99999999"
+        shift
+    }
+    ;;
+
+    -E) {
+        DO_EXEC=y
+        shift
+    }
+    ;;
+
+    -EE|-2) {
+        CAPTURE_STDERR=y
+        shift
+    }
+    ;;
+
+    -u) {
+        UPDATE=y
+        shift
+    }
+    ;;
+
+    -uu) {
+        export UPDATE=y
+        shift
+    }
+    ;;
+
+    -v2) {
+        # for nested CIs
+        # Print to stderr as it's happening
+        export VERBOSE_ERROR=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# TODO: Add a refresh interval
+
+# cache it
+
+# This would be much easier in a language like racket.
+# Seriously, I need to master the racket language.
+
+# Same inputs and same outputs
+
+if test "$DO_EXEC" = "y"; then
+    CMD="$1"
+else
+    CMD="$(cmd "$@")"
+fi
+
+# It was too long sometimes
+cmd_slug="$(printf -- "%s" "$CMD" | slugify | cut -c 1-30)"
+cmd_sha="$(printf -- "%s" "$CMD" | md5sum | cut -d ' ' -f 1 | cut -c 1-10)"
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+# I want to check the md5 of the input against an md5 that is recorded
+# Calculate the md5 for both the stdin and the arguments
+
+wdmd5="_$(printf -- "%s\n" "$(pwd)$EXTRA_METADATA" | md5sum | cut -d ' ' -f 1)"
+
+if stdin_exists; then
+    IFS= read -rd '' input < <(cat /dev/stdin)
+
+    inputmd5="_$(printf -- "%s" "$input" | md5sum | cut -d ' ' -f 1)"
+    exec < <(s chomp <<< "$input")
+
+    # Store the stdin into a file
+fi
+
+cfp="$HOME/notes2018/programs/ci/${cmd_slug}${cmd_sha}${inputmd5}_${wdmd5}"
+
+if test "$RETURN_CACHE_FILE_PATH" = "y"; then
+    echo -n "$cfp"
+    exit 0
+fi
+
+if ! test "$UPDATE" = y && [ -f "$cfp" ] && test "$(age "$cfp")" -lt "$TIMEOUT"; then
+    cat "$cfp"
+else
+    tf_out="$(nix tf out || echo /dev/null)"
+    trap "rm \"$tf_out\" 2>/dev/null" 0
+
+    if test "$CAPTURE_STDERR" = "y"; then
+        eval "cap2 $CMD" > "$tf_out"
+    else
+        if test "$VERBOSE_ERROR" = "y"; then
+            eval "$CMD" > "$tf_out"
+        else
+            eval "$CMD" 2>/dev/null > "$tf_out"
+        fi
+    fi
+
+    result="$?"
+
+    cat "$tf_out"
+
+    if test "$result" -eq 0; then
+        cat "$tf_out" > "$cfp"
+    fi
+fi

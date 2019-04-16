@@ -1,0 +1,31 @@
+#!/bin/bash
+export TTY
+
+# script for sending things to other servers
+
+# Related to this:
+# $HOME/scripts/get
+
+opt="$1"
+shift
+case "$opt" in
+    gcloud_script) {
+        for (( i = 1; i <= $#; i++ )); do
+            eval ARG=\${$i}
+            rp="$(which "$ARG")"
+
+            if [ -n "$rp" ]; then
+                echo "$rp"
+                rs -L "$rp" instance-1:scripts
+            fi
+        done
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

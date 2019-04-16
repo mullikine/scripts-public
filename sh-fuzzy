@@ -1,0 +1,46 @@
+#!/bin/bash
+export TTY
+
+clear
+# exec 1> >(mnm)
+
+# I should turn this entire script into an elisp hydra.
+# Although that would require that emacs has been started already.
+
+read -r -d '' options <<HEREDOC
+.  EDIT
+t  tools
+a  awesome
+v  discovery
+f  functions
+T  v tools.txt (edit)
+A  v awesome.txt (edit)
+V  v discovery.txt (edit)
+F  v functions.txt (edit)
+d  sh-fuzzy-dir
+HEREDOC
+
+echo "$0" | udl
+echo "$options" | mnm
+
+read -n1 d
+# clear
+
+case "$d" in
+    .) cmd="v $0" ;;
+    t) cmd="cat $HOME/notes2018/ws/fuzzy/tools.txt | fzf -C | xc -i" ;;
+    a) cmd="cat $HOME/notes2018/ws/fuzzy/awesome.txt | fzf -C | xc -i" ;;
+    v) cmd="cat $HOME/notes2018/ws/fuzzy/discovery.txt | fzf -C | xc -i" ;;
+    f) cmd="cat $HOME/notes2018/ws/fuzzy/functions.txt | fzf -C | xc -i" ;;
+    T) cmd="v $HOME/notes2018/ws/fuzzy/tools.txt" ;;
+    A) cmd="v $HOME/notes2018/ws/fuzzy/awesome.txt" ;;
+    V) cmd="v $HOME/notes2018/ws/fuzzy/discovery.txt" ;;
+    F) cmd="v $HOME/notes2018/ws/fuzzy/functions.txt" ;;
+    d) cmd="sh-fuzzy-dir" ;;
+esac
+echo
+echo "$cmd"
+
+# exec </dev/tty
+# exec 1> /dev/tty
+eval "$cmd"

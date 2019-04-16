@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" </dev/tty ` # Disable tty to pipe content into hs ` )
+
+# x-gore -s '[]string{"hi"}' -c m
+# x -sh "gore" -e "gore>" -s ":import fmt" -c m -s '[]string{"hi"}' -c m -i
+
+x -sh "gore" -e "gore>" -s ":import fmt" -c m "$@" -i

@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+# Mathematica
+
+tf_script="$(nix tf script wls || echo /dev/null)"
+trap "rm \"$tf_script\" 2>/dev/null" 0
+
+cat > "$tf_script" <<HEREDOC
+Print[$@]
+HEREDOC
+
+wolframscript -file "$tf_script" "$@"

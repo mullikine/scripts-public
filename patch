@@ -1,0 +1,22 @@
+#!/bin/bash
+export TTY
+
+# --no-backup-if-mismatch
+# This avoids creation of .orig files
+
+tf_patch_code="$(odn nix tf patch_code || echo /dev/null)"
+trap "rm \"$tf_patch_code\" 2>/dev/null" 0
+
+cat > "$tf_patch_code"
+
+output="$(cat "$tf_patch_code" | /usr/bin/patch --no-backup-if-mismatch -r - "$@" | tee /dev/stderr)"
+
+if printf -- "%s\n" "$output" | grep -q -P 'FAILED.*different line endings'; then
+    echo "different line endings" 1>&2
+    exit 101
+fi
+
+echo "code: $?" 1>&2
+
+# Ending in true prevents parent scripts that die on subscript failure from dying
+:

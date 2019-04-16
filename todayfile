@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+f="`date +%d.%m.%y`.org"
+
+ns +todayfile "$f"
+
+touch "$f"
+og "$f"

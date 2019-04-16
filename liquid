@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -nv) {
+        NVC=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# Liquid clojure editor
+
+# cd $HOME/notes2018/programs/liquid-editor
+
+# java -jar liq.jar --jframe "$@"
+if test "$NVC" = "y"; then
+    nvc java -jar $HOME/notes2018/programs/liquid-editor/liq.jar --tty "$@"
+else
+    java -jar $HOME/notes2018/programs/liquid-editor/liq.jar --tty "$@"
+fi
+
+# Just wait a little bit for it to quit.
+# clear

@@ -1,0 +1,53 @@
+#!/bin/bash
+export TTY
+# shopt -s nullglob # use for 'for' loops but not for 'ls', 'grep'
+
+# This script potentiallya should be able to convert one filetype into
+# another given any series of hops
+
+# Requirements:
+# unoconv - convert any document from and to any LibreOffice supported
+# format
+
+if [ -n "$1" ]; then
+    first_fp="$1"
+    shift
+fi
+
+if [ -n "$1" ]; then
+    second_fp="$1"
+    shift
+fi
+
+first_fn=$(basename "$first_fp")
+first_dn=$(dirname "$first_fp")
+first_ext="${first_fn##*.}"
+first_mant="${first_fn%.*}"
+
+second_fn=$(basename "$second_fp")
+second_dn=$(dirname "$second_fp")
+second_ext="${second_fn##*.}"
+second_mant="${second_fn%.*}"
+
+case "$first_ext" in
+    ppt) {
+        if test "$second_ext" = "pdf"; then
+            if ! test -f "${first_mant}.pdf"; then
+                unoconv -f pdf  "$first_fp"
+            fi
+        elif ! test -n "$second_ext"; then
+            if ! test -f "${first_mant}.pdf"; then
+                unoconv -f pdf  "$first_fp"
+            fi
+            
+        fi
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac

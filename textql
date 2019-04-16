@@ -1,0 +1,30 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+notify-send "Use csvkit instead of textql!" &>/dev/null
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -s) {
+        if stdin_exists; then
+            exec < <(csv-slugify-header)
+            # csv-slugify-header -tsv
+        else
+            echo "Can't slugify header if using a file path as input. Not supported yet." 1>&2
+        fi
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+# echo "$@" 1>&2
+$HOME/go/bin/textql "$@"
+
+# csvsql --query "select name from data where age > 30" data.csv > new.csv

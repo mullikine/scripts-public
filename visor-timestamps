@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+scrape "[0-9]{10}" | sort -n | xargs -L1 -I{} date-hr -d @{}

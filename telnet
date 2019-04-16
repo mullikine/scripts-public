@@ -1,0 +1,13 @@
+#!/bin/bash
+export TTY
+
+( hs "$(basename "$0")" "$@" 0</dev/null ) &>/dev/null
+
+# DISCARD
+# DISCARD: Can't use rlwrap
+# To quit:
+# Ctrl+c, Esc, Enter, Ctrl+], Enter, q, Enter
+# rlwrap /usr/bin/telnet "$@"
+# It actually doesn't work for me at all
+
+/usr/bin/telnet "$@"

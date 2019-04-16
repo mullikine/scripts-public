@@ -1,0 +1,27 @@
+#!/bin/bash
+export TTY
+
+# This is basically =() but for bash
+# Instead you would write
+# ep -E "the command | with pipes"
+# or
+# ep the command
+
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -E) {
+        DO_EXEC=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+tf_output="$(nix tf output txt || echo /dev/null)"
+
+if test "$DO_EXEC" = "y"; then
+    eval "$1" > "$tf_output"
+else
+    "$@" > "$tf_output"
+fi
+echo "$tf_output"

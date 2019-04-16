@@ -1,0 +1,23 @@
+#!/bin/bash
+export TTY
+
+opt="$1"
+case "$opt" in
+    fix-locale) {
+        shift
+
+        ssh "$1" "sudo locale-gen en_NZ.UTF-8"
+
+        exit 0
+    }
+    ;;
+
+    template) {
+        :
+    }
+    ;;
+
+    *)
+esac
+
+/usr/bin/mosh "$@"

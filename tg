@@ -1,0 +1,26 @@
+#!/bin/bash
+export TTY
+
+# temp git repository
+
+# This can be a path to a file or a directory. Use this to populate the
+# temp repository
+fp="$1"
+rp="$(realpath "$fp")"
+
+td_git="$(mktemp -t -d td_gitXXXXXX || echo /dev/null)"
+
+cd "$td_git"
+git init
+
+if [ -f "$rp" ]; then
+    cp -a "$rp" "$td_git"
+    git add -A .
+    git commit -m "Added $rp"
+elif [ -d "$rp" ]; then
+    rs -nc -nogit -noswap "$rp/" "$td_git"
+    git add -A .
+    git commit -m "Added $rp"
+fi
+
+CWD="$td_git" zsh

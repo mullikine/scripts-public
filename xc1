@@ -1,0 +1,15 @@
+#!/bin/bash
+export TTY
+
+target="$1"
+: ${target:="shane@instance-1"}
+
+stdinexists() {
+    ! [ -t 0 ]
+}
+
+if stdinexists; then
+    ssh "$target" bash -l $HOME/scripts/xc 2>/dev/null
+else
+    ssh -t "$target" bash -l $HOME/scripts/xc 2>/dev/null
+fi

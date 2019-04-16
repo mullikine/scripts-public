@@ -1,0 +1,4 @@
+#!/bin/bash
+export TTY
+
+sed 's=^https://github.com/==' | sed 's=^\([^/]\+/[^/]\+\).*=\1=' | path-lasttwo

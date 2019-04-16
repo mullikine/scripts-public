@@ -1,0 +1,9 @@
+#!/bin/bash
+export TTY
+
+count="$1"
+: ${count:="1"}
+
+(( count ++ ))
+
+sed "s/^\*/$(lit -n '*' | rps $count | esc '*')/"

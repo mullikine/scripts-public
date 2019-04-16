@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+disable-dual-screens
+
+# 13"
+# xrandr --output eDP-1 --primary --left-of HDMI-2 --output HDMI-2 --auto
+
+# 15"
+xrandr --output eDP-1 --primary --left-of HDMI-3 --output HDMI-3 --auto

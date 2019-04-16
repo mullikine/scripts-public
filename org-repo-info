@@ -1,0 +1,73 @@
+#!/bin/bash
+export TTY
+
+SHOW_UNSTAGED=
+SHOW_DIFF_WITH_MASTER=
+while [ $# -gt 0 ]; do opt="$1"; case "$opt" in
+    -sc) {
+        SHOW_UNSTAGED=y
+        shift
+    }
+    ;;
+
+    -sdm) {
+        SHOW_DIFF_WITH_MASTER=y
+        shift
+    }
+    ;;
+
+    *) break;
+esac; done
+
+
+if ! is-git; then
+    exit 1
+fi
+
+cd "$(vc get-top-level)"
+
+echo "** repo state"
+echo -n "+ url :: "
+dirname "$(git-file-to-url "$(find . -type f | head -n 1)")"
+echo
+get-environment-info 
+echo
+
+if test "$SHOW_UNSTAGED" = "y"; then
+    echo "*** ~git status~"
+    echo "- Verify that there are no unstaged changes here."
+
+    echo "#+BEGIN_SRC text"
+    git status | indent 2 | awk 1
+    echo "#+END_SRC"
+fi
+
+# This needs to show all commits sitting above origin master, plus the
+# latest origin master commit
+echo "*** recent commits"
+echo "#+BEGIN_SRC text"
+# no more than 10
+git log --pretty=short origin/master\^...HEAD | indent 2 | awk 1 | head -n 10
+echo "#+END_SRC"
+
+if test "$SHOW_DIFF_WITH_MASTER" = "y"; then
+    echo "*** diff with origin/master"
+    mydiff="$(git diff origin/master...HEAD)"
+    dlc="$(printf -- "%s\n" "$mydiff" | wc -l)"
+    if ! test "$dlc" -lt "100"; then
+        echo diff too long to display
+    else
+        echo "#+BEGIN_SRC diff"
+        printf -- "%s\n" "$mydiff" | indent 2 | awk 1
+        echo "#+END_SRC"
+    fi
+fi
+
+for fp in .codelingoignore; do
+    if test -f "$fp"; then
+        echo "*** ~$fp~"
+        echo "#+BEGIN_SRC text"
+        cat "$fp" | indent 2 | awk 1
+        echo "#+END_SRC"
+    fi
+done

@@ -1,0 +1,25 @@
+#!/bin/bash
+export TTY
+
+# For use here
+# $HOME/scripts/browsh
+
+ff_pid () {
+    # COLUMNS=1000 ps -ef | grep firefox | grep -- --headless | s field 2
+    COLUMNS=1000 ps -ef | grep firefox | grep -- "-P browsh" | s field 2
+}
+
+ff_running () {
+    test -n "$(ff_pid)"
+}
+
+# If I do not kill, it will open a tab in the browser
+# Ultimately, this is what I want
+if ff_running; then
+    if test "$NEW_TAB" = "y"; then
+        exec 2>/dev/null
+        echo "Creating new tab in other terminal.."
+    else
+        kill "$(ff_pid)"
+    fi
+fi

@@ -1,0 +1,10 @@
+#!/bin/bash
+export TTY
+
+# echo the args back to you
+
+for var in "$@"
+do
+    # Put the entire thing in quotes, even if it's multiline
+    printf -- "%s" "$var" | q -f | awk 1
+done

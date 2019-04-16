@@ -1,0 +1,24 @@
+#!/bin/bash
+export TTY
+
+# For debugging
+export GOPACKAGESPRINTGOLISTERRORS=1
+# This breaks it
+# export GO111MODULE=on 
+
+# It works.
+# ( hs "$(basename "$0")" "$@" # <== "$(ps -o comm= $PPID)" 0</dev/null ) &>/dev/null
+
+# Disabled this for emacs
+
+exit 0
+
+# export GOARCH=amd64
+$HOME/go/bin/staticcheck
+ret="$?"
+
+# gometalinter "$@"
+# :
+# echo "$ret"
+
+exit "$ret"

@@ -1,0 +1,19 @@
+#!/bin/bash
+export TTY
+
+stdin_exists() {
+    ! [ -t 0 ]
+}
+
+script_fp="$HOME$MYGIT/russellw/racket-format/racket-format.rkt"
+
+if stdin_exists && ! test -f "$1"; then
+    tf_rkt="$(nix tf rkt rkt || echo /dev/null)"
+    trap "rm \"$tf_rkt\" 2>/dev/null" 0
+
+    cat > "$tf_rkt"
+    eval "$script_fp -i $(aqf "$tf_rkt")"
+    cat "$tf_rkt"
+else
+    eval "$script_fp" -i "$@"
+fi
